@@ -13,5 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideExperimentalZonelessChangeDetection(),
     provideClientHydration(withEventReplay())
+
   ]
 };
