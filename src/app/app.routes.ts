@@ -1,25 +1,15 @@
-import { Routes } from '@angular/router';
+import {Route} from '@angular/router';
 
-export const routes: Routes = [
+export const routes: Route[] = [
   {
     path: '',
-    loadComponent: () => import('./routes/home/containers/home/home').then(m => m.Home)
-  },
-  {
-    path: 'career',
-    loadComponent: () => import('./routes/career/containers/career/career').then(m => m.Career)
-  },
-  {
-    path: 'contact',
-    loadComponent: () => import('./routes/contact/containers/contact/contact').then(m => m.Contact)
-  },
-  {
-    path: 'skills',
-    loadComponent: () => import('./routes/skills/containers/skills/skills').then(m => m.Skills)
+    loadComponent: () => import('./layouts/public-layout/public-layout').then(m => m.PublicLayout),
+    loadChildren: () => import('./routes/public.routes').then(r => r.publicRoutes)
   },
   {
     path: 'console',
-    loadChildren: () => import('./routes/console/console.routes').then(m => m.consoleRoutes)
+    loadComponent: () => import('./layouts/console-layout/console-layout').then(m => m.ConsoleLayout),
+    loadChildren: () => import('./routes/console/console.routes').then(r => r.consoleRoutes)
   },
   {
     path: '**',
