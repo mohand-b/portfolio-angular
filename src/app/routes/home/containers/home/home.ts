@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -7,5 +7,4 @@ import { Component } from '@angular/core';
   styleUrl: './home.scss'
 })
 export class Home {
-
 }

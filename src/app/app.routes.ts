@@ -8,7 +8,6 @@ export const routes: Route[] = [
   },
   {
     path: 'console',
-    loadComponent: () => import('./layouts/console-layout/console-layout').then(m => m.ConsoleLayout),
     loadChildren: () => import('./routes/console/console.routes').then(r => r.consoleRoutes)
   },
   {
