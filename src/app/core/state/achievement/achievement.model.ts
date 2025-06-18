@@ -4,3 +4,13 @@ export interface Achievement {
   label: string;
   description?: string;
 }
+
+export interface AchievementUnlockLog {
+  id: string;
+  unlockedAt: Date;
+  visitorId: string;
+  visitorName?: string;
+  achievementId: string;
+  achievementCode: string;
+  achievementLabel: string;
+}

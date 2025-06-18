@@ -1,0 +1,10 @@
+<p>achievements works!</p>
+
+@for (achievementLog of achievementLogs(); track achievementLog.id) {
+  <div>
+    <strong>{{ achievementLog.achievementLabel }}</strong>
+    débloqué par {{ achievementLog.visitorName ?? 'Inconnu' }}
+    le {{ achievementLog.unlockedAt | date: 'dd/MM/yyyy à HH:mm' }}
+  </div>
+}
+

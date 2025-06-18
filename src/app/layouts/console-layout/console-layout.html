@@ -1,7 +1,10 @@
-<div class="h-[100vh] flex">
-  <app-console-menu class="h-full" />
-
-  <div class="flex-1 p-4 overflow-y-auto">
-    <router-outlet />
+@if (isLoading()) {
+  <app-loader/>
+} @else if (canAccessAdmin()) {
+  <div class="h-[100vh] flex">
+    <app-console-menu class="h-full"/>
+    <div class="flex-1 p-4 overflow-y-auto">
+      <router-outlet/>
+    </div>
   </div>
-</div>
+}

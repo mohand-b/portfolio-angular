@@ -1,21 +1,48 @@
 import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
 import {computed} from '@angular/core';
 
+type SessionStatus = 'unknown' | 'checking' | 'authenticated' | 'unauthenticated';
+
 interface AdminState {
-  accessToken: string | null;
+  sessionStatus: SessionStatus;
+  lastSessionError: string | null;
 }
 
 export const AdminStore = signalStore(
-  { providedIn: 'root' },
+  {providedIn: 'root'},
   withState<AdminState>({
-    accessToken: null,
+    sessionStatus: 'unknown',
+    lastSessionError: null,
   }),
   withComputed((store) => ({
-    authorizationHeader: computed(() => store.accessToken() ? `Bearer ${store.accessToken()}` : null)
+    canAccessAdmin: computed(() => store.sessionStatus() === 'authenticated'),
+    mustLogin: computed(() => store.sessionStatus() === 'unauthenticated'),
+    isLoading: computed(() =>
+      store.sessionStatus() === 'checking' || store.sessionStatus() === 'unknown'
+    ),
   })),
   withMethods((store) => ({
-    setToken(accessToken: string | null) {
-      patchState(store, {accessToken});
-    }
-  }))
+    setSessionStatus(status: SessionStatus, error: string | null = null) {
+      patchState(store, {
+        sessionStatus: status,
+        lastSessionError: error,
+      })
+    },
+    setError(error: string) {
+      patchState(store, {
+        lastSessionError: error,
+      })
+    },
+    clearError() {
+      patchState(store, {
+        lastSessionError: null,
+      });
+    },
+    resetSession() {
+      patchState(store, {
+        sessionStatus: 'unknown',
+        lastSessionError: null,
+      });
+    },
+  })),
 );

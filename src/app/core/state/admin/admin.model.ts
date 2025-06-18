@@ -4,5 +4,5 @@ export interface AdminAuthDto {
 }
 
 export interface AdminAuthResponseDto {
-  accessToken: string;
+  message: string;
 }
