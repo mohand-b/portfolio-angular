@@ -1,0 +1,37 @@
+import {Component, inject} from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {Router} from '@angular/router';
+import {ConsoleFacade} from '../../console.facade';
+
+@Component({
+  selector: 'app-achievement-create',
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ],
+  templateUrl: './achievement-create.html',
+  styleUrl: './achievement-create.scss'
+})
+export class AchievementCreate {
+  private router = inject(Router);
+  private consoleFacade = inject(ConsoleFacade);
+
+  private fb = inject(FormBuilder);
+  form: FormGroup = this.fb.group({
+    code: ['', Validators.required],
+    label: ['', Validators.required],
+    description: ['']
+  });
+
+  addAchievement() {
+    if (this.form.valid) {
+      this.consoleFacade.createAchievement(this.form.value).subscribe()
+    }
+  }
+
+}

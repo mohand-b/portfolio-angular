@@ -5,6 +5,12 @@ export interface Achievement {
   description?: string;
 }
 
+export interface AchievementCreate {
+  code: string;
+  label: string;
+  description?: string;
+}
+
 export interface AchievementUnlockLog {
   id: string;
   unlockedAt: Date;

@@ -1,0 +1,32 @@
+<form
+  (submit)="addAchievement()"
+  [formGroup]="form"
+  class="w-full flex items-center gap-4 p-4 flex-wrap"
+>
+  <mat-form-field appearance="outline" class="flex-1 min-w-[10rem]">
+    <mat-label>Code</mat-label>
+    <input formControlName="code" matInput/>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="flex-1 min-w-[10rem]">
+    <mat-label>Label</mat-label>
+    <input formControlName="label" matInput/>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="flex-1 min-w-[15rem]">
+    <mat-label>Description</mat-label>
+    <input formControlName="description" matInput/>
+  </mat-form-field>
+
+  <div class="flex items-end h-full">
+    <button
+      [disabled]="form.invalid"
+      class="whitespace-nowrap"
+      color="primary"
+      mat-raised-button
+      type="submit"
+    >
+      Ajouter
+    </button>
+  </div>
+</form>

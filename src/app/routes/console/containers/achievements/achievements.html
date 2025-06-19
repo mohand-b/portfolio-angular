@@ -1,4 +1,10 @@
-<p>achievements works!</p>
+<app-achievement-create/>
+
+@for (achievement of achievements(); track achievement.id) {
+  <div>
+    {{ achievement.code }} - {{ achievement.label }} - {{ achievement.description }}
+  </div>
+}
 
 @for (achievementLog of achievementLogs(); track achievementLog.id) {
   <div>
