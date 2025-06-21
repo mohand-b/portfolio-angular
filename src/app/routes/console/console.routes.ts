@@ -13,9 +13,39 @@ export const consoleRoutes: Routes = [
         title: 'Dashboard',
       },
       {
+        path: 'messages',
+        loadComponent: () => import('./containers/manage-messages/manage-messages').then(m => m.ManageMessages),
+        title: 'Messages',
+      },
+      {
+        path: 'visitors',
+        loadComponent: () => import('./containers/manage-visitors/manage-visitors').then(m => m.ManageVisitors),
+        title: 'Visiteurs',
+      },
+      {
+        path: 'timeline',
+        loadComponent: () => import('./containers/manage-timeline/manage-timeline').then(m => m.ManageTimeline),
+        title: 'Parcours',
+      },
+      {
+        path: 'skills',
+        loadComponent: () => import('./containers/manage-skills/manage-skills').then(m => m.ManageSkills),
+        title: 'Compétences',
+      },
+      {
+        path: 'projects',
+        loadComponent: () => import('./containers/manage-projects/manage-projects').then(m => m.ManageProjects),
+        title: 'Projets',
+      },
+      {
         path: 'achievements',
         loadComponent: () => import('./containers/achievements/achievements').then(m => m.Achievements),
         title: 'Succès',
+      },
+      {
+        path: 'blog',
+        loadComponent: () => import('./containers/manage-blog/manage-blog').then(m => m.ManageBlog),
+        title: 'Blog',
       },
       {
         path: '',
