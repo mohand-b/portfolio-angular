@@ -1,40 +1,41 @@
-<app-achievement-create/>
+<div class="flex flex-col gap-4">
+  <app-achievement-create/>
 
-<table [dataSource]="achievements()" mat-table>
+  <table [dataSource]="achievements()" mat-table>
 
-  <ng-container matColumnDef="code">
-    <th *matHeaderCellDef mat-header-cell>Code</th>
-    <td *matCellDef="let achievement" mat-cell>{{ achievement.code }}</td>
-  </ng-container>
+    <ng-container matColumnDef="code">
+      <th *matHeaderCellDef mat-header-cell>Code</th>
+      <td *matCellDef="let achievement" mat-cell>{{ achievement.code }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="label">
-    <th *matHeaderCellDef mat-header-cell>Label</th>
-    <td *matCellDef="let achievement" mat-cell>{{ achievement.label }}</td>
-  </ng-container>
+    <ng-container matColumnDef="label">
+      <th *matHeaderCellDef mat-header-cell>Label</th>
+      <td *matCellDef="let achievement" mat-cell>{{ achievement.label }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="description">
-    <th *matHeaderCellDef mat-header-cell>Description</th>
-    <td *matCellDef="let achievement" mat-cell>{{ achievement.description }}</td>
-  </ng-container>
+    <ng-container matColumnDef="description">
+      <th *matHeaderCellDef mat-header-cell>Description</th>
+      <td *matCellDef="let achievement" mat-cell>{{ achievement.description }}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="actions">
-    <th *matHeaderCellDef mat-header-cell>Actions</th>
-    <td *matCellDef="let achievement" mat-cell>
-      <button (click)="deleteAchievement(achievement.code)" matIconButton>
-        <mat-icon>delete</mat-icon>
-      </button>
-    </td>
-  </ng-container>
+    <ng-container matColumnDef="actions">
+      <th *matHeaderCellDef mat-header-cell>Actions</th>
+      <td *matCellDef="let achievement" mat-cell>
+        <button (click)="deleteAchievement(achievement.code)" matIconButton>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
 
-  <tr *matHeaderRowDef="displayedColumnsAchievements" mat-header-row></tr>
-  <tr *matRowDef="let row; columns: displayedColumnsAchievements" mat-row></tr>
-</table>
+    <tr *matHeaderRowDef="displayedColumnsAchievements" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumnsAchievements" mat-row></tr>
+  </table>
 
-@for (achievementLog of achievementLogs(); track achievementLog.id) {
-  <div>
-    <strong>{{ achievementLog.achievementLabel }}</strong>
-    débloqué par {{ achievementLog.visitorName ?? 'Inconnu' }}
-    le {{ achievementLog.unlockedAt | date: 'dd/MM/yyyy à HH:mm' }}
-  </div>
-}
-
+  @for (achievementLog of achievementLogs(); track achievementLog.id) {
+    <div>
+      <strong>{{ achievementLog.achievementLabel }}</strong>
+      débloqué par {{ achievementLog.visitorName ?? 'Inconnu' }}
+      le {{ achievementLog.unlockedAt | date: 'dd/MM/yyyy à HH:mm' }}
+    </div>
+  }
+</div>

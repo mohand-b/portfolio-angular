@@ -4,7 +4,7 @@
   class="w-full flex items-center gap-4 flex-wrap"
 >
   <mat-form-field appFormFieldStyle appearance="outline" class="flex-1 min-w-[10rem]">
-    <input formControlName="code" matInput placeholder="Code"/>
+    <input (input)="onCodeInput()" formControlName="code" matInput placeholder="Code"/>
   </mat-form-field>
 
   <mat-form-field appFormFieldStyle appearance="outline" class="flex-1 min-w-[10rem]">
@@ -14,14 +14,14 @@
   <mat-form-field appFormFieldStyle appearance="outline" class="flex-1 min-w-[15rem]">
     <input formControlName="description" matInput placeholder="Description"/>
   </mat-form-field>
-  
+
   <div class="flex items-center h-full">
     <button
       color="primary"
       matButton="filled"
       type="submit"
     >
-      Ajouter
+      Créer
     </button>
   </div>
 </form>

@@ -23,7 +23,7 @@ export class AchievementCreate {
 
   private fb = inject(FormBuilder);
   form: FormGroup = this.fb.group({
-    code: ['', Validators.required],
+    code: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
     label: ['', Validators.required],
     description: ['']
   });
@@ -35,6 +35,15 @@ export class AchievementCreate {
       next: () => this.form.reset(),
       error: () => this.form.markAsTouched(),
     });
+  }
+
+  onCodeInput() {
+    const codeCtrl = this.form.get('code');
+    if (!codeCtrl) return;
+    const value = codeCtrl.value?.toUpperCase().slice(0, 5) ?? '';
+    if (value !== codeCtrl.value) {
+      codeCtrl.setValue(value, {emitEvent: false});
+    }
   }
 
 }
