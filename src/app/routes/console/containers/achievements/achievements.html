@@ -17,6 +17,15 @@
     <td *matCellDef="let achievement" mat-cell>{{ achievement.description }}</td>
   </ng-container>
 
+  <ng-container matColumnDef="actions">
+    <th *matHeaderCellDef mat-header-cell>Actions</th>
+    <td *matCellDef="let achievement" mat-cell>
+      <button (click)="deleteAchievement(achievement.code)" matIconButton>
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
   <tr *matHeaderRowDef="displayedColumnsAchievements" mat-header-row></tr>
   <tr *matRowDef="let row; columns: displayedColumnsAchievements" mat-row></tr>
 </table>

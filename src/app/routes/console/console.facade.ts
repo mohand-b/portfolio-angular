@@ -30,4 +30,12 @@ export class ConsoleFacade {
       }),
     )
   }
+
+  deleteAchievementByCode(code: string): Observable<void> {
+    return this.achievementService.deleteAchievementByCode(code).pipe(
+      tap(() => {
+        this.achievementStore.removeAchievementByCode(code);
+      }),
+    );
+  }
 }

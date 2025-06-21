@@ -1,6 +1,6 @@
 import {patchState, signalStore, withComputed, withHooks, withMethods, withProps} from '@ngrx/signals';
 import {Achievement} from './achievement.model';
-import {addEntity, setEntities, withEntities} from '@ngrx/signals/entities';
+import {addEntity, removeEntities, setEntities, withEntities} from '@ngrx/signals/entities';
 import {computed, inject} from '@angular/core';
 import {AchievementService} from './achievement.service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
@@ -33,7 +33,10 @@ export const AchievementStore = signalStore(
     ),
     addAchievement(achievement: Achievement): void {
       patchState(store, addEntity(achievement))
-    }
+    },
+    removeAchievementByCode(code: string): void {
+      patchState(store, removeEntities(achievement => achievement.code === code));
+    },
   })),
   withHooks({
     onInit(store) {

@@ -17,4 +17,8 @@ export class AchievementService {
   createAchievement(achievement: AchievementCreate): Observable<Achievement> {
     return this.http.post<Achievement>(`${this.achievementBaseUrl}`, achievement, {withCredentials: true});
   }
+
+  deleteAchievementByCode(code: string): Observable<void> {
+    return this.http.delete<void>(`${this.achievementBaseUrl}/code/${code}`, {withCredentials: true});
+  }
 }
