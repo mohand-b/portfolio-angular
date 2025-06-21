@@ -3,9 +3,16 @@ export interface Achievement {
   code: string;
   label: string;
   description?: string;
+  createdAt: Date;
 }
 
 export interface AchievementCreate {
+  code: string;
+  label: string;
+  description?: string;
+}
+
+export interface AchievementLight {
   code: string;
   label: string;
   description?: string;

@@ -29,9 +29,12 @@ export class AchievementCreate {
   });
 
   addAchievement() {
-    if (this.form.valid) {
-      this.consoleFacade.createAchievement(this.form.value).subscribe()
-    }
+    if (this.form.invalid) return;
+
+    this.consoleFacade.createAchievement(this.form.value).subscribe({
+      next: () => this.form.reset(),
+      error: () => this.form.markAsTouched(),
+    });
   }
 
 }

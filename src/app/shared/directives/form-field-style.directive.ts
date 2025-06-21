@@ -2,7 +2,6 @@ import {AfterViewInit, Directive, ElementRef, inject, Input, Renderer2} from '@a
 
 @Directive({
   selector: '[appFormFieldStyle]',
-  standalone: true
 })
 export class FormFieldStyleDirective implements AfterViewInit {
   @Input() rounded = false;

@@ -12,7 +12,7 @@ html {
       tertiary: my-theme.$tertiary-palette,
       error: my-theme.$error-palette,
       background: (
-        background: map-get(my-theme.$secondary-palette, 50),
+        background: map-get(my-theme.$secondary-palette, 100),
         surface: map-get(my-theme.$secondary-palette, 100)
       )
     ),

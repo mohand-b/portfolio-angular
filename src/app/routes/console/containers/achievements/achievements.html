@@ -1,10 +1,25 @@
 <app-achievement-create/>
 
-@for (achievement of achievements(); track achievement.id) {
-  <div>
-    {{ achievement.code }} - {{ achievement.label }} - {{ achievement.description }}
-  </div>
-}
+<table [dataSource]="achievements()" mat-table>
+
+  <ng-container matColumnDef="code">
+    <th *matHeaderCellDef mat-header-cell>Code</th>
+    <td *matCellDef="let achievement" mat-cell>{{ achievement.code }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="label">
+    <th *matHeaderCellDef mat-header-cell>Label</th>
+    <td *matCellDef="let achievement" mat-cell>{{ achievement.label }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <th *matHeaderCellDef mat-header-cell>Description</th>
+    <td *matCellDef="let achievement" mat-cell>{{ achievement.description }}</td>
+  </ng-container>
+
+  <tr *matHeaderRowDef="displayedColumnsAchievements" mat-header-row></tr>
+  <tr *matRowDef="let row; columns: displayedColumnsAchievements" mat-row></tr>
+</table>
 
 @for (achievementLog of achievementLogs(); track achievementLog.id) {
   <div>
