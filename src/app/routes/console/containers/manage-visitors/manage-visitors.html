@@ -1,1 +1,44 @@
-<p>manage-visitors works!</p>
+<table [dataSource]="displayedVisitors()" mat-table>
+
+  <ng-container matColumnDef="firstName">
+    <th *matHeaderCellDef mat-header-cell>Nom</th>
+    <td *matCellDef="let visitor" mat-cell>{{ visitor.firstName }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="lastName">
+    <th *matHeaderCellDef mat-header-cell>Prénom</th>
+    <td *matCellDef="let visitor" mat-cell>{{ visitor.lastName }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th *matHeaderCellDef mat-header-cell>Email</th>
+    <td *matCellDef="let visitor" mat-cell>{{ visitor.email }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="createdAt">
+    <th *matHeaderCellDef mat-header-cell>Créé le</th>
+    <td *matCellDef="let visitor" mat-cell>{{ visitor.createdAt | date: 'dd/MM/yyyy' }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="isVerified">
+    <th *matHeaderCellDef mat-header-cell>Vérifié</th>
+    <td *matCellDef="let visitor" mat-cell>
+      @if (visitor.isVerified) {
+        Oui
+      } @else {
+        Non
+      }
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th *matHeaderCellDef mat-header-cell>Actions</th>
+    <td *matCellDef="let visitor" mat-cell>
+
+    </td>
+  </ng-container>
+
+
+  <tr *matHeaderRowDef="displayedColumnsVisitors" mat-header-row></tr>
+  <tr *matRowDef="let row; columns: displayedColumnsVisitors" mat-row></tr>
+</table>

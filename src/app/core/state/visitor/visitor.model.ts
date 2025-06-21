@@ -4,6 +4,9 @@ export interface Visitor {
   firstName: string;
   lastName: string;
   isVerified: boolean;
+  verificationToken?: string;
+  verificationExpiresAt?: Date;
+  createdAt: Date;
 }
 
 export interface VisitorAuthDto {
