@@ -1,15 +1,11 @@
-export interface Skill {
+export interface SkillDto {
   id: string;
   name: string;
   level: number;
   category: SkillCategory;
 }
 
-export interface SkillCreate {
-  name: string;
-  level: number;
-  category: SkillCategory;
-}
+export type SkillCreateDto = Omit<SkillDto, 'id'>;
 
 export enum SkillCategory {
   FRONTEND = 'frontend',

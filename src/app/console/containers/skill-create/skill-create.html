@@ -4,6 +4,23 @@
   class="w-full flex items-center gap-4 flex-wrap"
 >
   <mat-form-field appFormFieldStyle appearance="outline" class="flex-1 min-w-[12rem]">
+    <mat-select formControlName="category" placeholder="Catégorie">
+      @for (cat of skillCategories; track cat) {
+        <mat-option [value]="cat" class="flex items-center gap-2">
+          <mat-icon
+            fontIcon="{{ skillCategoryCatalog[cat].icon }}"
+            [style.color]="skillCategoryCatalog[cat].color"
+            class="mr-2 align-middle"
+          ></mat-icon>
+          <span class="align-middle">
+          {{ skillCategoryCatalog[cat].label }}
+        </span>
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  
+  <mat-form-field appFormFieldStyle appearance="outline" class="flex-1 min-w-[12rem]">
     <input formControlName="name" matInput placeholder="Nom de la compétence"/>
   </mat-form-field>
 
@@ -16,22 +33,6 @@
       placeholder="Niveau"
       type="number"
     />
-  </mat-form-field>
-
-  <mat-form-field appFormFieldStyle appearance="outline" class="flex-1 min-w-[12rem]">
-    <mat-select formControlName="category" placeholder="Catégorie">
-      @for (cat of skillCategories; track cat) {
-        <mat-option [value]="cat">
-        <span
-          class="inline-block align-middle w-3 h-3 rounded-full mr-2"
-          [style.background]="skillCategoryCatalog[cat].color"
-        ></span>
-          <span class="align-middle">
-          {{ skillCategoryCatalog[cat].label }}
-        </span>
-        </mat-option>
-      }
-    </mat-select>
   </mat-form-field>
 
   <div class="flex items-center h-full">

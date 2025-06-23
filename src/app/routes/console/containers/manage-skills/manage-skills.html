@@ -1,3 +1,6 @@
 <app-skill-create/>
 
-<p>manage-skills works!</p>
+@for (skill of skills(); track skill.id) {
+  {{ skill.name }} - {{ skill.level }}/5 - {{ skill.category }}
+  <br>
+}
