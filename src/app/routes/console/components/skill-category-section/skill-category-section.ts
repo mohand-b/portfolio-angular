@@ -5,7 +5,7 @@ import {SKILL_CATEGORY_CATALOG, SkillCategory} from '../../../skills/state/skill
 @Component({
   selector: 'app-skill-category-section',
   imports: [
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './skill-category-section.html',
   styleUrl: './skill-category-section.scss'

@@ -4,12 +4,38 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
     @for (cat of categories; track cat) {
       <app-skill-category-section
+        cdkDropList
+        cdkDropListSortingDisabled
+        [cdkDropListData]="getSkillsByCategory(cat)"
+        [cdkDropListConnectedTo]="dropListIds"
+        [id]="cat"
+        (cdkDropListDropped)="drop($event, cat)"
         [category]="cat"
       >
         @for (skill of getSkillsByCategory(cat); track skill.id) {
-          <app-skill-item [skill]="skill"/>
+          <app-skill-item
+            cdkDrag
+            [skill]="skill"
+            [cdkDragData]="skill"
+            (setLevel)="onSkillLevelChange(skill, $event)"
+            (cdkDragStarted)="isDragging.set(true)"
+            (cdkDragEnded)="isDragging.set(false)"
+          />
         }
       </app-skill-category-section>
     }
   </div>
 </div>
+
+<div
+  (cdkDropListDropped)="onDropToTrash($event)"
+  [cdkDropListConnectedTo]="dropListIds"
+  [cdkDropListData]="emptySkillList"
+  [class.global-trash-zone--active]="isDragging()"
+  [id]="dropTrashId"
+  cdkDropList
+  class="global-trash-zone"
+>
+  <mat-icon style="font-size: 3rem; color: #e53935;">delete</mat-icon>
+</div>
+

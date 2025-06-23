@@ -33,7 +33,7 @@ export class SkillCreate {
   private fb = inject(FormBuilder);
   form: FormGroup = this.fb.group({
     name: ['', Validators.required],
-    level: [1, [Validators.required, Validators.min(1), Validators.max(5)]],
+    level: ['', [Validators.required, Validators.min(1), Validators.max(5)]],
     category: ['', Validators.required],
   });
 

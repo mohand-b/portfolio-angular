@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, output} from '@angular/core';
 import {SkillDto} from '../../../skills/state/skill/skill.model';
 import {MatIconModule} from '@angular/material/icon';
 
@@ -11,11 +11,16 @@ import {MatIconModule} from '@angular/material/icon';
 export class SkillItem {
 
   @Input() skill!: SkillDto;
+  setLevel = output<number>();
 
   get stars(): boolean[] {
     return Array(5)
       .fill(false)
       .map((_, i) => i < Math.round(this.skill.level ?? 0));
+  }
+
+  onSetLevel(newLevel: number) {
+    this.setLevel.emit(newLevel);
   }
 
 }

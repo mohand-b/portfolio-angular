@@ -1,10 +1,10 @@
 import {patchState, signalStore, withComputed, withHooks, withMethods, withProps} from '@ngrx/signals';
-import {addEntity, removeEntities, setEntities, withEntities} from '@ngrx/signals/entities';
+import {addEntity, removeEntities, setEntities, updateEntity, withEntities} from '@ngrx/signals/entities';
 import {computed, inject} from '@angular/core';
 import {SkillService} from './skill.service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {pipe, switchMap, tap} from 'rxjs';
-import {SkillDto} from './skill.model';
+import {SkillCategory, SkillDto} from './skill.model';
 
 export const SkillStore = signalStore(
   {providedIn: 'root'},
@@ -28,6 +28,12 @@ export const SkillStore = signalStore(
     ),
     addSkill(skill: SkillDto): void {
       patchState(store, addEntity(skill));
+    },
+    updateSkillCategory(id: string, category: SkillCategory): void {
+      patchState(store, updateEntity({id, changes: {category}}))
+    },
+    updateSkillLevel(id: string, level: number): void {
+      patchState(store, updateEntity({id, changes: {level}}))
     },
     removeSkillById(id: string): void {
       patchState(store, removeEntities(skill => skill.id === id));

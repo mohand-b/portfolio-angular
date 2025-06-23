@@ -10,7 +10,7 @@ import {
 import {AchievementService} from '../../core/state/achievement/achievement.service';
 import {AchievementStore} from '../../core/state/achievement/achievement.store';
 import {SkillStore} from '../skills/state/skill/skill.store';
-import {SkillCreateDto, SkillDto} from '../skills/state/skill/skill.model';
+import {SkillCategory, SkillCreateDto, SkillDto} from '../skills/state/skill/skill.model';
 import {SkillService} from '../skills/state/skill/skill.service';
 
 @Injectable({providedIn: 'root'})
@@ -50,6 +50,30 @@ export class ConsoleFacade {
       tap((skill: SkillDto) => {
         this.skillStore.addSkill(skill);
       }),
+    );
+  }
+
+  updateSkillCategory(id: string, category: SkillCategory): Observable<SkillDto> {
+    return this.skillService.updateSkillCategory(id, category).pipe(
+      tap((skill: SkillDto) => {
+        this.skillStore.updateSkillCategory(id, skill.category);
+      }),
+    );
+  }
+
+  updateSkillLevel(id: string, level: number): Observable<SkillDto> {
+    return this.skillService.updateSkillLevel(id, level).pipe(
+      tap((skill: SkillDto) => {
+        this.skillStore.updateSkillLevel(id, skill.level);
+      }),
+    );
+  }
+
+  removeSkillById(id: string): Observable<void> {
+    return this.skillService.deleteSkillById(id).pipe(
+      tap(() => {
+        this.skillStore.removeSkillById(id);
+      })
     );
   }
 
