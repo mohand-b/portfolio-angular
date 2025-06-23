@@ -26,7 +26,7 @@ import {ConsoleFacade} from '../../../routes/console/console.facade';
 export class SkillCreate {
 
   readonly skillCategories: SkillCategory[] = Object.values(SkillCategory) as SkillCategory[];
-  readonly skillCategoryCatalog = SKILL_CATEGORY_CATALOG;
+  protected readonly skillCategoryCatalog = SKILL_CATEGORY_CATALOG;
 
   private consoleFacade = inject(ConsoleFacade);
 

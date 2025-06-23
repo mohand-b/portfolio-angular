@@ -1,6 +1,15 @@
-<app-skill-create/>
+<div class="flex flex-col gap-6">
+  <app-skill-create/>
 
-@for (skill of skills(); track skill.id) {
-  {{ skill.name }} - {{ skill.level }}/5 - {{ skill.category }}
-  <br>
-}
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+    @for (cat of categories; track cat) {
+      <app-skill-category-section
+        [category]="cat"
+      >
+        @for (skill of getSkillsByCategory(cat); track skill.id) {
+          <app-skill-item [skill]="skill"/>
+        }
+      </app-skill-category-section>
+    }
+  </div>
+</div>

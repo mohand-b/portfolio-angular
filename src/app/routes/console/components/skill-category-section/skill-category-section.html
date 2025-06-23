@@ -1,0 +1,23 @@
+<div
+  [style.borderTop]="
+    '2px solid ' + (category ? skillCategoryCatalog[category].color : '#ccc')
+  "
+  class="p-4 rounded shadow-md bg-white relative"
+>
+  <div class="flex items-center mb-4 gap-2">
+    @if (category) {
+      <mat-icon
+        [style.color]="skillCategoryCatalog[category].color"
+        fontIcon="{{ skillCategoryCatalog[category].icon }}"
+      ></mat-icon>
+      <span class="font-semibold text-lg">
+        {{ skillCategoryCatalog[category].label }}
+      </span>
+    }
+  </div>
+
+  <div class="flex flex-wrap gap-4">
+    <ng-content/>
+  </div>
+
+</div>

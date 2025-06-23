@@ -1,0 +1,16 @@
+<div class="flex items-center justify-between gap-4 py-1 px-3 rounded-xl bg-gray-50 shadow-sm">
+  <div class="text-sm">
+    {{ skill.name }}
+  </div>
+  <div class="flex items-center">
+    @for (full of stars; track $index) {
+      <mat-icon
+        class="text-base"
+        [style.color]="full ? '#FFD600' : '#e0e0e0'"
+        style="font-size: 1rem; height: 1em; width: 1em; line-height: 1em; vertical-align: -3px; display: inline-block;"
+      >
+        {{ full ? 'star' : 'star_border' }}
+      </mat-icon>
+    }
+  </div>
+</div>
