@@ -6,6 +6,9 @@ import {SkillCategorySection} from '../../components/skill-category-section/skil
 import {SkillItem} from '../../components/skill-item/skill-item';
 import {CdkDragDrop, DragDropModule} from '@angular/cdk/drag-drop';
 import {MatIconModule} from '@angular/material/icon';
+import {ModalService} from '../../../../shared/services/modal.service';
+import {GenericModal} from '../../../../shared/components/generic-modal/generic-modal';
+import {filter, switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-manage-skills',
@@ -21,31 +24,76 @@ import {MatIconModule} from '@angular/material/icon';
   styleUrl: './manage-skills.scss'
 })
 export class ManageSkills {
-  public readonly categories: SkillCategory[] = Object.values(SkillCategory) as SkillCategory[];
-  public readonly dropTrashId: string = 'trash';
-  public readonly dropListIds: string[] = [...this.categories, this.dropTrashId];
-  public readonly emptySkillList: SkillDto[] = [];
-  public isDragging = signal<boolean>(false);
-  private readonly consoleFacade: ConsoleFacade = inject(ConsoleFacade);
-  public readonly skills: Signal<SkillDto[]> = this.consoleFacade.skills;
+  readonly categories: SkillCategory[] = Object.values(SkillCategory) as SkillCategory[];
+  readonly dropTrashId: string = 'trash';
+  readonly dropListIds: string[] = [...this.categories, this.dropTrashId];
+  readonly emptySkillList: SkillDto[] = [];
+  isDragging = signal<boolean>(false);
+  readonly consoleFacade: ConsoleFacade = inject(ConsoleFacade);
+  readonly skills: Signal<SkillDto[]> = this.consoleFacade.skills;
+  private modalService = inject(ModalService);
 
-  public getSkillsByCategory(category: SkillCategory): SkillDto[] {
+  getSkillsByCategory(category: SkillCategory): SkillDto[] {
     return this.skills().filter(skill => skill.category === category);
   }
 
-  public drop(event: CdkDragDrop<SkillDto[]>, newCategory: SkillCategory): void {
+  drop(event: CdkDragDrop<SkillDto[]>, newCategory: SkillCategory): void {
     if (event.previousContainer === event.container) return;
+
     const skill = event.item.data as SkillDto;
-    this.consoleFacade.updateSkillCategory(skill.id, newCategory).subscribe();
+
+    this.modalService.open(GenericModal, {
+      data: {
+        title: 'Confirmer le déplacement',
+        message: `Déplacer "${skill.name}" dans la catégorie "${newCategory}" ?`,
+        actions: [
+          {label: 'Annuler', value: 'cancel'},
+          {label: 'Confirmer', value: 'confirm', color: 'primary'}
+        ]
+      },
+      width: '350px'
+    }).afterClosed().pipe(
+      filter(result => result === 'confirm'),
+      switchMap(() => this.consoleFacade.updateSkillCategory(skill.id, newCategory))
+    ).subscribe();
   }
 
-  public onSkillLevelChange(skill: SkillDto, newLevel: number): void {
-    this.consoleFacade.updateSkillLevel(skill.id, newLevel).subscribe();
+  onSkillLevelChange(skill: SkillDto, newLevel: number): void {
+    this.modalService.open(GenericModal, {
+      data: {
+        title: 'Confirmer la modification',
+        message: `Changer le niveau de "${skill.name}" à ${newLevel} ?`,
+        actions: [
+          {label: 'Annuler', value: 'cancel'},
+          {label: 'Confirmer', value: 'confirm', color: 'primary'}
+        ]
+      },
+      width: '350px'
+    }).afterClosed().pipe(
+      filter(result => result === 'confirm'),
+      switchMap(() => this.consoleFacade.updateSkillLevel(skill.id, newLevel))
+    ).subscribe();
   }
 
-  public onDropToTrash(event: CdkDragDrop<SkillDto[]>): void {
+
+  onDropToTrash(event: CdkDragDrop<SkillDto[]>): void {
     const skill = event.item.data as SkillDto;
-    this.consoleFacade.removeSkillById(skill.id).subscribe();
+
+    this.modalService.open(GenericModal, {
+      data: {
+        title: 'Supprimer la compétence',
+        message: `Supprimer définitivement "${skill.name}" ?`,
+        actions: [
+          {label: 'Annuler', value: 'cancel'},
+          {label: 'Supprimer', value: 'delete', color: 'error', style: 'filled'}
+        ]
+      },
+      width: '350px'
+    }).afterClosed().pipe(
+      filter(result => result === 'delete'),
+      switchMap(() => this.consoleFacade.removeSkillById(skill.id))
+    ).subscribe();
   }
+
 }
 

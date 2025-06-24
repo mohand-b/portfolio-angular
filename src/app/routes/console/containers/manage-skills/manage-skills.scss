@@ -27,3 +27,7 @@
 .cdk-drag-placeholder {
   display: none !important;
 }
+
+.cdk-drag.cdk-drag-dragging {
+  cursor: grabbing !important;
+}
