@@ -10,12 +10,12 @@ export interface TimelineItemDto {
 
 export enum TimelineItemType {
   Job = 'job',
-  Project = 'project',
   Certification = 'certification',
+  Project = 'project',
   Other = 'other'
 }
 
-interface TimelineItemTypeMeta {
+export interface TimelineItemTypeMeta {
   key: TimelineItemType;
   label: string;
   color: string;
@@ -29,17 +29,17 @@ export const TIMELINE_ITEM_TYPE_META: Record<TimelineItemType, TimelineItemTypeM
     color: '#1976D2',
     icon: 'work',
   },
-  [TimelineItemType.Project]: {
-    key: TimelineItemType.Project,
-    label: 'Projets personnels',
-    color: '#8e24aa',
-    icon: 'lightbulb',
-  },
   [TimelineItemType.Certification]: {
     key: TimelineItemType.Certification,
     label: 'Diplômes / Certifications',
     color: '#11bd89',
     icon: 'school',
+  },
+  [TimelineItemType.Project]: {
+    key: TimelineItemType.Project,
+    label: 'Projets personnels',
+    color: '#8e24aa',
+    icon: 'lightbulb',
   },
   [TimelineItemType.Other]: {
     key: TimelineItemType.Other,

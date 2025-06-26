@@ -1,1 +1,29 @@
-<p>manage-timeline works!</p>
+<mat-tab-group (selectedIndexChange)="onTabChange($event)" [selectedIndex]="selectedTabIndex()">
+  @for (meta of timelineItemTypesMeta; track meta.key) {
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="flex items-center gap-2">
+          <mat-icon [style.color]="meta.color">{{ meta.icon }}</mat-icon>
+          <span>{{ meta.label }}</span>
+        </div>
+      </ng-template>
+
+      <div class="flex flex-col gap-4 p-4">
+        @switch (meta.key) {
+          @case ('job') {
+            <div>job</div>
+          }
+          @case ('project') {
+            <div>project</div>
+          }
+          @case ('certification') {
+            <div>certification</div>
+          }
+          @case ('other') {
+            <div>other</div>
+          }
+        }
+      </div>
+    </mat-tab>
+  }
+</mat-tab-group>
