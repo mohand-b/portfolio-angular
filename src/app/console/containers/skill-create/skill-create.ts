@@ -4,7 +4,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
-import {SKILL_CATEGORY_CATALOG, SkillCategory, SkillCreateDto} from '../../../routes/skills/state/skill/skill.model';
+import {SKILL_CATEGORY_META, SkillCategory, SkillCreateDto} from '../../../routes/skills/state/skill/skill.model';
 import {FormFieldStyleDirective} from '../../../shared/directives/form-field-style.directive';
 import {MatIconModule} from '@angular/material/icon';
 import {ConsoleFacade} from '../../../routes/console/console.facade';
@@ -26,7 +26,7 @@ import {ConsoleFacade} from '../../../routes/console/console.facade';
 export class SkillCreate {
 
   readonly skillCategories: SkillCategory[] = Object.values(SkillCategory) as SkillCategory[];
-  protected readonly skillCategoryCatalog = SKILL_CATEGORY_CATALOG;
+  protected readonly skillCategoryCatalog = SKILL_CATEGORY_META;
 
   private consoleFacade = inject(ConsoleFacade);
 

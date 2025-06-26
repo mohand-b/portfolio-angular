@@ -48,7 +48,7 @@ export class ManageSkills {
         message: `Déplacer "${skill.name}" dans la catégorie "${newCategory}" ?`,
         actions: [
           {label: 'Annuler', value: 'cancel'},
-          {label: 'Confirmer', value: 'confirm', color: 'primary'}
+          {label: 'Confirmer', value: 'confirm', style: 'filled'}
         ]
       },
       width: '350px'
@@ -65,7 +65,7 @@ export class ManageSkills {
         message: `Changer le niveau de "${skill.name}" à ${newLevel} ?`,
         actions: [
           {label: 'Annuler', value: 'cancel'},
-          {label: 'Confirmer', value: 'confirm', color: 'primary'}
+          {label: 'Confirmer', value: 'confirm', style: 'filled'}
         ]
       },
       width: '350px'
@@ -85,7 +85,7 @@ export class ManageSkills {
         message: `Supprimer définitivement "${skill.name}" ?`,
         actions: [
           {label: 'Annuler', value: 'cancel'},
-          {label: 'Supprimer', value: 'delete', color: 'error', style: 'filled'}
+          {label: 'Supprimer', value: 'delete', style: 'filled'}
         ]
       },
       width: '350px'

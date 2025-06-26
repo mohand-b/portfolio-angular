@@ -24,7 +24,7 @@ export interface SkillCategoryMeta {
   icon?: string;
 }
 
-export const SKILL_CATEGORY_CATALOG: Record<SkillCategory, SkillCategoryMeta> = {
+export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.FRONTEND]: {
     key: SkillCategory.FRONTEND,
     label: 'Frontend',
