@@ -20,6 +20,11 @@
     <td *matCellDef="let visitor" mat-cell>{{ visitor.createdAt | date: 'dd/MM/yyyy' }}</td>
   </ng-container>
 
+  <ng-container matColumnDef="lastVisitAt">
+    <th *matHeaderCellDef mat-header-cell>Dernière visite le</th>
+    <td *matCellDef="let visitor" mat-cell>{{ visitor.lastVisitAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+  </ng-container>
+
   <ng-container matColumnDef="isVerified">
     <th *matHeaderCellDef mat-header-cell>Vérifié</th>
     <td *matCellDef="let visitor" mat-cell>

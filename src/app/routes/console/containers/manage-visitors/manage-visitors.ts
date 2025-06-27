@@ -38,11 +38,12 @@ export class ManageVisitors {
         email: v.email,
         isVerified: v.isVerified,
         createdAt: v.createdAt,
+        lastVisitAt: v.lastVisitAt,
       }))
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   });
 
 
-  readonly displayedColumnsVisitors: string[] = ['firstName', 'lastName', 'email', 'createdAt', 'isVerified', 'actions'];
+  readonly displayedColumnsVisitors: string[] = ['firstName', 'lastName', 'email', 'createdAt', 'lastVisitAt', 'isVerified', 'actions'];
 
 }

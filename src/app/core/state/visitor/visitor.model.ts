@@ -7,6 +7,7 @@ export interface Visitor {
   verificationToken?: string;
   verificationExpiresAt?: Date;
   createdAt: Date;
+  lastVisitAt: Date;
 }
 
 export interface VisitorAuthDto {
