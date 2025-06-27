@@ -12,6 +12,8 @@ import {AchievementStore} from '../../core/state/achievement/achievement.store';
 import {SkillStore} from '../skills/state/skill/skill.store';
 import {SkillCategory, SkillCreateDto, SkillDto} from '../skills/state/skill/skill.model';
 import {SkillService} from '../skills/state/skill/skill.service';
+import {JobService} from '../career/state/job/job.service';
+import {JobCreateDto, JobDto} from '../career/state/job/job.model';
 
 @Injectable({providedIn: 'root'})
 export class ConsoleFacade {
@@ -19,11 +21,14 @@ export class ConsoleFacade {
 
   private achievementLogsService = inject(AchievementLogsService);
   private achievementService = inject(AchievementService);
+  private jobService = inject(JobService);
   private skillService = inject(SkillService);
   private achievementStore = inject(AchievementStore);
   readonly achievements: Signal<AchievementLight[]> = this.achievementStore.achievements;
   private skillStore = inject(SkillStore);
   readonly skills: Signal<SkillDto[]> = this.skillStore.skills;
+
+  // ACHIEVEMENTS
 
   getAchievementLogs(): Observable<AchievementUnlockLog[]> {
     return this.achievementLogsService.findAll();
@@ -44,6 +49,8 @@ export class ConsoleFacade {
       }),
     );
   }
+
+  // SKILLS
 
   createSkill(skill: SkillCreateDto): Observable<SkillDto> {
     return this.skillService.createSkill(skill).pipe(
@@ -75,6 +82,12 @@ export class ConsoleFacade {
         this.skillStore.removeSkillById(id);
       })
     );
+  }
+
+  // JOBS
+
+  addJob(job: JobCreateDto): Observable<JobDto> {
+    return this.jobService.createJob(job)
   }
 
 }

@@ -8,3 +8,6 @@ export interface JobDto extends TimelineItemDto {
   missions: string[];
   projects?: ProjectDto[];
 }
+
+export interface JobCreateDto extends JobDto {
+}

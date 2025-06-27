@@ -1,0 +1,85 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="jobForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+  <mat-form-field appFormFieldStyle appearance="outline" class="w-full md:col-span-1">
+    <input
+      (click)="pickerStart.open()"
+      (focus)="pickerStart.open()"
+      [matDatepicker]="pickerStart"
+      [readonly]="true"
+      formControlName="startDate"
+      matInput
+      placeholder="Date de début"
+    />
+    <mat-datepicker-toggle [for]="pickerStart" matSuffix></mat-datepicker-toggle>
+    <mat-datepicker #pickerStart></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appFormFieldStyle appearance="outline" class="w-full md:col-span-1">
+    <input
+      (click)="pickerEnd.open()"
+      (focus)="pickerEnd.open()"
+      [matDatepicker]="pickerEnd"
+      [min]="jobForm.get('startDate')?.value || null"
+      [readonly]="true"
+      formControlName="endDate"
+      matInput
+      placeholder="Date de fin"
+    />
+    <mat-datepicker-toggle [for]="pickerEnd" matSuffix></mat-datepicker-toggle>
+    <mat-datepicker #pickerEnd></mat-datepicker>
+  </mat-form-field>
+
+  <div class="hidden md:block"></div>
+
+  <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+    <input formControlName="title" matInput placeholder="Intitulé du poste" required>
+  </mat-form-field>
+
+  <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+    <input formControlName="company" matInput placeholder="Entreprise" required>
+  </mat-form-field>
+
+  <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+    <input formControlName="location" matInput placeholder="Lieu">
+  </mat-form-field>
+
+
+  <div class="md:col-span-3 w-full">
+    <div class="mb-2 ml-1">Missions</div>
+    <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <input
+        (keydown.enter)="onMissionInputKeyup($event)"
+        [formControl]="missionFormControl"
+        matInput
+        placeholder="Nouvelle mission"
+      />
+      <button
+        (click)="addMission()"
+        matIconButton
+        matSuffix
+        type="button"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-form-field>
+    @if (missions().length > 0) {
+      <ul class="list-disc">
+        @for (m of missions(); let i = $index; track i) {
+          <li class="flex items-center gap-2">
+            - <span>{{ m }}</span>
+            <button matIconButton type="button" (click)="removeMission(i)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <div class="md:col-span-3 flex justify-end">
+    <button [disabled]="jobForm.invalid" matButton="filled" type="submit">
+      Ajouter
+    </button>
+  </div>
+</form>
+

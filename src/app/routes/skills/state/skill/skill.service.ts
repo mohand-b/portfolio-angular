@@ -15,7 +15,7 @@ export class SkillService {
   }
 
   createSkill(skill: SkillCreateDto): Observable<SkillDto> {
-    return this.http.post<SkillDto>(`${this.skillBaseUrl}`, skill, {withCredentials: true});
+    return this.http.post<SkillDto>(`${this.skillBaseUrl}/create`, skill, {withCredentials: true});
   }
 
   deleteSkillById(id: string): Observable<void> {

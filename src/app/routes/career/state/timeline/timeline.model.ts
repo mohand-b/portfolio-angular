@@ -26,7 +26,7 @@ export const TIMELINE_ITEM_TYPE_META: Record<TimelineItemType, TimelineItemTypeM
   [TimelineItemType.Job]: {
     key: TimelineItemType.Job,
     label: 'Expériences professionnelles',
-    color: '#1976D2',
+    color: '#58acff',
     icon: 'work',
   },
   [TimelineItemType.Certification]: {
@@ -38,7 +38,7 @@ export const TIMELINE_ITEM_TYPE_META: Record<TimelineItemType, TimelineItemTypeM
   [TimelineItemType.Project]: {
     key: TimelineItemType.Project,
     label: 'Projets personnels',
-    color: '#8e24aa',
+    color: '#f465f1',
     icon: 'lightbulb',
   },
   [TimelineItemType.Other]: {
