@@ -13,7 +13,7 @@ import {SkillStore} from '../skills/state/skill/skill.store';
 import {SkillCategory, SkillCreateDto, SkillDto} from '../skills/state/skill/skill.model';
 import {SkillService} from '../skills/state/skill/skill.service';
 import {JobService} from '../career/state/job/job.service';
-import {JobCreateDto, JobDto} from '../career/state/job/job.model';
+import {JobDto} from '../career/state/job/job.model';
 
 @Injectable({providedIn: 'root'})
 export class ConsoleFacade {
@@ -86,8 +86,8 @@ export class ConsoleFacade {
 
   // JOBS
 
-  addJob(job: JobCreateDto): Observable<JobDto> {
-    return this.jobService.createJob(job)
+  addJob(jobFormData: FormData): Observable<JobDto> {
+    return this.jobService.createJob(jobFormData)
   }
 
 }

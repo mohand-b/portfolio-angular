@@ -26,10 +26,9 @@ import {JobCreateDto} from '../../../career/state/job/job.model';
   styleUrl: './job-create.scss',
 })
 export class JobCreate {
-
   resetForm = input(false);
   jobSubmit = output<JobCreateDto>();
-
+  imagePreview = signal<string | null>(null);
   missions: WritableSignal<string[]> = signal([]);
   private fb = inject(FormBuilder);
   jobForm = this.fb.group({
@@ -39,7 +38,8 @@ export class JobCreate {
     startDate: [null, Validators.required],
     endDate: [null],
     description: [''],
-    type: [TimelineItemType.Job]
+    type: [TimelineItemType.Job],
+    image: [null as File | null],
   });
   missionFormControl = this.fb.control('');
 
@@ -48,6 +48,7 @@ export class JobCreate {
       this.jobForm.reset({type: TimelineItemType.Job});
       this.missions.set([]);
       this.missionFormControl.reset();
+      this.imagePreview.set(null);
     }
   });
 
@@ -70,6 +71,18 @@ export class JobCreate {
       event.preventDefault();
       event.stopPropagation();
       this.addMission();
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0] || null;
+    this.jobForm.patchValue({image: file});
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview.set(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   }
 

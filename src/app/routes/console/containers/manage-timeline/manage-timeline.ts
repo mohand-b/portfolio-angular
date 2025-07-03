@@ -10,6 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {JobCreate} from '../../components/job-create/job-create';
 import {ConsoleFacade} from '../../console.facade';
 import {JobCreateDto} from '../../../career/state/job/job.model';
+import {toFormData} from '../../../../shared/extensions/object.extension';
 
 @Component({
   selector: 'app-manage-timeline',
@@ -26,7 +27,7 @@ export class ManageTimeline {
   private consoleFacade = inject(ConsoleFacade);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  
+
   private syncTabWithQueryParam = effect(() => {
     const type = this.route.snapshot.queryParamMap.get('type') as TimelineItemType;
     const idx = this.timelineItemTypes.indexOf(type);
@@ -44,7 +45,7 @@ export class ManageTimeline {
   }
 
   onJobSubmit(job: JobCreateDto) {
-    this.consoleFacade.addJob(job).subscribe({
+    this.consoleFacade.addJob(toFormData(job)).subscribe({
       next: () => this.resetForm.set(true),
       error: () => {
       }

@@ -6,6 +6,7 @@ export interface TimelineItemDto {
   endDate?: Date;
   description?: string;
   createdAt: Date;
+  image?: string;
 }
 
 export enum TimelineItemType {
