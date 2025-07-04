@@ -12,6 +12,15 @@ html {
     typography: Roboto,
     density: 0,
   ));
+
+  @include mat.datepicker-overrides((
+    calendar-container-background-color: #fff,
+  ));
+
+  @include mat.tabs-overrides((
+    divider-color: transparent,
+  ));
+
 }
 
 @import "../../node_modules/tailwindcss";
@@ -22,6 +31,9 @@ html {
   --color-secondary: var(--mat-sys-secondary);
 }
 
+.mat-mdc-form-field {
+  background-color: white !important;
+}
 
 html, body {
   height: 100%;
