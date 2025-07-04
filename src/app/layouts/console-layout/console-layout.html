@@ -2,8 +2,8 @@
   <app-loader/>
 } @else if (canAccessAdmin()) {
   <div class="h-[100vh] flex">
-    <app-console-menu class="h-full"/>
-    <div class="flex-1 p-4 overflow-y-auto">
+    <app-console-menu class="h-full console-menu"/>
+    <div class="flex-1 p-4 overflow-y-auto console-content-bg">
       <router-outlet/>
     </div>
   </div>

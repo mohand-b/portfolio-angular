@@ -8,13 +8,6 @@ html {
     color: (
       theme-type: light,
       primary: my-theme.$primary-palette,
-      secondary: my-theme.$secondary-palette,
-      tertiary: my-theme.$tertiary-palette,
-      error: my-theme.$error-palette,
-      background: (
-        background: map-get(my-theme.$secondary-palette, 100),
-        surface: map-get(my-theme.$secondary-palette, 100)
-      )
     ),
     typography: Roboto,
     density: 0,
@@ -22,6 +15,7 @@ html {
 }
 
 @import "../../node_modules/tailwindcss";
+
 
 @theme static {
   --color-primary: var(--mat-sys-primary);
@@ -36,8 +30,6 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: var(--mat-sys-background);
-  color: var(--mat-sys-on-background);
 }
 
 .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch {
