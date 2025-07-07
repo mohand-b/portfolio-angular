@@ -11,10 +11,11 @@ import {JobCreate} from '../../components/job-create/job-create';
 import {ConsoleFacade} from '../../console.facade';
 import {JobCreateDto} from '../../../career/state/job/job.model';
 import {toFormData} from '../../../../shared/extensions/object.extension';
+import {CertificationCreate} from '../../components/certification-create/certification-create';
 
 @Component({
   selector: 'app-manage-timeline',
-  imports: [MatTabsModule, MatIconModule, JobCreate, JobCreate],
+  imports: [MatTabsModule, MatIconModule, JobCreate, JobCreate, CertificationCreate],
   templateUrl: './manage-timeline.html',
   styleUrl: './manage-timeline.scss'
 })
