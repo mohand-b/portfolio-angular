@@ -25,7 +25,7 @@ import {TimelineItemType} from '../../../career/state/timeline/timeline.model';
   styleUrl: './certification-create.scss'
 })
 export class CertificationCreate {
-  resetForm = input(false);
+  resetForm = input(0);
   certificationSubmit = output<CreateCertificationDto>();
   imagePreview = signal<string | null>(null);
 
@@ -41,10 +41,9 @@ export class CertificationCreate {
   });
 
   private readonly resetFormEffect = effect(() => {
-    if (this.resetForm()) {
-      this.certificationForm.reset({type: TimelineItemType.Job});
-      this.imagePreview.set(null);
-    }
+    const token = this.resetForm();
+    this.certificationForm.reset({type: TimelineItemType.Job});
+    this.imagePreview.set(null);
   });
 
   onSubmit() {

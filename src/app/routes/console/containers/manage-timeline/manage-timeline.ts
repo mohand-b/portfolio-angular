@@ -24,7 +24,7 @@ export class ManageTimeline {
 
   readonly timelineItemTypesMeta: TimelineItemTypeMeta[] = Object.values(TIMELINE_ITEM_TYPE_META);
   readonly timelineItemTypes: TimelineItemType[] = this.timelineItemTypesMeta.map(meta => meta.key);
-  resetForm: WritableSignal<boolean> = signal(false);
+  resetForm: WritableSignal<number> = signal(0);
   selectedTabIndex: WritableSignal<number> = signal(0);
   private consoleFacade = inject(ConsoleFacade);
   private route = inject(ActivatedRoute);
@@ -48,7 +48,7 @@ export class ManageTimeline {
 
   onJobSubmit(job: CreateJobDto) {
     this.consoleFacade.addJob(toFormData(job)).subscribe({
-      next: () => this.resetForm.set(true),
+      next: () => this.resetForm.update(v => v + 1),
       error: () => {
       }
     });
@@ -56,7 +56,7 @@ export class ManageTimeline {
 
   onCertificationSubmit(certification: CreateCertificationDto) {
     this.consoleFacade.addCertification(toFormData(certification)).subscribe({
-      next: () => this.resetForm.set(true),
+      next: () => this.resetForm.update(v => v + 1),
       error: () => {
       }
     })

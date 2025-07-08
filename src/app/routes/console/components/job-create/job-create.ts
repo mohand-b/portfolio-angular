@@ -26,11 +26,13 @@ import {CreateJobDto} from '../../../career/state/job/job.model';
   styleUrl: './job-create.scss',
 })
 export class JobCreate {
-  resetForm = input(false);
+  resetForm = input(0);
   jobSubmit = output<CreateJobDto>();
   imagePreview = signal<string | null>(null);
   missions: WritableSignal<string[]> = signal([]);
+
   private fb = inject(FormBuilder);
+  
   jobForm = this.fb.group({
     title: ['', Validators.required],
     company: ['', Validators.required],
@@ -44,12 +46,11 @@ export class JobCreate {
   missionFormControl = this.fb.control('');
 
   private readonly resetFormEffect = effect(() => {
-    if (this.resetForm()) {
-      this.jobForm.reset({type: TimelineItemType.Job});
-      this.missions.set([]);
-      this.missionFormControl.reset();
-      this.imagePreview.set(null);
-    }
+    const token = this.resetForm();
+    this.jobForm.reset({type: TimelineItemType.Job});
+    this.missions.set([]);
+    this.missionFormControl.reset();
+    this.imagePreview.set(null);
   });
 
   addMission() {
