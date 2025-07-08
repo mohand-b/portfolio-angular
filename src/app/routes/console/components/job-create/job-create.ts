@@ -8,7 +8,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {FormFieldStyleDirective} from '../../../../shared/directives/form-field-style.directive';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {JobCreateDto} from '../../../career/state/job/job.model';
+import {CreateJobDto} from '../../../career/state/job/job.model';
 
 @Component({
   selector: 'app-job-create',
@@ -27,7 +27,7 @@ import {JobCreateDto} from '../../../career/state/job/job.model';
 })
 export class JobCreate {
   resetForm = input(false);
-  jobSubmit = output<JobCreateDto>();
+  jobSubmit = output<CreateJobDto>();
   imagePreview = signal<string | null>(null);
   missions: WritableSignal<string[]> = signal([]);
   private fb = inject(FormBuilder);
@@ -90,10 +90,10 @@ export class JobCreate {
     this.jobForm.markAllAsTouched();
     if (!this.jobForm.valid) return;
 
-    const job: JobCreateDto = {
+    const job: CreateJobDto = {
       ...this.jobForm.value,
       missions: this.missions(),
-    } as JobCreateDto;
+    } as CreateJobDto;
 
     this.jobSubmit.emit(job);
   }

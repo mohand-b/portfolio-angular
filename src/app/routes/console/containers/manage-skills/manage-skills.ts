@@ -1,5 +1,5 @@
 import {Component, inject, signal, Signal} from '@angular/core';
-import {SkillCreate} from '../../../../console/containers/skill-create/skill-create';
+import {SkillCreate} from '../skill-create/skill-create';
 import {ConsoleFacade} from '../../console.facade';
 import {SkillCategory, SkillDto} from '../../../skills/state/skill/skill.model';
 import {SkillCategorySection} from '../../components/skill-category-section/skill-category-section';

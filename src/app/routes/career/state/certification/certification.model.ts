@@ -5,3 +5,6 @@ export interface CertificationDto extends TimelineItemDto {
   school: string;
   location: string;
 }
+
+export interface CreateCertificationDto extends Omit<CertificationDto, 'id'> {
+}

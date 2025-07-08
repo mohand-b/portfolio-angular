@@ -9,9 +9,10 @@ import {MatIconModule} from '@angular/material/icon';
 import {ActivatedRoute, Router} from '@angular/router';
 import {JobCreate} from '../../components/job-create/job-create';
 import {ConsoleFacade} from '../../console.facade';
-import {JobCreateDto} from '../../../career/state/job/job.model';
+import {CreateJobDto} from '../../../career/state/job/job.model';
 import {toFormData} from '../../../../shared/extensions/object.extension';
 import {CertificationCreate} from '../../components/certification-create/certification-create';
+import {CreateCertificationDto} from '../../../career/state/certification/certification.model';
 
 @Component({
   selector: 'app-manage-timeline',
@@ -45,7 +46,7 @@ export class ManageTimeline {
     });
   }
 
-  onJobSubmit(job: JobCreateDto) {
+  onJobSubmit(job: CreateJobDto) {
     this.consoleFacade.addJob(toFormData(job)).subscribe({
       next: () => this.resetForm.set(true),
       error: () => {
@@ -53,4 +54,11 @@ export class ManageTimeline {
     });
   }
 
+  onCertificationSubmit(certification: CreateCertificationDto) {
+    this.consoleFacade.addCertification(toFormData(certification)).subscribe({
+      next: () => this.resetForm.set(true),
+      error: () => {
+      }
+    })
+  }
 }

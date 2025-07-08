@@ -4,10 +4,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
-import {SKILL_CATEGORY_META, SkillCategory, SkillCreateDto} from '../../../routes/skills/state/skill/skill.model';
-import {FormFieldStyleDirective} from '../../../shared/directives/form-field-style.directive';
+import {SKILL_CATEGORY_META, SkillCategory, SkillCreateDto} from '../../../skills/state/skill/skill.model';
+import {FormFieldStyleDirective} from '../../../../shared/directives/form-field-style.directive';
 import {MatIconModule} from '@angular/material/icon';
-import {ConsoleFacade} from '../../../routes/console/console.facade';
+import {ConsoleFacade} from '../../console.facade';
 
 @Component({
   selector: 'app-skill-create',

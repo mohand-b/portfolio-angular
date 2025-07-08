@@ -20,7 +20,8 @@
             <div>project</div>
           }
           @case ('certification') {
-            <app-certification-create/>
+            <app-certification-create [resetForm]="resetForm()"
+                                      (certificationSubmit)="onCertificationSubmit($event)"/>
           }
           @case ('other') {
             <div>other</div>

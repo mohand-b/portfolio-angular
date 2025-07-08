@@ -14,6 +14,8 @@ import {SkillCategory, SkillCreateDto, SkillDto} from '../skills/state/skill/ski
 import {SkillService} from '../skills/state/skill/skill.service';
 import {JobService} from '../career/state/job/job.service';
 import {JobDto} from '../career/state/job/job.model';
+import {CertificationDto} from '../career/state/certification/certification.model';
+import {CertificationService} from '../career/state/certification/certification.service';
 
 @Injectable({providedIn: 'root'})
 export class ConsoleFacade {
@@ -23,6 +25,7 @@ export class ConsoleFacade {
   private achievementService = inject(AchievementService);
   private jobService = inject(JobService);
   private skillService = inject(SkillService);
+  private certificationService = inject(CertificationService);
   private achievementStore = inject(AchievementStore);
   readonly achievements: Signal<AchievementLight[]> = this.achievementStore.achievements;
   private skillStore = inject(SkillStore);
@@ -88,6 +91,12 @@ export class ConsoleFacade {
 
   addJob(jobFormData: FormData): Observable<JobDto> {
     return this.jobService.createJob(jobFormData)
+  }
+
+  // CERTIFICATIONS
+
+  addCertification(certificationFormData: FormData): Observable<CertificationDto> {
+    return this.certificationService.createCertification(certificationFormData);
   }
 
 }
