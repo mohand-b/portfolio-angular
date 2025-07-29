@@ -1,7 +1,10 @@
 <a
   [routerLink]="menuEntry.path"
-  class="m-0 text-inherit no-underline"
-  routerLinkActive="active-link"
+  class="flex items-center gap-3 text-white p-3 rounded transition duration-200 hover:bg-[rgba(255,255,255,0.04)]"
+  routerLinkActive="bg-[rgba(255,255,255,0.1)] font-medium"
 >
-  {{ menuEntry.title }}
+  @if (menuEntry.icon) {
+    <mat-icon>{{ menuEntry.icon }}</mat-icon>
+  }
+  <span>{{ menuEntry.title }}</span>
 </a>

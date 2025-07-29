@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import {publicRoutes} from '../../../public.routes';
+import {Component} from '@angular/core';
 import {MenuEntry} from '../../../../shared/components/main-menu/main-menu';
 import {consoleRoutes} from '../../console.routes';
 import {MenuItem} from '../../../../shared/components/menu-item/menu-item';
@@ -18,7 +17,8 @@ export class ConsoleMenu {
     ?.filter(child => child.title)
     .map(child => ({
       title: child.title as string,
-      path: '/console/' + (child.path || '')
+      path: '/console/' + (child.path || ''),
+      icon: child.icon
     })) || [];
 
 

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {MenuItem} from '../menu-item/menu-item';
 import {publicRoutes} from '../../../routes/public.routes';
 
 export interface MenuEntry {
   title: string;
   path: string;
+  icon?: string;
 }
 
 @Component({

@@ -4,7 +4,7 @@ export const publicRoutes: Route[] = [
   {
     path: 'home',
     loadComponent: () => import('./home/containers/home/home').then(m => m.Home),
-    title: 'Home'
+    title: 'Home',
   },
   {
     path: 'career',

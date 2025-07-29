@@ -15,4 +15,6 @@ export interface ProjectDto extends TimelineItemDto {
   challenges?: string;
   impact?: string;
   job?: JobDto;
+  images?: string[];
+  githubLink?: string;
 }

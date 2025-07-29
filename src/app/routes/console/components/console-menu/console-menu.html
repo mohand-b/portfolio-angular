@@ -1,14 +1,12 @@
-<div class="flex flex-col h-full w-50 border-r shadow-md justify-between p-4">
-  <div class="flex flex-col gap-4">
+<nav class="flex flex-col h-full w-64 bg-primary text-white justify-between shadow-md">
+  <div class="flex flex-col gap-2">
     @for (item of menuItems; track item) {
       <app-menu-item [menuEntry]="item"/>
     }
   </div>
 
-  <div class="mt-6 flex flex-col items-center">
-    <h3 class="font-bold">
-      mohand
-      <span class="text-primary">boudjema</span>
-    </h3>
+  <div class="text-center my-4 mx-auto font-semibold">
+    mohand <span class="text-white/50">boudjema</span>
   </div>
-</div>
+
+</nav>
