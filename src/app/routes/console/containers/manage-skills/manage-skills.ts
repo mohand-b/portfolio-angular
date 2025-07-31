@@ -1,5 +1,4 @@
 import {Component, inject, signal, Signal} from '@angular/core';
-import {SkillCreate} from '../skill-create/skill-create';
 import {ConsoleFacade} from '../../console.facade';
 import {SkillCategory, SkillDto} from '../../../skills/state/skill/skill.model';
 import {SkillCategorySection} from '../../components/skill-category-section/skill-category-section';
@@ -9,16 +8,21 @@ import {MatIconModule} from '@angular/material/icon';
 import {ModalService} from '../../../../shared/services/modal.service';
 import {GenericModal} from '../../../../shared/components/generic-modal/generic-modal';
 import {filter, switchMap} from 'rxjs';
+import {MatButtonModule} from '@angular/material/button';
+import {UpperCasePipe} from '@angular/common';
+import {SidePanel} from '../../../../shared/components/side-panel/side-panel';
 
 @Component({
   selector: 'app-manage-skills',
   standalone: true,
   imports: [
-    SkillCreate,
     SkillCategorySection,
     SkillItem,
     MatIconModule,
-    DragDropModule
+    DragDropModule,
+    MatButtonModule,
+    UpperCasePipe,
+    SidePanel
   ],
   templateUrl: './manage-skills.html',
   styleUrl: './manage-skills.scss'
@@ -31,6 +35,7 @@ export class ManageSkills {
   isDragging = signal<boolean>(false);
   readonly consoleFacade: ConsoleFacade = inject(ConsoleFacade);
   readonly skills: Signal<SkillDto[]> = this.consoleFacade.skills;
+  panelOpen = signal(false);
   private modalService = inject(ModalService);
 
   getSkillsByCategory(category: SkillCategory): SkillDto[] {
@@ -75,7 +80,6 @@ export class ManageSkills {
     ).subscribe();
   }
 
-
   onDropToTrash(event: CdkDragDrop<SkillDto[]>): void {
     const skill = event.item.data as SkillDto;
 
@@ -95,5 +99,13 @@ export class ManageSkills {
     ).subscribe();
   }
 
+
+  openPanel() {
+    this.panelOpen.set(true);
+  }
+
+  onCloseRequested() {
+    this.panelOpen.set(false);
+  }
 }
 

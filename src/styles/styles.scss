@@ -56,3 +56,8 @@ body {
 }
 
 
+.secondary {
+  @include mat.button-overrides((
+    filled-container-color: var(--color-secondary),
+  ));
+}
