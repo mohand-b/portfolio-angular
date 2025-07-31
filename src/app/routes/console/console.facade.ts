@@ -1,5 +1,5 @@
 import {inject, Injectable, Signal} from '@angular/core';
-import {AchievementLogsService} from './state/achievement-logs/achievement-logs.service';
+import {AchievementLogsService} from './manage-achievements/state/achievement-logs/achievement-logs.service';
 import {Observable, tap} from 'rxjs';
 import {
   Achievement,
