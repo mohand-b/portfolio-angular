@@ -26,9 +26,8 @@ export class CertificationCreate {
   resetForm = input(0);
   certificationSubmit = output<CreateCertificationDto>();
   imagePreview = signal<string | null>(null);
-
+  submitted = output<void>();
   private fb = inject(FormBuilder);
-
   certificationForm: FormGroup = this.fb.group({
     certificationName: ['', Validators.required],
     startDate: [null],

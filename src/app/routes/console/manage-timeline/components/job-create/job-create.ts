@@ -28,9 +28,8 @@ export class JobCreate {
   jobSubmit = output<CreateJobDto>();
   imagePreview = signal<string | null>(null);
   missions: WritableSignal<string[]> = signal([]);
-
+  submitted = output<void>();
   private fb = inject(FormBuilder);
-
   jobForm = this.fb.group({
     title: ['', Validators.required],
     company: ['', Validators.required],
@@ -42,7 +41,6 @@ export class JobCreate {
     image: [null as File | null],
   });
   missionFormControl = this.fb.control('');
-
   private readonly resetFormEffect = effect(() => {
     const token = this.resetForm();
     this.jobForm.reset({type: TimelineItemType.Job});
