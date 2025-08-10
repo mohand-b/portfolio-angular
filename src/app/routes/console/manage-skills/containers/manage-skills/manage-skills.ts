@@ -11,6 +11,7 @@ import {filter, switchMap} from 'rxjs';
 import {MatButtonModule} from '@angular/material/button';
 import {UpperCasePipe} from '@angular/common';
 import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
+import {SkillCreate} from '../skill-create/skill-create';
 
 @Component({
   selector: 'app-manage-skills',
@@ -22,7 +23,8 @@ import {SidePanel} from '../../../../../shared/components/side-panel/side-panel'
     DragDropModule,
     MatButtonModule,
     UpperCasePipe,
-    SidePanel
+    SidePanel,
+    SkillCreate
   ],
   templateUrl: './manage-skills.html',
   styleUrl: './manage-skills.scss'

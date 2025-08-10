@@ -23,17 +23,17 @@
     </div>
 
     <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input formControlName="certificationName" matInput placeholder="Intitulé de la certification" required>
       </mat-form-field>
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input formControlName="school" matInput placeholder="École/Organisme" required>
       </mat-form-field>
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input formControlName="location" matInput placeholder="Lieu" required>
       </mat-form-field>
 
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input
           (click)="pickerStart.open()"
           (focus)="pickerStart.open()"
@@ -47,7 +47,7 @@
         <mat-datepicker #pickerStart></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input
           (click)="pickerEnd.open()"
           (focus)="pickerEnd.open()"

@@ -5,7 +5,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {FormFieldStyleDirective} from '../../../../../shared/directives/form-field-style.directive';
 import {CreateCertificationDto} from '../../../../career/state/certification/certification.model';
 import {TimelineItemType} from '../../../../career/state/timeline/timeline.model';
 
@@ -18,8 +17,7 @@ import {TimelineItemType} from '../../../../career/state/timeline/timeline.model
     MatInputModule,
     MatDatepickerModule,
     MatButtonModule,
-    MatIconModule,
-    FormFieldStyleDirective
+    MatIconModule
   ],
   templateUrl: './certification-create.html',
   styleUrl: './certification-create.scss'

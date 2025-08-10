@@ -1,13 +1,12 @@
 <form (ngSubmit)="login()" [formGroup]="form"
-      class="min-h-screen flex items-center justify-center flex flex-col gap-2">
+      class="min-h-screen flex items-center justify-center flex flex-col gap-4">
+
   <mat-form-field appearance="outline">
-    <mat-label>Email</mat-label>
-    <input formControlName="email" matInput type="email"/>
+    <input formControlName="email" matInput placeholder="Email" type="email"/>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Mot de passe</mat-label>
-    <input formControlName="password" matInput type="password"/>
+    <input formControlName="password" matInput placeholder="Mot de passe" type="password"/>
   </mat-form-field>
 
   <button color="primary" matButton="filled" type="submit">

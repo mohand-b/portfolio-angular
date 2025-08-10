@@ -4,7 +4,6 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {ConsoleFacade} from '../../../console.facade';
-import {FormFieldStyleDirective} from '../../../../../shared/directives/form-field-style.directive';
 
 @Component({
   selector: 'app-achievement-create',
@@ -12,8 +11,7 @@ import {FormFieldStyleDirective} from '../../../../../shared/directives/form-fie
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
-    FormFieldStyleDirective
+    MatButtonModule
   ],
   templateUrl: './achievement-create.html',
   styleUrl: './achievement-create.scss'

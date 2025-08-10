@@ -23,17 +23,17 @@
     </div>
 
     <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input formControlName="title" matInput placeholder="Intitulé du poste" required>
       </mat-form-field>
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input formControlName="company" matInput placeholder="Entreprise" required>
       </mat-form-field>
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input formControlName="location" matInput placeholder="Lieu">
       </mat-form-field>
 
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input
           (click)="pickerStart.open()"
           (focus)="pickerStart.open()"
@@ -46,7 +46,7 @@
         <mat-datepicker-toggle [for]="pickerStart" matSuffix></mat-datepicker-toggle>
         <mat-datepicker #pickerStart></mat-datepicker>
       </mat-form-field>
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
         <input
           (click)="pickerEnd.open()"
           (focus)="pickerEnd.open()"
@@ -61,7 +61,7 @@
         <mat-datepicker #pickerEnd></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field appFormFieldStyle appearance="outline" class="w-full md:col-span-2">
+      <mat-form-field appearance="outline" class="w-full md:col-span-2">
         <input (keydown.enter)="onMissionInputKeyup($event)"
                [formControl]="missionFormControl"
                matInput placeholder="Nouvelle mission"/>

@@ -1,4 +1,4 @@
-<script src="../../../routes/console/console.routes.ts"></script>@if (isOpen()) {
+@if (isOpen()) {
   <div class="fixed inset-0 z-50 flex justify-end" (keydown.escape)="requestClose()" tabindex="0">
     <div
       class="absolute inset-0 bg-black/50"
@@ -10,11 +10,8 @@
       animate.in="slide-in-from-right"
       animate.out="slide-out-to-right"
     >
-      <div class="p-4 flex justify-between items-center">
-        <h2 class="text-lg font-semibold">Panneau latéral</h2>
-      </div>
-      <div class="p-4 overflow-auto h-[calc(100%-4rem)]">
-        <ng-content></ng-content>
+      <div class="px-[1.75rem] py-[2.25rem] overflow-auto h-full">
+        <ng-content/>
       </div>
     </div>
   </div>

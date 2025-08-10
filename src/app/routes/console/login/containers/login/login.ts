@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss'

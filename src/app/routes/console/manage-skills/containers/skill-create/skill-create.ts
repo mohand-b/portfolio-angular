@@ -5,7 +5,6 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {SKILL_CATEGORY_META, SkillCategory, SkillCreateDto} from '../../../../skills/state/skill/skill.model';
-import {FormFieldStyleDirective} from '../../../../../shared/directives/form-field-style.directive';
 import {MatIconModule} from '@angular/material/icon';
 import {ConsoleFacade} from '../../../console.facade';
 
@@ -17,8 +16,7 @@ import {ConsoleFacade} from '../../../console.facade';
     MatSelectModule,
     MatButtonModule,
     ReactiveFormsModule,
-    MatIconModule,
-    FormFieldStyleDirective
+    MatIconModule
   ],
   templateUrl: './skill-create.html',
   styleUrl: './skill-create.scss'

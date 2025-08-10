@@ -6,7 +6,6 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {FormFieldStyleDirective} from '../../../../../shared/directives/form-field-style.directive';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {CreateJobDto} from '../../../../career/state/job/job.model';
 
@@ -19,8 +18,7 @@ import {CreateJobDto} from '../../../../career/state/job/job.model';
     MatButtonModule,
     ReactiveFormsModule,
     MatIconModule,
-    MatDatepickerModule,
-    FormFieldStyleDirective
+    MatDatepickerModule
   ],
   templateUrl: './job-create.html',
   styleUrl: './job-create.scss',
