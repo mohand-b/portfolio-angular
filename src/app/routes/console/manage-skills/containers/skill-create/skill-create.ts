@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -24,8 +24,8 @@ import {ConsoleFacade} from '../../../console.facade';
 export class SkillCreate {
 
   readonly skillCategories: SkillCategory[] = Object.values(SkillCategory) as SkillCategory[];
+  readonly created = output<void>();
   protected readonly skillCategoryCatalog = SKILL_CATEGORY_META;
-
   private consoleFacade = inject(ConsoleFacade);
 
   private fb = inject(FormBuilder);
@@ -45,7 +45,10 @@ export class SkillCreate {
     };
 
     this.consoleFacade.createSkill(skill).subscribe({
-      next: () => this.form.reset(),
+      next: () => {
+        this.created.emit();
+        this.form.reset();
+      },
       error: () => this.form.markAsTouched(),
     });
 

@@ -109,5 +109,6 @@ export class ManageSkills {
   onCloseRequested() {
     this.panelOpen.set(false);
   }
+
 }
 
