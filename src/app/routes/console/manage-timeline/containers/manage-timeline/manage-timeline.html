@@ -7,81 +7,47 @@
   </button>
 </div>
 
+<app-side-panel (closed)="onCloseRequested()" [isOpen]="panelOpen()">
+  <div class="h-full flex flex-col">
+    <div class="shrink-0">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-select [formControl]="typeControl" class="unified-field" placeholder="Catégorie">
+          @for (t of types; track t) {
+            <mat-option [value]="t" class="flex items-center gap-2">
+              <mat-icon
+                fontIcon="{{ typeMeta[t].icon }}"
+                [style.color]="typeMeta[t].color"
+                class="mr-2 align-middle"
+              ></mat-icon>
+              {{ typeMeta[t].label }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <div class="mb-4"></div>
+    </div>
 
-<mat-tab-group (selectedIndexChange)="onTabChange($event)" [selectedIndex]="selectedTabIndex()">
-  @for (meta of timelineItemTypesMeta; track meta.key) {
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <div class="flex items-center gap-2">
-          <mat-icon [style.color]="meta.color">{{ meta.icon }}</mat-icon>
-          <span>{{ meta.label }}</span>
-        </div>
-      </ng-template>
-
-      <div class="flex flex-col gap-4 p-4">
-        @switch (meta.key) {
-          @case ('job') {
-            <app-job-create
-              [resetForm]="resetForm()"
-              (jobSubmit)="onJobSubmit($event)"
-            />
-          }
-          @case ('project') {
-            <div>project</div>
-          }
-          @case ('certification') {
-            <app-certification-create [resetForm]="resetForm()"
-                                      (certificationSubmit)="onCertificationSubmit($event)"/>
-          }
-          @case ('other') {
-            <div>other</div>
-          }
+    <div class="flex-1">
+      @switch (selectedType()) {
+        @case (TimelineItemType.Job) {
+          <app-job-create (submitted)="onCreated()"/>
         }
-      </div>
-    </mat-tab>
-  }
-</mat-tab-group>
-
-<app-side-panel
-  (closed)="onCloseRequested()"
-  [isOpen]="panelOpen()"
->
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-select [formControl]="typeControl" class="unified-field" placeholder="Catégorie">
-      @for (t of types; track t) {
-        <mat-option [value]="t" class="flex items-center gap-2">
-          <mat-icon
-            fontIcon="{{ typeMeta[t].icon }}"
-            [style.color]="typeMeta[t].color"
-            class="mr-2 align-middle"
-          ></mat-icon>
-          {{ typeMeta[t].label }}
-        </mat-option>
+        @case (TimelineItemType.Certification) {
+          <app-certification-create (created)="onCloseRequested()"/>
+        }
+        @case (TimelineItemType.Project) {
+          <app-project-timeline-item-create (submitted)="onCreated()"/>
+        }
+        @case (TimelineItemType.Other) {
+          <app-other-timeline-item-create (submitted)="onCreated()"/>
+        }
+        @default {
+          <div class="text-slate-500 text-sm">
+            Choisis une catégorie pour afficher le formulaire correspondant.
+          </div>
+        }
       }
-    </mat-select>
-  </mat-form-field>
-
-  <div class="mb-4"></div>
-
-  @switch (selectedType()) {
-    @case (TimelineItemType.Job) {
-      <app-job-create (submitted)="onCreated()"/>
-    }
-    @case (TimelineItemType.Certification) {
-      <app-certification-create (submitted)="onCreated()"/>
-    }
-    @case (TimelineItemType.Project) {
-      <app-project-timeline-item-create (submitted)="onCreated()"/>
-    }
-    @case (TimelineItemType.Other) {
-      <app-other-timeline-item-create (submitted)="onCreated()"/>
-    }
-    @default {
-      <div class="text-slate-500 text-sm">
-        Choisis une catégorie pour afficher le formulaire correspondant.
-      </div>
-    }
-  }
-
-
+    </div>
+  </div>
 </app-side-panel>
+
