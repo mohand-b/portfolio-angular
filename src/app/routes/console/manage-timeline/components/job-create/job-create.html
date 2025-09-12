@@ -1,1 +1,134 @@
-<div>job create</div>
+<form (submit)="onSubmit()" [formGroup]="jobForm" class="h-full w-full flex flex-col justify-between gap-4">
+
+  <div class="flex items-center w-full px-1 py-4 gap-4 select-none">
+    @for (s of stepsMeta; track s.icon; let i = $index) {
+      <div
+        class="w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-white"
+        role="img"
+        [attr.aria-label]="s.label + (step()===i ? ' (en cours)' : '')"
+        [attr.aria-current]="step()===i ? 'step' : null"
+        [style.backgroundColor]="i <= step() ? 'var(--color-secondary)' : 'var(--color-neutral-300)'">
+        <mat-icon>{{ s.icon }}</mat-icon>
+      </div>
+
+      @if (i < stepsMeta.length - 1) {
+        <div class="h-0.5 flex-1"
+             [style.backgroundColor]="i < step() ? 'var(--color-secondary)' : 'var(--color-neutral-300)'">
+        </div>
+      }
+    }
+  </div>
+
+  <div class="flex-1 overflow-auto">
+    @if (step() === 0) {
+      <div formGroupName="step1" class="flex flex-col gap-4">
+
+        <mat-form-field appearance="outline" class="w-full">
+          <input matInput placeholder="Ex: Développeur Front-end" formControlName="title"/>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <input [matDatepicker]="startPicker" formControlName="startDate" matInput placeholder="Date de début"/>
+          <button (click)="startPicker.open()" mat-icon-button matSuffix type="button">
+            <mat-icon>calendar_month</mat-icon>
+          </button>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <input [matDatepicker]="endPicker" [min]="s1.get('startDate')?.value || null"
+                 formControlName="endDate" matInput
+                 placeholder="Date de fin"/>
+          <button (click)="endPicker.open()" mat-icon-button matSuffix type="button">
+            <mat-icon>calendar_month</mat-icon>
+          </button>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+      </div>
+    }
+
+    @if (step() === 1) {
+      <div formGroupName="step2" class="flex flex-col gap-4">
+        <div class="w-full">
+          <input
+            #fileInput
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            class="hidden"
+            type="file"
+          />
+          <div
+            (click)="fileInput.click()"
+            class="h-[12rem] w-full rounded-xl border border-black/10 bg-black/5 flex items-center justify-center cursor-pointer"
+          >
+            @if (imagePreview()) {
+              <img [src]="imagePreview()!" class="h-full w-full object-cover rounded-xl"/>
+            } @else {
+              <mat-icon fontIcon="image" class="opacity-40 text-5xl"></mat-icon>
+            }
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <input matInput placeholder="Entreprise" formControlName="company">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <input matInput placeholder="Ville / Remote" formControlName="location">
+        </mat-form-field>
+      </div>
+    }
+
+    @if (step() === 2) {
+      <div class="flex flex-col gap-4">
+
+        <mat-form-field appearance="outline" class="w-full">
+          <input matInput placeholder="Ajouter une mission" [formControl]="missionControl"
+                 (keydown.enter)="addMission($event)"/>
+          <mat-icon matSuffix>add</mat-icon>
+        </mat-form-field>
+
+        <div class="divide-y divide-slate-200">
+          @for (m of missions(); track m; let i = $index) {
+            <div class="flex items-center justify-between py-2">
+              <div class="text-base text-slate-800 truncate pr-4">{{ m }}</div>
+              <button type="button" class="text-slate-500 hover:text-red-600 cursor-pointer" (click)="removeMission(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="flex items-center justify-between">
+    @if (step() > 0) {
+      <button type="button" matButton="text" (click)="prev()">Précédent</button>
+    } @else {
+      <span></span>
+    }
+
+    @if (step() < 2) {
+      <button
+        type="button"
+        matButton="filled"
+        (click)="next()"
+        [disabled]="(step()===0 && s1.invalid) || (step()===1 && s2.invalid)">
+        Suivant
+      </button>
+    } @else {
+      <button type="submit" matButton="filled">
+        <mat-icon class="mr-1">add</mat-icon>
+        Ajouter
+      </button>
+    }
+  </div>
+
+
+  @if (isSubmitting()) {
+    <mat-progress-bar mode="indeterminate" class="mt-2"/>
+  }
+
+</form>

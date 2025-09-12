@@ -6,6 +6,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {ConsoleFacade} from '../../../console.facade';
+import {toFormData} from '../../../../../shared/extensions/object.extension';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class CertificationCreate {
       return;
     }
 
-    this.consoleFacade.addCertification(this.certificationForm.value).subscribe({
+    this.consoleFacade.addCertification(toFormData(this.certificationForm.value)).subscribe({
       next: () => {
         this.created.emit();
         this.certificationForm.reset();
@@ -55,11 +56,13 @@ export class CertificationCreate {
 
   onFileSelected(evt: Event) {
     const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) return;
+    const image = input.files?.[0];
+    if (!image) return;
+
+    this.certificationForm.patchValue({image});
 
     const reader = new FileReader();
     reader.onload = () => this.imagePreview.set(reader.result as string);
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(image);
   }
 }

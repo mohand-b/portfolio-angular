@@ -38,7 +38,6 @@ import {toSignal} from '@angular/core/rxjs-interop';
 })
 export class ManageTimeline {
 
-
   typeControl = new FormControl<TimelineItemType | null>(null, {nonNullable: false, validators: [Validators.required]});
 
   readonly types = Object.values(TimelineItemType);
@@ -55,9 +54,5 @@ export class ManageTimeline {
 
   onCloseRequested() {
     this.panelOpen.set(false);
-  }
-
-  onCreated() {
-
   }
 }

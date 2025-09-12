@@ -30,16 +30,16 @@
     <div class="flex-1">
       @switch (selectedType()) {
         @case (TimelineItemType.Job) {
-          <app-job-create (submitted)="onCreated()"/>
+          <app-job-create (created)="onCloseRequested()"/>
         }
         @case (TimelineItemType.Certification) {
           <app-certification-create (created)="onCloseRequested()"/>
         }
         @case (TimelineItemType.Project) {
-          <app-project-timeline-item-create (submitted)="onCreated()"/>
+          <app-project-timeline-item-create (submitted)="onCloseRequested()"/>
         }
         @case (TimelineItemType.Other) {
-          <app-other-timeline-item-create (submitted)="onCreated()"/>
+          <app-other-timeline-item-create (submitted)="onCloseRequested()"/>
         }
         @default {
           <div class="text-slate-500 text-sm">
