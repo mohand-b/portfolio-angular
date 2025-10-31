@@ -183,9 +183,79 @@ body {
   color: var(--ff-icon) !important;
 }
 
+/* --- TEXTAREA exceptions (déjà présentes) --- */
+.mat-mdc-form-field.mat-form-field-appearance-outline:has(textarea.mat-mdc-input-element)
+.mat-mdc-text-field-wrapper {
+  align-items: flex-start;
+  overflow: visible !important;
+}
+
+.mat-mdc-form-field.mat-form-field-appearance-outline:has(textarea.mat-mdc-input-element)
+.mat-mdc-form-field-infix {
+  height: auto !important;
+  min-height: 0 !important;
+  display: block !important;
+  padding: 8px var(--ff-pad-x) !important;
+}
+
+.mat-mdc-form-field.mat-form-field-appearance-outline textarea.mat-mdc-input-element {
+  height: auto !important;
+  line-height: 1.5 !important;
+  resize: vertical;
+  font-size: var(--ff-fs) !important;
+  color: var(--ff-text) !important;
+}
+
+/* --- CHIPS exceptions (NOUVEAU) --- */
+
+/* Le wrapper ne doit pas centrer verticalement, ni être figé en hauteur */
+.mat-mdc-form-field.mat-form-field-appearance-outline:has(.mat-mdc-chip-grid)
+.mat-mdc-text-field-wrapper {
+  align-items: flex-start !important;
+  height: auto !important;
+  overflow: visible !important;
+  background: var(--ff-bg);
+}
+
+/* L’infix doit pouvoir grandir pour contenir grid + input */
+.mat-mdc-form-field.mat-form-field-appearance-outline:has(.mat-mdc-chip-grid)
+.mat-mdc-form-field-infix {
+  height: auto !important;
+  min-height: 0 !important;
+  display: block !important;
+  padding: 8px var(--ff-pad-x) !important;
+  background: var(--ff-bg);
+}
+
+/* Les chips doivent pouvoir aller à la ligne */
+.mat-mdc-form-field:has(.mat-mdc-chip-grid)
+.mdc-evolution-chip-set__chips {
+  flex-wrap: wrap !important;
+}
+
+/* L’input d’appoint à côté des chips doit rester “naturel” */
+.mat-mdc-form-field:has(.mat-mdc-chip-grid)
+input.mat-mdc-input-element {
+  height: auto !important;
+  line-height: 1.4 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: var(--ff-fs) !important;
+  color: var(--ff-text) !important;
+}
+
+/* Remplace la règle globale "fixe la hauteur" par une version qui IGNORE les chips et les textarea */
+.mat-mdc-form-field.mat-form-field-appearance-outline:not(:has(textarea.mat-mdc-input-element)):not(:has(.mat-mdc-chip-grid))
+.mat-mdc-form-field-infix {
+  height: var(--ff-h) !important;
+  display: flex;
+  align-items: center;
+}
+
 /* === Buttons (secondary variant) === */
 .secondary {
   @include mat.button-overrides((
     filled-container-color: var(--color-secondary),
   ));
 }
+

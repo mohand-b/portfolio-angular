@@ -58,24 +58,24 @@ export class JobCreate {
   });
   missionControl = this.fb.control('');
 
-  get s1() {
-    return this.jobForm.get('step1') as FormGroup;
+  get s1(): FormGroup {
+    return this.getStepGroup(0)!;
   }
 
-  get s2() {
-    return this.jobForm.get('step2') as FormGroup;
+  get s2(): FormGroup {
+    return this.getStepGroup(1)!;
   }
 
   next() {
-    if (this.step() === 0 && this.s1.invalid) {
-      this.s1.markAllAsTouched();
+    const idx = this.step();
+    const current = this.getStepGroup(idx);
+    if (current && current.invalid) {
+      current.markAllAsTouched();
       return;
     }
-    if (this.step() === 1 && this.s2.invalid) {
-      this.s2.markAllAsTouched();
-      return;
+    if (idx < this.stepsMeta.length - 1) {
+      this.step.update(v => v + 1);
     }
-    if (this.step() < 2) this.step.update(v => v + 1);
   }
 
   prev() {
@@ -145,5 +145,9 @@ export class JobCreate {
         this.isSubmitting.set(false);
       },
     });
+  }
+
+  private getStepGroup(idx: number): FormGroup | null {
+    return this.jobForm.get(`step${idx + 1}`) as FormGroup | null;
   }
 }
