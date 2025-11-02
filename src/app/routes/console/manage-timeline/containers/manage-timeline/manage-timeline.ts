@@ -11,7 +11,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
-import {ProjectTimelineItemCreate} from '../../components/project-timeline-item-create/project-timeline-item-create';
 import {OtherTimelineItemCreate} from '../../components/other-timeline-item-create/other-timeline-item-create';
 import {toSignal} from '@angular/core/rxjs-interop';
 
@@ -30,7 +29,6 @@ import {toSignal} from '@angular/core/rxjs-interop';
       CertificationCreate,
       SidePanel,
       UpperCasePipe,
-      ProjectTimelineItemCreate,
       OtherTimelineItemCreate
     ],
   templateUrl: './manage-timeline.html',
@@ -56,3 +54,4 @@ export class ManageTimeline {
     this.panelOpen.set(false);
   }
 }
+

@@ -64,13 +64,10 @@
         <div class="flex flex-col gap-4" formGroupName="step2">
 
           <mat-form-field appearance="outline" class="w-full md:col-span-2">
-            <mat-select formControlName="projectType" multiple aria-label="Typologie de projet">
+            <mat-select placeholder="Typologie de projet" formControlName="projectTypes" multiple
+                        aria-label="Typologie de projet">
               <mat-select-trigger>
-                @if ((s2.get('projectType')?.value?.length ?? 0) === 0) {
-                  <span>Typologie de projet…</span>
-                } @else {
-                  <span class="text-sm">{{ s2.get('projectType')?.value.join(', ') }}</span>
-                }
+                <span class="text-sm">{{ s2.get('projectTypes')?.value?.join(', ') }}</span>
               </mat-select-trigger>
 
               @for (opt of projectTypeOptions; track opt) {
@@ -146,7 +143,44 @@
         </div>
       }
       @case (3) {
-        <div>step 4</div>
+        <div class="flex flex-col gap-4">
+          <input
+            #imageInput
+            (change)="onFilesSelected($event)"
+            accept="image/png,image/jpeg,image/jpg,image/webp"
+            class="hidden"
+            type="file"
+            multiple
+          />
+
+          @if (images().length < 4) {
+            <button
+              type="button"
+              (click)="imageInput.click()"
+              class="h-32 w-full rounded-xl border-2 border-dashed border-black/20 bg-black/5 flex flex-col items-center justify-center cursor-pointer hover:border-black/40 hover:bg-black/10 transition-colors"
+            >
+              <mat-icon class="text-4xl opacity-40">add_photo_alternate</mat-icon>
+              <span class="text-sm text-slate-600 mt-2">Ajouter des images</span>
+            </button>
+          }
+
+          @if (images().length > 0) {
+            <div class="grid grid-cols-2 gap-4">
+              @for (img of images(); track $index) {
+                <div class="relative h-40 w-full rounded-lg overflow-hidden bg-black/5 border border-black/10">
+                  <img [src]="img.preview" class="h-full w-full object-cover" alt="Image {{ $index + 1 }}"/>
+                  <button
+                    type="button"
+                    (click)="removeImage($index)"
+                    class="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors shadow-md cursor-pointer"
+                  >
+                    <mat-icon class="text-lg">close</mat-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
       }
     }
   </div>
@@ -168,11 +202,15 @@
         Suivant
       </button>
     } @else {
-      <button type="submit" matButton="filled">
+      <button type="submit" matButton="filled" [disabled]="isSubmitting()">
         <mat-icon class="mr-1">add</mat-icon>
         Ajouter
       </button>
     }
   </div>
+
+  @if (isSubmitting()) {
+    <mat-progress-bar mode="indeterminate" class="mt-2"/>
+  }
 
 </form>

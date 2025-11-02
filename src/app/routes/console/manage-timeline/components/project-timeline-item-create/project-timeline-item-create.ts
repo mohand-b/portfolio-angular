@@ -11,6 +11,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {ConsoleFacade} from '../../../console.facade';
+import {toFormData} from '../../../../../shared/extensions/object.extension';
 
 @Component({
   selector: 'app-project-timeline-item-create',
@@ -31,15 +33,15 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
   styleUrl: './project-timeline-item-create.scss'
 })
 export class ProjectTimelineItemCreate {
-
-  readonly step = signal(1);
+  readonly step = signal(0);
+  readonly isSubmitting = signal(false);
+  readonly created = output<void>();
   readonly stepsMeta = [
     {icon: 'description', label: 'Étape 1 : Contexte'},
     {icon: 'build', label: 'Étape 2 : Typologie & stack'},
     {icon: 'format_list_bulleted', label: 'Étape 3 : Missions'},
     {icon: 'photo_library', label: 'Étape 4 : Médias & impact'},
   ] as const;
-
   readonly projectTypeOptions = [
     'MVP / POC',
     'SaaS',
@@ -48,11 +50,10 @@ export class ProjectTimelineItemCreate {
     'Mobile-like',
     'Data-driven',
   ] as const;
-
   readonly scopeOptions = ['Interne', 'Externe'] as const;
   readonly marketOptions = ['B2B', 'B2C'] as const;
   missions: WritableSignal<string[]> = signal([]);
-  submitted = output<void>();
+  images = signal<Array<{ file: File; preview: string }>>([]);
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   private fb = inject(FormBuilder);
   missionControl = this.fb.control('');
@@ -64,7 +65,7 @@ export class ProjectTimelineItemCreate {
       collaboration: [''],
     }),
     step2: this.fb.group({
-      projectType: this.fb.control<string[]>([], {
+      projectTypes: this.fb.control<string[]>([], {
         validators: [Validators.required, Validators.minLength(1)],
       }),
       scope: this.fb.control<string | null>(null, {validators: [Validators.required]}),
@@ -73,6 +74,7 @@ export class ProjectTimelineItemCreate {
     }),
     step4: this.fb.group({}),
   })
+  private consoleFacade = inject(ConsoleFacade);
 
   get s1(): FormGroup {
     return this.getStepGroup(0)!;
@@ -113,6 +115,52 @@ export class ProjectTimelineItemCreate {
   }
 
   onSubmit() {
+    if (this.eventForm.invalid) {
+      this.s1.markAllAsTouched();
+      this.s2.markAllAsTouched();
+
+      this.step.set(this.s1.invalid ? 0 : this.s2.invalid ? 1 : 0);
+      return;
+    }
+
+    const {step1, step2} = this.eventForm.getRawValue();
+    const imageFiles = this.images().map(img => img.file);
+
+    const payload = {
+      title: step1.title!.trim(),
+      description: step1.description?.trim() || undefined,
+      context: step1.context?.trim() || '',
+      collaboration: step1.collaboration?.trim() || undefined,
+      missions: this.missions(),
+      projectTypes: step2.projectTypes!,
+      scope: step2.scope!,
+      market: step2.market!,
+      tools: step2.tools!,
+    };
+
+    const formData = toFormData(payload);
+
+    imageFiles.forEach(file => {
+      formData.append('images', file);
+    });
+
+    this.isSubmitting.set(true);
+    this.consoleFacade.addProject(formData).subscribe({
+      next: () => {
+        this.created.emit();
+        this.eventForm.reset();
+        this.missions.set([]);
+        this.images.set([]);
+        this.missionControl.reset('');
+        this.step.set(0);
+        this.isSubmitting.set(false);
+      },
+      error: () => {
+        this.s1.markAllAsTouched();
+        this.s2.markAllAsTouched();
+        this.isSubmitting.set(false);
+      },
+    });
   }
 
   add(event: MatChipInputEvent) {
@@ -146,6 +194,54 @@ export class ProjectTimelineItemCreate {
 
   removeMission(i: number) {
     this.missions.update(arr => arr.filter((_, idx) => idx !== i));
+  }
+
+  onFilesSelected(e: Event) {
+    const input = e.target as HTMLInputElement;
+    const files = Array.from(input.files || []);
+
+    if (!files.length) return;
+
+    const MAX_IMAGES = 4;
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+
+    const currentCount = this.images().length;
+    const availableSlots = MAX_IMAGES - currentCount;
+
+    if (availableSlots <= 0) {
+      alert(`Maximum ${MAX_IMAGES} images autorisées`);
+      return;
+    }
+
+    const filesToAdd = files.slice(0, availableSlots);
+
+    filesToAdd.forEach(file => {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        alert(`Type non autorisé: ${file.name}. Formats acceptés: PNG, JPEG, WEBP`);
+        return;
+      }
+
+      if (file.size > MAX_SIZE) {
+        alert(`Fichier trop volumineux: ${file.name}. Max 5MB`);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.images.update(imgs => [...imgs, {
+          file,
+          preview: reader.result as string
+        }]);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    input.value = '';
+  }
+
+  removeImage(index: number) {
+    this.images.update(imgs => imgs.filter((_, i) => i !== index));
   }
 
   private getStepGroup(idx: number): FormGroup | null {

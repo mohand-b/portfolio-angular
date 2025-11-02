@@ -8,3 +8,8 @@
     background: #f3f6fd;
   }
 }
+
+::ng-deep .mat-mdc-select-placeholder {
+  color: #41414170 !important;
+  font-size: 0.875rem !important;
+}

@@ -9,7 +9,7 @@ export interface ProjectDto extends TimelineItemDto {
   missions: string[];
   tools: string[];
   skills: SkillDto[];
-  projectType: string;
+  projectTypes: string[];
   scope: string;
   market: string;
   challenges?: string;
@@ -17,4 +17,12 @@ export interface ProjectDto extends TimelineItemDto {
   job?: JobDto;
   images?: string[];
   githubLink?: string;
+}
+
+export interface CreateProjectDto extends Omit<ProjectDto, 'id'> {
+}
+
+export interface UpdateProjectDto {
+  startDate: Date;
+  endDate?: Date;
 }

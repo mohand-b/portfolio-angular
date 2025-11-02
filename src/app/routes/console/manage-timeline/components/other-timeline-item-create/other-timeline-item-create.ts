@@ -8,6 +8,6 @@ import {Component, output} from '@angular/core';
 })
 export class OtherTimelineItemCreate {
 
-  submitted = output<void>();
-  
+  created = output<void>();
+
 }

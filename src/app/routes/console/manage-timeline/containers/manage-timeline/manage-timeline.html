@@ -36,10 +36,10 @@
           <app-certification-create (created)="onCloseRequested()"/>
         }
         @case (TimelineItemType.Project) {
-          <app-project-timeline-item-create (submitted)="onCloseRequested()"/>
+          <div>Ajout d'un projet</div>
         }
         @case (TimelineItemType.Other) {
-          <app-other-timeline-item-create (submitted)="onCloseRequested()"/>
+          <app-other-timeline-item-create (created)="onCloseRequested()"/>
         }
         @default {
           <div class="text-slate-500 text-sm">
