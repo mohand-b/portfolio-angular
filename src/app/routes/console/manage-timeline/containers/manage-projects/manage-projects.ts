@@ -26,20 +26,6 @@ export class ManageProjects implements OnInit {
   private consoleFacade = inject(ConsoleFacade);
 
   ngOnInit() {
-    this.loadProjects();
-  }
-
-  loadProjects() {
-    this.isLoading.set(true);
-    this.consoleFacade.getProjects().subscribe({
-      next: (projects) => {
-        this.projects.set(projects);
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.isLoading.set(false);
-      }
-    });
   }
 
   openPanel() {
@@ -47,7 +33,6 @@ export class ManageProjects implements OnInit {
   }
 
   onCloseRequested() {
-    console.log('close');
     this.panelOpen.set(false);
   }
 
