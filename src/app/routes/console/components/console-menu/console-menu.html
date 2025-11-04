@@ -1,12 +1,21 @@
-<nav class="flex flex-col h-full w-64 bg-primary text-white justify-between shadow-md">
-  <div class="flex flex-col gap-2">
-    @for (item of menuItems; track item) {
-      <app-menu-item [menuEntry]="item"/>
-    }
+<aside class="w-64 h-screen bg-white border-r border-neutral-200 shadow-[0_0_0_1px_rgba(0,0,0,0.02)] flex flex-col">
+  <div class="flex flex-col justify-center px-5 mb-2 border-b border-neutral-200  min-h-[5rem]">
+    <h1 class="text-lg font-semibold text-neutral-800">Portfolio Admin</h1>
+    <p class="text-xs text-neutral-500">Gestion de contenu</p>
   </div>
 
-  <div class="text-center my-4 mx-auto font-semibold">
-    mohand <span class="text-white/50">boudjema</span>
-  </div>
+  <nav class="flex-1 px-2">
+    <ul class="flex flex-col gap-1">
+      @for (item of menuItems; track item) {
+        <li>
+          <app-menu-item [menuEntry]="item"></app-menu-item>
+        </li>
+      }
+    </ul>
+  </nav>
 
-</nav>
+  <div class="border-t border-neutral-200 px-5 py-4 text-sm text-neutral-500">
+    <span class="font-medium text-neutral-800">mohand</span>
+    <span class="text-neutral-400"> boudjema</span>
+  </div>
+</aside>

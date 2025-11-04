@@ -1,10 +1,26 @@
 <a
+  #rla="routerLinkActive"
+  [ngClass]="{
+    'bg-primary text-white shadow-sm hover:bg-primary hover:text-white': rla.isActive
+  }"
+  [routerLinkActiveOptions]="{ exact: true }"
   [routerLink]="menuEntry.path"
-  class="flex items-center gap-3 text-white p-3 rounded transition duration-200 hover:bg-[rgba(255,255,255,0.04)]"
-  routerLinkActive="bg-[rgba(255,255,255,0.1)] font-medium"
+  class="group flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+         transition-colors duration-150
+         text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100"
+  routerLinkActive
 >
   @if (menuEntry.icon) {
-    <mat-icon>{{ menuEntry.icon }}</mat-icon>
+    <mat-icon
+      class="text-[20px] leading-none -mt-px"
+      [ngClass]="
+        rla.isActive
+          ? 'text-white/90'
+          : 'text-neutral-400 group-hover:text-neutral-700'
+      "
+    >
+      {{ menuEntry.icon }}
+    </mat-icon>
   }
-  <span>{{ menuEntry.title }}</span>
+  <span class="truncate">{{ menuEntry.title }}</span>
 </a>
