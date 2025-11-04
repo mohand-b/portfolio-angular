@@ -10,10 +10,12 @@ export type SkillCreateDto = Omit<SkillDto, 'id'>;
 export enum SkillCategory {
   FRONTEND = 'frontend',
   BACKEND = 'backend',
-  DEVOPS = 'devops',
+  DEVOPS_CLOUD = 'devops_cloud',
   DATABASE = 'database',
   DESIGN = 'design',
   ARCHITECTURE = 'architecture',
+  TESTING = 'testing',
+  TOOLING = 'tooling',
   METHODOLOGY = 'methodology',
 }
 
@@ -22,50 +24,71 @@ export interface SkillCategoryMeta {
   label: string;
   color: string;
   icon?: string;
+  subtitle?: string;
 }
 
 export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.FRONTEND]: {
     key: SkillCategory.FRONTEND,
-    label: 'Frontend',
-    color: '#1976D2',
-    icon: 'web',
+    label: 'Développement Frontend',
+    subtitle: 'Technologies côté client',
+    color: '#2563EB',
+    icon: 'code',
   },
   [SkillCategory.BACKEND]: {
     key: SkillCategory.BACKEND,
-    label: 'Backend',
-    color: '#388E3C',
-    icon: 'storage',
+    label: 'Développement Backend',
+    subtitle: 'Applications, APIs et services côté serveur',
+    color: '#16A34A',
+    icon: 'terminal',
   },
-  [SkillCategory.DEVOPS]: {
-    key: SkillCategory.DEVOPS,
-    label: 'DevOps',
-    color: '#FFA000',
-    icon: 'build',
+  [SkillCategory.DEVOPS_CLOUD]: {
+    key: SkillCategory.DEVOPS_CLOUD,
+    label: 'DevOps & Cloud',
+    subtitle: 'Déploiement et gestion des environnements serveurs',
+    color: '#F59E0B',
+    icon: 'cloud',
   },
   [SkillCategory.DATABASE]: {
     key: SkillCategory.DATABASE,
     label: 'Base de données',
-    color: '#512DA8',
-    icon: 'dns',
+    subtitle: 'Conception et gestion des données d’application',
+    color: '#7C3AED',
+    icon: 'storage',
   },
   [SkillCategory.DESIGN]: {
     key: SkillCategory.DESIGN,
-    label: 'Design',
-    color: '#D81B60',
-    icon: 'brush',
+    label: 'Design & UX',
+    subtitle: 'Interface, expérience et accessibilité',
+    color: '#E11D48',
+    icon: 'palette',
   },
   [SkillCategory.ARCHITECTURE]: {
     key: SkillCategory.ARCHITECTURE,
-    label: 'Architecture',
-    color: '#607D8B',
+    label: 'Architecture & Patterns',
+    subtitle: 'Structure, patterns et bonnes pratiques',
+    color: '#475569',
     icon: 'account_tree',
+  },
+  [SkillCategory.TESTING]: {
+    key: SkillCategory.TESTING,
+    label: 'Tests & Qualité',
+    subtitle: 'Tests, couverture et fiabilité',
+    color: '#0D9488',
+    icon: 'rule',
+  },
+  [SkillCategory.TOOLING]: {
+    key: SkillCategory.TOOLING,
+    label: 'Outils & Productivité',
+    subtitle: 'Outils du quotidien pour développer efficacement',
+    color: '#F97316',
+    icon: 'build',
   },
   [SkillCategory.METHODOLOGY]: {
     key: SkillCategory.METHODOLOGY,
-    label: 'Méthodologie',
-    color: '#0097A7',
-    icon: 'psychology',
+    label: 'Méthodologie & Management',
+    subtitle: 'Organisation, agilité et pilotage projet',
+    color: '#6366F1',
+    icon: 'view_kanban',
   },
-};
-
+} as const;

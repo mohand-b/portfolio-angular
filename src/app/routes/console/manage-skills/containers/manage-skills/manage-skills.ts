@@ -1,47 +1,55 @@
 import {Component, inject, signal, Signal} from '@angular/core';
-import {ConsoleFacade} from '../../../console.facade';
+import {filter, switchMap} from 'rxjs';
+import {CdkDragDrop, DragDropModule} from '@angular/cdk/drag-drop';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
 import {SkillCategory, SkillDto} from '../../../../skills/state/skill/skill.model';
+import {ConsoleFacade} from '../../../console.facade';
 import {SkillCategorySection} from '../../components/skill-category-section/skill-category-section';
 import {SkillItem} from '../../components/skill-item/skill-item';
-import {CdkDragDrop, DragDropModule} from '@angular/cdk/drag-drop';
-import {MatIconModule} from '@angular/material/icon';
-import {ModalService} from '../../../../../shared/services/modal.service';
-import {GenericModal} from '../../../../../shared/components/generic-modal/generic-modal';
-import {filter, switchMap} from 'rxjs';
-import {MatButtonModule} from '@angular/material/button';
-import {UpperCasePipe} from '@angular/common';
-import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
 import {SkillCreate} from '../skill-create/skill-create';
+import {GenericModal} from '../../../../../shared/components/generic-modal/generic-modal';
+import {ModalService} from '../../../../../shared/services/modal.service';
+import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
 
 @Component({
   selector: 'app-manage-skills',
   standalone: true,
   imports: [
-    SkillCategorySection,
-    SkillItem,
-    MatIconModule,
     DragDropModule,
     MatButtonModule,
-    UpperCasePipe,
-    SidePanel,
-    SkillCreate
+    MatIconModule,
+    SkillCategorySection,
+    SkillItem,
+    SkillCreate,
+    SidePanel
   ],
   templateUrl: './manage-skills.html',
   styleUrl: './manage-skills.scss'
 })
 export class ManageSkills {
-  readonly categories: SkillCategory[] = Object.values(SkillCategory) as SkillCategory[];
-  readonly dropTrashId: string = 'trash';
+  private readonly modalService = inject(ModalService);
+  private readonly consoleFacade = inject(ConsoleFacade);
+
+  readonly categories: SkillCategory[] = Object.values(SkillCategory);
+  readonly dropTrashId = 'trash';
   readonly dropListIds: string[] = [...this.categories, this.dropTrashId];
   readonly emptySkillList: SkillDto[] = [];
-  isDragging = signal<boolean>(false);
-  readonly consoleFacade: ConsoleFacade = inject(ConsoleFacade);
+
   readonly skills: Signal<SkillDto[]> = this.consoleFacade.skills;
-  panelOpen = signal(false);
-  private modalService = inject(ModalService);
+  readonly isDragging = signal(false);
+  readonly panelOpen = signal(false);
 
   getSkillsByCategory(category: SkillCategory): SkillDto[] {
     return this.skills().filter(skill => skill.category === category);
+  }
+
+  openPanel(): void {
+    this.panelOpen.set(true);
+  }
+
+  onCloseRequested(): void {
+    this.panelOpen.set(false);
   }
 
   drop(event: CdkDragDrop<SkillDto[]>, newCategory: SkillCategory): void {
@@ -100,15 +108,5 @@ export class ManageSkills {
       switchMap(() => this.consoleFacade.removeSkillById(skill.id))
     ).subscribe();
   }
-
-
-  openPanel() {
-    this.panelOpen.set(true);
-  }
-
-  onCloseRequested() {
-    this.panelOpen.set(false);
-  }
-
 }
 

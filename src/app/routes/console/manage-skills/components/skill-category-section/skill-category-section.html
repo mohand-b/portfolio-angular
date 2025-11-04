@@ -1,23 +1,55 @@
-<div
-  [style.borderTop]="
-    '3px solid ' + (category ? skillCategoryCatalog[category].color : '#ccc')
-  "
-  class="p-4 rounded shadow-md bg-[#ffffff90] relative"
+<section
+  [style.--cat-color]="color()"
+  class="rounded-xl border border-neutral-200 bg-white overflow-hidden"
 >
-  <div class="flex items-center mb-4 gap-2">
-    @if (category) {
-      <mat-icon
-        [style.color]="skillCategoryCatalog[category].color"
-        fontIcon="{{ skillCategoryCatalog[category].icon }}"
-      ></mat-icon>
-      <span class="font-semibold text-lg">
-        {{ skillCategoryCatalog[category].label }}
+  <header class="flex items-center justify-between px-[1.25rem] py-[1rem] border-b border-neutral-200">
+    <div class="flex items-center gap-[0.75rem]">
+      <div
+        [style.backgroundColor]="hexWithAlpha(color(), 0.15)"
+        class="h-[2.5rem] w-[2.5rem] rounded-xl flex items-center justify-center"
+      >
+        <mat-icon [ngStyle]="{ color: color() }" class="text-[1rem]" fontIcon="{{ icon() }}"></mat-icon>
+      </div>
+      <div class="leading-tight">
+        <h3 class="text-[1rem] font-medium text-neutral-900">{{ label() }}</h3>
+        @if (subtitle()) {
+          <p class="text-[0.75rem] text-neutral-500">{{ subtitle() }}</p>
+        }
+      </div>
+    </div>
+
+    <div class="flex items-center gap-[0.5rem]">
+      <span
+        [style.backgroundColor]="hexWithAlpha(color(), 0.12)"
+        [style.color]="color()"
+        class="px-[0.75rem] py-[0.25rem] rounded-full text-[0.875rem] font-medium"
+      >
+        {{ count() }} compétence{{ count() > 1 ? 's' : '' }}
       </span>
-    }
-  </div>
 
-  <div class="flex flex-wrap gap-4">
-    <ng-content/>
-  </div>
+      @if (shouldShowToggle()) {
+        <button
+          type="button"
+          class="h-[1.75rem] w-[1.75rem] rounded-lg flex items-center justify-center
+                 bg-neutral-100 hover:bg-neutral-200 transition-colors cursor-pointer"
+          (click)="toggle()"
+          [title]="collapsed() ? 'Afficher tout' : 'Réduire'"
+        >
+          <mat-icon class="text-[1rem] text-neutral-700">
+            {{ collapsed() ? 'expand_more' : 'expand_less' }}
+          </mat-icon>
+        </button>
+      }
+    </div>
+  </header>
 
-</div>
+  <div class="px-[1.25rem] pb-[1rem] pt-[0.75rem]">
+    <div
+      #contentContainer
+      [style.maxHeight]="collapsed() ? collapsedHeight() : '999rem'"
+      class="flex flex-wrap gap-[1rem] overflow-hidden transition-[max-height] duration-300 ease-in-out"
+    >
+      <ng-content/>
+    </div>
+  </div>
+</section>

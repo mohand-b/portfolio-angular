@@ -1,26 +1,30 @@
-import {Component, Input, output} from '@angular/core';
+import {Component, computed, input, output} from '@angular/core';
+import {NgClass} from '@angular/common';
 import {SkillDto} from '../../../../skills/state/skill/skill.model';
-import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-skill-item',
-  imports: [MatIconModule],
-  templateUrl: './skill-item.html',
-  styleUrl: './skill-item.scss'
+  standalone: true,
+  imports: [NgClass],
+  templateUrl: './skill-item.html'
 })
 export class SkillItem {
+  readonly skill = input.required<SkillDto>();
+  readonly setLevel = output<number>();
 
-  @Input() skill!: SkillDto;
-  setLevel = output<number>();
+  protected readonly SEGMENTS = 5;
+  protected readonly trackByIndex = (i: number) => i;
 
-  get stars(): boolean[] {
-    return Array(5)
-      .fill(false)
-      .map((_, i) => i < Math.round(this.skill.level ?? 0));
+  protected readonly segments = computed(() => {
+    return Array.from({length: this.SEGMENTS}, (_, i) => i);
+  });
+
+  protected readonly filledCount = computed(() => {
+    const lvl = Math.round(this.skill()?.level ?? 0);
+    return Math.max(0, Math.min(this.SEGMENTS, lvl));
+  });
+
+  onSetLevel(newLevel: number): void {
+    this.setLevel.emit(Math.max(1, Math.min(this.SEGMENTS, newLevel)));
   }
-
-  onSetLevel(newLevel: number) {
-    this.setLevel.emit(newLevel);
-  }
-
 }
