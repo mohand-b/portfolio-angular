@@ -7,6 +7,7 @@ export interface Achievement {
   color: string;
   isActive: boolean;
   createdAt: Date;
+  unlockedCount: number;
 }
 
 export interface AchievementCreate {
@@ -26,4 +27,9 @@ export interface AchievementUnlockLog {
   achievementId: string;
   achievementCode: string;
   achievementLabel: string;
+}
+
+export interface AchievementStats {
+  totalUnlocked: number;
+  completionRate: number;
 }

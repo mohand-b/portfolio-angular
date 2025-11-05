@@ -1,7 +1,7 @@
 import {Component, inject, signal, Signal} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {Achievement} from '../../../../../core/state/achievement/achievement.model';
+import {Achievement, AchievementStats} from '../../../../../core/state/achievement/achievement.model';
 import {ConsoleFacade} from '../../../console.facade';
 import {AchievementCreate} from '../../components/achievement-create/achievement-create';
 import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
@@ -28,6 +28,7 @@ export class Achievements {
   readonly achievements: Signal<Achievement[]> = this.consoleFacade.achievements;
   readonly totalAchievements: Signal<number> = this.consoleFacade.totalAchievements;
   readonly totalActiveAchievements: Signal<number> = this.consoleFacade.totalActiveAchievements;
+  readonly achievementStats: Signal<AchievementStats | null> = this.consoleFacade.achievementStats;
 
   readonly panelOpen = signal(false);
 
