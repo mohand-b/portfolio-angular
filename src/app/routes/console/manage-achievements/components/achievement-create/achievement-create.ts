@@ -13,6 +13,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {ConsoleFacade} from '../../../console.facade';
 
 const ICON_NAMES = [
@@ -46,7 +47,8 @@ function iconValidator(control: AbstractControl): ValidationErrors | null {
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    MatSlideToggleModule
   ],
   templateUrl: './achievement-create.html'
 })
@@ -64,7 +66,8 @@ export class AchievementCreate {
     color: [DEFAULT_COLOR, [Validators.required]],
     code: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
     label: ['', [Validators.required]],
-    description: ['']
+    description: [''],
+    isActive: [true, [Validators.required]]
   });
 
   protected readonly iconCtrl = this.form.get('icon') as FormControl<string>;
@@ -113,7 +116,7 @@ export class AchievementCreate {
 
     this.consoleFacade.createAchievement(this.form.getRawValue()).subscribe({
       next: () => {
-        this.form.reset({color: DEFAULT_COLOR});
+        this.form.reset({color: DEFAULT_COLOR, isActive: true});
         this.selectedIcon.set('');
         this.created.emit();
       },

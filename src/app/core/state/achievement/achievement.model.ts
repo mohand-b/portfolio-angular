@@ -5,6 +5,7 @@ export interface Achievement {
   description?: string;
   icon: string;
   color: string;
+  isActive: boolean;
   createdAt: Date;
 }
 
@@ -14,6 +15,7 @@ export interface AchievementCreate {
   description?: string;
   icon: string;
   color: string;
+  isActive: boolean;
 }
 
 export interface AchievementLight {
@@ -22,6 +24,7 @@ export interface AchievementLight {
   description?: string;
   icon: string;
   color: string;
+  isActive: boolean;
 }
 
 export interface AchievementUnlockLog {
