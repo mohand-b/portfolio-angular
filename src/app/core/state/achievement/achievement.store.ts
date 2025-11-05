@@ -17,14 +17,10 @@ export const AchievementStore = signalStore(
       store.entities()
         .slice()
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .map(a => ({
-          code: a.code,
-          label: a.label,
-          description: a.description,
-          icon: a.icon,
-          color: a.color,
-          isActive: a.isActive,
-        }))
+    ),
+    totalAchievements: computed(() => store.entities().length),
+    totalActiveAchievements: computed(() =>
+      store.entities().filter(a => a.isActive).length
     ),
   })),
   withMethods(store => ({

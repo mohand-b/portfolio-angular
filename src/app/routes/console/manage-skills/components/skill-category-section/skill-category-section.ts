@@ -1,7 +1,18 @@
-import {afterNextRender, Component, computed, effect, ElementRef, Injector, input, signal, viewChild} from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  Injector,
+  input,
+  signal,
+  viewChild
+} from '@angular/core';
 import {NgStyle} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {SKILL_CATEGORY_META, SkillCategory} from '../../../../skills/state/skill/skill.model';
+import {hexWithAlpha} from '../../../../../shared/utils/color.utils';
 
 @Component({
   selector: 'app-skill-category-section',
@@ -72,22 +83,11 @@ export class SkillCategorySection {
     });
   }
 
-  ngOnDestroy(): void {
-    this.resizeObserver?.disconnect();
-  }
-
   toggle(): void {
     this.collapsed.update(v => !v);
   }
 
-  hexWithAlpha(hex: string, alpha = 1): string {
-    const match = hex.trim().match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
-    if (!match) return hex;
-    const r = parseInt(match[1], 16);
-    const g = parseInt(match[2], 16);
-    const b = parseInt(match[3], 16);
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  }
+  protected readonly hexWithAlpha = hexWithAlpha;
 
   private checkOverflow(element: HTMLDivElement): void {
     const children = Array.from(element.children) as HTMLElement[];

@@ -1,12 +1,7 @@
 import {inject, Injectable, Signal} from '@angular/core';
 import {AchievementLogsService} from './manage-achievements/state/achievement-logs/achievement-logs.service';
 import {Observable, tap} from 'rxjs';
-import {
-  Achievement,
-  AchievementCreate,
-  AchievementLight,
-  AchievementUnlockLog
-} from '../../core/state/achievement/achievement.model';
+import {Achievement, AchievementCreate, AchievementUnlockLog} from '../../core/state/achievement/achievement.model';
 import {AchievementService} from '../../core/state/achievement/achievement.service';
 import {AchievementStore} from '../../core/state/achievement/achievement.store';
 import {SkillStore} from '../skills/state/skill/skill.store';
@@ -30,7 +25,10 @@ export class ConsoleFacade {
   private certificationService = inject(CertificationService);
   private projectService = inject(ProjectService);
   private achievementStore = inject(AchievementStore);
-  readonly achievements: Signal<AchievementLight[]> = this.achievementStore.achievements;
+  readonly achievements: Signal<Achievement[]> = this.achievementStore.achievements;
+  readonly totalAchievements: Signal<number> = this.achievementStore.totalAchievements;
+  readonly totalActiveAchievements: Signal<number> = this.achievementStore.totalActiveAchievements;
+
   private skillStore = inject(SkillStore);
   readonly skills: Signal<SkillDto[]> = this.skillStore.skills;
 

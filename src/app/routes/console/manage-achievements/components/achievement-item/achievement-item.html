@@ -1,0 +1,65 @@
+<article
+  class="flex flex-col h-full p-5 bg-white border border-slate-200 rounded-xl">
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-2">
+      <div
+        class="flex items-center justify-center w-12 h-12 rounded-lg"
+        [style.background-color]="iconBgColor()"
+      >
+        <mat-icon class="!text-2xl !w-6 !h-6 !leading-none" [style.color]="achievement().color">
+          {{ achievement().icon }}
+        </mat-icon>
+      </div>
+      <span class="px-2.5 py-1.5 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg">
+        {{ achievement().code | uppercase }}
+      </span>
+    </div>
+
+    <div class="flex items-center gap-2 text-slate-400">
+      <button
+        class="flex items-center cursor-pointer hover:text-slate-600 transition-colors"
+        (click)="edit.emit(achievement())"
+        matTooltip="Éditer"
+      >
+        <mat-icon class="!text-lg">edit</mat-icon>
+      </button>
+      <button
+        class="flex items-center cursor-pointer hover:text-rose-600 transition-colors"
+        (click)="remove.emit(achievement())"
+        matTooltip="Supprimer"
+      >
+        <mat-icon class="!text-lg">delete</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <h3 class="font-medium text-slate-800 mb-2">
+    {{ achievement().label }}
+  </h3>
+
+  <p class="text-sm leading-relaxed text-slate-600 mb-4 flex-grow">
+    {{ achievement().description || '—' }}
+  </p>
+
+  <div class="flex items-center justify-between mt-auto">
+    <span
+      class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full"
+      [class]="achievement().isActive
+        ? 'bg-emerald-50 text-emerald-700'
+        : 'bg-slate-100 text-slate-600'"
+    >
+      <span
+        class="w-2 h-2 rounded-full"
+        [class]="achievement().isActive ? 'bg-emerald-500' : 'bg-slate-400'"
+      ></span>
+      {{ achievement().isActive ? 'Actif' : 'Inactif' }}
+    </span>
+
+    <!--
+    <div class="flex items-center gap-1.5 text-slate-600">
+      <mat-icon class="!text-sm">group</mat-icon>
+      <span class="text-xs">débloqués</span>
+    </div>
+    -->
+  </div>
+</article>
