@@ -21,6 +21,8 @@ export const AchievementStore = signalStore(
           code: a.code,
           label: a.label,
           description: a.description,
+          icon: a.icon,
+          color: a.color,
         }))
     ),
   })),

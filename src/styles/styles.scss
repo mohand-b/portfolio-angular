@@ -259,3 +259,32 @@ input.mat-mdc-input-element {
   ));
 }
 
+/* === Force color on mat-icon with inline style === */
+.mat-mdc-form-field .mat-mdc-form-field-icon-prefix mat-icon.icon-colored {
+  color: var(--icon-color, currentColor) !important;
+  padding-right: 0.25rem !important;
+  margin-right: 0 !important;
+}
+
+/* === Icon selector field animation === */
+.mat-mdc-form-field.icon-selector-field {
+  width: 100%;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mat-mdc-form-field.icon-selector-field.icon-selected {
+  width: 3rem !important;
+}
+
+.mat-mdc-form-field.icon-selector-field input[readonly] {
+  width: 0 !important;
+  min-width: 0 !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease-in-out, width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mat-mdc-form-field.icon-selector-field:not(.icon-selected) input {
+  opacity: 1 !important;
+  transition: opacity 0.3s ease-in-out 0.1s, width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+

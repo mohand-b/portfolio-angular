@@ -3,6 +3,8 @@ export interface Achievement {
   code: string;
   label: string;
   description?: string;
+  icon: string;
+  color: string;
   createdAt: Date;
 }
 
@@ -10,12 +12,16 @@ export interface AchievementCreate {
   code: string;
   label: string;
   description?: string;
+  icon: string;
+  color: string;
 }
 
 export interface AchievementLight {
   code: string;
   label: string;
   description?: string;
+  icon: string;
+  color: string;
 }
 
 export interface AchievementUnlockLog {

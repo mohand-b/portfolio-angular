@@ -1,41 +1,64 @@
-<div class="flex flex-col gap-4">
-  <app-achievement-create/>
+<div class="flex flex-col">
+  <div
+    class="sticky top-0 z-10 flex items-center justify-between min-h-[5rem] px-[1.25rem] border-b border-neutral-200 bg-white"
+  >
+    <h1 class="text-2xl font-semibold text-neutral-800">Achievements</h1>
 
-  <table [dataSource]="achievements()" mat-table>
+    <button (click)="openPanel()" matButton="filled">
+      <mat-icon>add</mat-icon>
+      Créer un nouveau succès
+    </button>
+  </div>
 
-    <ng-container matColumnDef="code">
-      <th *matHeaderCellDef mat-header-cell>Code</th>
-      <td *matCellDef="let achievement" mat-cell>{{ achievement.code }}</td>
-    </ng-container>
+  <div class="flex flex-col gap-[1.5rem] bg-neutral-100 p-[1.25rem]">
+    <div class="rounded-xl border border-neutral-200 bg-white overflow-hidden">
+      <table [dataSource]="achievements()" mat-table class="w-full">
+        <ng-container matColumnDef="code">
+          <th *matHeaderCellDef mat-header-cell>Code</th>
+          <td *matCellDef="let achievement" mat-cell>{{ achievement.code }}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="label">
-      <th *matHeaderCellDef mat-header-cell>Label</th>
-      <td *matCellDef="let achievement" mat-cell>{{ achievement.label }}</td>
-    </ng-container>
+        <ng-container matColumnDef="label">
+          <th *matHeaderCellDef mat-header-cell>Label</th>
+          <td *matCellDef="let achievement" mat-cell>{{ achievement.label }}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th *matHeaderCellDef mat-header-cell>Description</th>
-      <td *matCellDef="let achievement" mat-cell>{{ achievement.description }}</td>
-    </ng-container>
+        <ng-container matColumnDef="description">
+          <th *matHeaderCellDef mat-header-cell>Description</th>
+          <td *matCellDef="let achievement" mat-cell>{{ achievement.description }}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <th *matHeaderCellDef mat-header-cell>Actions</th>
-      <td *matCellDef="let achievement" mat-cell>
-        <button (click)="deleteAchievement(achievement.code)" matIconButton>
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef mat-header-cell>Actions</th>
+          <td *matCellDef="let achievement" mat-cell>
+            <button (click)="deleteAchievement(achievement.code)" matIconButton>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-    <tr *matHeaderRowDef="displayedColumnsAchievements" mat-header-row></tr>
-    <tr *matRowDef="let row; columns: displayedColumnsAchievements" mat-row></tr>
-  </table>
-
-  @for (achievementLog of achievementLogs(); track achievementLog.id) {
-    <div>
-      <strong>{{ achievementLog.achievementLabel }}</strong>
-      débloqué par {{ achievementLog.visitorName ?? 'Inconnu' }}
-      le {{ achievementLog.unlockedAt | date: 'dd/MM/yyyy à HH:mm' }}
+        <tr *matHeaderRowDef="displayedColumnsAchievements" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumnsAchievements" mat-row></tr>
+      </table>
     </div>
-  }
+
+    @if (achievementLogs().length > 0) {
+      <div class="rounded-xl border border-neutral-200 bg-white p-4">
+        <h2 class="text-lg font-semibold text-neutral-800 mb-3">Logs de déblocage</h2>
+        <div class="flex flex-col gap-2">
+          @for (achievementLog of achievementLogs(); track achievementLog.id) {
+            <div class="text-sm text-neutral-600">
+              <strong>{{ achievementLog.achievementLabel }}</strong>
+              débloqué par {{ achievementLog.visitorName ?? 'Inconnu' }}
+              le {{ achievementLog.unlockedAt | date: 'dd/MM/yyyy à HH:mm' }}
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
 </div>
+
+<app-side-panel (closed)="onCloseRequested()" [isOpen]="panelOpen()">
+  <app-achievement-create (created)="onCloseRequested()"/>
+</app-side-panel>
