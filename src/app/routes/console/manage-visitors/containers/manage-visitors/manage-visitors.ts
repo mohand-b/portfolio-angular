@@ -1,5 +1,5 @@
 import {Component, computed, signal} from '@angular/core';
-import {PaginatedVisitorsResponse, VisitorDto} from '../../../../../core/state/visitor/visitor.model';
+import {PaginatedVisitorsResponse, VisitorDto, VisitorStats} from '../../../../../core/state/visitor/visitor.model';
 import {DatePipe, registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import {MatIconModule} from '@angular/material/icon';
@@ -8,6 +8,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {SvgSafePipe} from '../../../../../shared/pipes/svg-safe.pipe';
 import {httpResource} from '@angular/common/http';
 import {environment} from '../../../../../../../environments/environments';
+import {KpiCard} from '../../../../../shared/components/kpi-card/kpi-card';
 
 registerLocaleData(localeFr);
 
@@ -43,7 +44,8 @@ const PAGE_SIZE_OPTIONS = [5, 10, 20] as const;
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    SvgSafePipe
+    SvgSafePipe,
+    KpiCard
   ],
   templateUrl: './manage-visitors.html',
   styleUrl: './manage-visitors.scss'
@@ -66,9 +68,17 @@ export class ManageVisitors {
     withCredentials: true
   }));
 
+  private readonly statsResource = httpResource<VisitorStats>(() => ({
+    url: `${environment.baseUrl}/visitor/stats`,
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+    withCredentials: true
+  }));
+
   readonly loading = computed(() => this.visitorsResource.isLoading());
   readonly data = computed(() => this.visitorsResource.value()?.data ?? []);
   readonly totalPages = computed(() => this.visitorsResource.value()?.totalPages ?? 0);
+  readonly stats = computed(() => this.statsResource.value());
 
   readonly skeletonRows = computed(() => Array.from({length: this.limit()}, (_, i) => i));
 

@@ -44,3 +44,11 @@ export interface VisitorAuthDto {
 export interface VisitorAuthResponseDto extends Visitor {
   accessToken: string;
 }
+
+export interface VisitorStats {
+  totalVisitors: number;
+  verifiedVisitors: number;
+  visitorsToday: number;
+  engagedVisitors: number;
+}
+

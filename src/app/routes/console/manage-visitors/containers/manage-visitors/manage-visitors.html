@@ -4,6 +4,31 @@
   </div>
 
   <div class="flex flex-col flex-1 gap-[1.5rem] bg-neutral-100 p-[1.25rem]">
+    @if (stats()) {
+      <section class="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+        <app-kpi-card
+          title="Total Visiteurs"
+          [value]="stats()!.totalVisitors"
+          icon="people"
+          color="#3b82f6"/>
+        <app-kpi-card
+          title="Vérifiés"
+          [value]="stats()!.verifiedVisitors"
+          icon="verified_user"
+          color="#10b981"/>
+        <app-kpi-card
+          title="Aujourd'hui"
+          [value]="stats()!.visitorsToday"
+          icon="today"
+          color="#f59e0b"/>
+        <app-kpi-card
+          title="Engagés"
+          [value]="stats()!.engagedVisitors"
+          icon="whatshot"
+          color="#f97316"/>
+      </section>
+    }
+
     <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full">
