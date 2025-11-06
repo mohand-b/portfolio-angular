@@ -52,7 +52,7 @@ export const consoleRoutes: CustomRoute[] = [
       },
       {
         path: 'achievements',
-        loadComponent: () => import('./manage-achievements/containers/achievements/achievements').then(m => m.Achievements),
+        loadComponent: () => import('./manage-achievements/containers/manage-achievements/manage-achievements').then(m => m.ManageAchievements),
         title: 'Succès',
         icon: 'emoji_events',
       },

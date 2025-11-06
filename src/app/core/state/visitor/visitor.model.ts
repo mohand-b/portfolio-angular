@@ -6,8 +6,33 @@ export interface Visitor {
   isVerified: boolean;
   verificationToken?: string;
   verificationExpiresAt?: Date;
+  avatarSvg: string;
   createdAt: Date;
   lastVisitAt: Date;
+}
+
+export interface VisitorDto {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  isVerified: boolean;
+  createdAt: string;
+  lastVisitAt: string;
+  avatarSvg: string | null;
+  achievements?: {
+    unlocked: number;
+    total: number;
+    percentCompletion: number;
+  };
+}
+
+export interface PaginatedVisitorsResponse {
+  data: VisitorDto[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 export interface VisitorAuthDto {

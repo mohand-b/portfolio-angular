@@ -9,7 +9,7 @@ import {AchievementItem} from '../../components/achievement-item/achievement-ite
 import {KpiCard} from '../../../../../shared/components/kpi-card/kpi-card';
 
 @Component({
-  selector: 'app-achievements',
+  selector: 'app-manage-achievements',
   standalone: true,
   imports: [
     MatButtonModule,
@@ -19,10 +19,10 @@ import {KpiCard} from '../../../../../shared/components/kpi-card/kpi-card';
     AchievementItem,
     KpiCard
   ],
-  templateUrl: './achievements.html',
-  styleUrl: './achievements.scss'
+  templateUrl: './manage-achievements.html',
+  styleUrl: './manage-achievements.scss'
 })
-export class Achievements {
+export class ManageAchievements {
   private readonly consoleFacade = inject(ConsoleFacade);
 
   readonly achievements: Signal<Achievement[]> = this.consoleFacade.achievements;

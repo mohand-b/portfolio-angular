@@ -1,49 +1,207 @@
-<table [dataSource]="displayedVisitors()" mat-table>
+<div class="flex flex-col h-full">
+  <div class="sticky top-0 z-10 flex items-center min-h-[5rem] px-[1.25rem] border-b border-neutral-200 bg-white">
+    <h1 class="text-2xl font-semibold text-neutral-800">Visiteurs</h1>
+  </div>
 
-  <ng-container matColumnDef="firstName">
-    <th *matHeaderCellDef mat-header-cell>Nom</th>
-    <td *matCellDef="let visitor" mat-cell>{{ visitor.firstName }}</td>
-  </ng-container>
+  <div class="flex flex-col flex-1 gap-[1.5rem] bg-neutral-100 p-[1.25rem]">
+    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+          <tr class="border-b border-slate-200 bg-white">
+            @for (column of columns; track column.key) {
+              <th
+                class="px-6 h-[3rem] text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
+                [style.width]="column.width"
+              >
+                {{ column.label }}
+              </th>
+            }
+          </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @if (loading()) {
+              @for (row of limit(); track row) {
+                <tr class="animate-pulse">
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full bg-slate-200"></div>
+                      <div class="flex flex-col gap-1.5">
+                        <div class="h-4 w-32 bg-slate-200 rounded"></div>
+                        <div class="h-3 w-40 bg-slate-200 rounded"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="h-4 w-24 bg-slate-200 rounded"></div>
+                  </td>
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="h-4 w-24 bg-slate-200 rounded"></div>
+                  </td>
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="flex flex-col gap-1">
+                      <div class="h-3 w-20 bg-slate-200 rounded"></div>
+                      <div class="h-2 w-full bg-slate-200 rounded-full"></div>
+                    </div>
+                  </td>
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="h-6 w-20 bg-slate-200 rounded-full"></div>
+                  </td>
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="h-8 w-24 bg-slate-200 rounded"></div>
+                  </td>
+                </tr>
+              }
+            } @else if (data().length === 0) {
+              <tr>
+                <td [attr.colspan]="columns.length" class="px-6 py-12 text-center text-slate-500">
+                  <mat-icon class="!text-4xl !w-10 !h-10 mx-auto mb-2 text-slate-300">people_outline</mat-icon>
+                  <p class="text-sm">Aucun visiteur</p>
+                </td>
+              </tr>
+            } @else {
+              @for (visitor of data(); track visitor.id) {
+                <tr class="hover:bg-slate-50 transition-colors">
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center">
+                        @if (visitor.avatarSvg) {
+                          <div [innerHTML]="visitor.avatarSvg | svgSafe" class="w-full h-full"></div>
+                        } @else {
+                          <span class="text-sm font-medium text-slate-600">{{ getInitials(visitor) }}</span>
+                        }
+                      </div>
+                      <div class="flex flex-col">
+                        <span
+                          class="text-sm font-medium text-slate-800">{{ visitor.firstName }} {{ visitor.lastName }}</span>
+                        <span class="text-xs text-slate-500">{{ visitor.email }}</span>
+                      </div>
+                    </div>
+                  </td>
 
-  <ng-container matColumnDef="lastName">
-    <th *matHeaderCellDef mat-header-cell>Prénom</th>
-    <td *matCellDef="let visitor" mat-cell>{{ visitor.lastName }}</td>
-  </ng-container>
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="flex flex-col">
+                      <span class="text-sm text-slate-800">{{ visitor.createdAt | date: 'd MMM yyyy' : '' : 'fr-FR' }}</span>
+                      <span class="text-xs text-slate-500">{{ visitor.createdAt | date: 'HH:mm' }}</span>
+                    </div>
+                  </td>
 
-  <ng-container matColumnDef="email">
-    <th *matHeaderCellDef mat-header-cell>Email</th>
-    <td *matCellDef="let visitor" mat-cell>{{ visitor.email }}</td>
-  </ng-container>
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="flex flex-col">
+                      <span class="text-sm text-slate-800">{{ visitor.lastVisitAt | date: 'd MMM yyyy' : '' : 'fr-FR' }}</span>
+                      <span class="text-xs text-slate-500">{{ visitor.lastVisitAt | date: 'HH:mm' }}</span>
+                    </div>
+                  </td>
 
-  <ng-container matColumnDef="createdAt">
-    <th *matHeaderCellDef mat-header-cell>Créé le</th>
-    <td *matCellDef="let visitor" mat-cell>{{ visitor.createdAt | date: 'dd/MM/yyyy' }}</td>
-  </ng-container>
+                  <td class="px-6 h-[4.5rem]">
+                    @if (visitor.achievements) {
+                      <div class="flex flex-col gap-0.5">
+                        <div class="flex items-center justify-between">
+                          <span class="text-xs text-slate-700">{{ visitor.achievements.unlocked }}
+                            /{{ visitor.achievements.total }}</span>
+                          <span class="text-xs text-slate-500">{{ visitor.achievements.percentCompletion }}%</span>
+                        </div>
 
-  <ng-container matColumnDef="lastVisitAt">
-    <th *matHeaderCellDef mat-header-cell>Dernière visite le</th>
-    <td *matCellDef="let visitor" mat-cell>{{ visitor.lastVisitAt | date: 'dd/MM/yyyy HH:mm' }}</td>
-  </ng-container>
+                        <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                          <div
+                            class="h-full rounded-full transition-all"
+                            [class]="getProgressBarColor(visitor.achievements.percentCompletion)"
+                            [style.width.%]="visitor.achievements.percentCompletion"
+                          ></div>
+                        </div>
 
-  <ng-container matColumnDef="isVerified">
-    <th *matHeaderCellDef mat-header-cell>Vérifié</th>
-    <td *matCellDef="let visitor" mat-cell>
-      @if (visitor.isVerified) {
-        Oui
-      } @else {
-        Non
+                        <div class="flex items-center gap-1">
+                          <span class="text-xs">{{ getProgressIcon(visitor.achievements.percentCompletion) }}</span>
+                          <span
+                            class="text-xs text-slate-500">{{ getProgressLabel(visitor.achievements.percentCompletion) }}</span>
+                        </div>
+                      </div>
+                    } @else {
+                      <span class="text-xs text-slate-400">Aucune donnée</span>
+                    }
+                  </td>
+
+                  <td class="px-6 h-[4.5rem]">
+                    @let status = getStatusConfig(visitor.isVerified);
+                    <span class="px-2 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1" [class]="status.bgClass">
+                      <span class="w-1.5 h-1.5 rounded-full" [class]="status.dotClass"></span>
+                      {{ status.label }}
+                    </span>
+                  </td>
+
+                  <td class="px-6 h-[4.5rem]">
+                    <div class="flex items-center gap-0.5">
+                      @for (action of actionButtons; track action.icon) {
+                        <button
+                          (click)="action.handler(visitor)"
+                          [matTooltip]="action.tooltip"
+                          class="w-8 h-8 flex items-center justify-center rounded cursor-pointer hover:bg-slate-100 transition-colors"
+                          [class]="action.hoverClass"
+                        >
+                          <mat-icon class="!text-[18px] !w-[18px] !h-[18px] !text-slate-400">{{ action.icon }}
+                          </mat-icon>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (!loading() && data().length > 0) {
+        <div class="px-6 h-[3.5rem] border-t border-slate-200 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-slate-600">Afficher</span>
+            <select
+              [value]="limit()"
+              (change)="onLimitChange($event)"
+              class="h-[2.5rem] px-3 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
+            >
+              @for (size of pageSizeOptions; track size) {
+                <option [value]="size">{{ size }}</option>
+              }
+            </select>
+            <span class="text-sm text-slate-600">par page</span>
+          </div>
+
+          <div class="flex items-center">
+            <button
+              (click)="previousPage()"
+              [disabled]="page() === 1"
+              class="h-[2.5rem] px-4 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-l-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
+            >
+              Précédent
+            </button>
+
+            @for (p of pages(); track p) {
+              @if (p === '...') {
+                <span
+                  class="h-[2.5rem] px-3 flex items-center text-sm text-slate-500 border-t border-b border-slate-300 bg-white">...</span>
+              } @else {
+                <button
+                  (click)="goToPage(p)"
+                  [class]="p === page()
+                    ? 'h-[2.5rem] px-3 text-sm font-medium bg-primary text-white border-t border-b border-primary cursor-pointer'
+                    : 'h-[2.5rem] px-3 text-sm font-medium text-slate-700 bg-white border-t border-b border-slate-300 hover:bg-slate-50 cursor-pointer transition-colors'"
+                >
+                  {{ p }}
+                </button>
+              }
+            }
+
+            <button
+              (click)="nextPage()"
+              [disabled]="page() === totalPages()"
+              class="h-[2.5rem] px-4 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-r-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
+            >
+              Suivant
+            </button>
+          </div>
+        </div>
       }
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="actions">
-    <th *matHeaderCellDef mat-header-cell>Actions</th>
-    <td *matCellDef="let visitor" mat-cell>
-
-    </td>
-  </ng-container>
-
-
-  <tr *matHeaderRowDef="displayedColumnsVisitors" mat-header-row></tr>
-  <tr *matRowDef="let row; columns: displayedColumnsVisitors" mat-row></tr>
-</table>
+    </div>
+  </div>
+</div>
