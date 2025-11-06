@@ -21,7 +21,7 @@
           </thead>
           <tbody class="divide-y divide-slate-100">
             @if (loading()) {
-              @for (row of limit(); track row) {
+              @for (row of skeletonRows(); track row) {
                 <tr class="animate-pulse">
                   <td class="px-6 h-[4.5rem]">
                     <div class="flex items-center gap-3">
@@ -81,14 +81,16 @@
 
                   <td class="px-6 h-[4.5rem]">
                     <div class="flex flex-col">
-                      <span class="text-sm text-slate-800">{{ visitor.createdAt | date: 'd MMM yyyy' : '' : 'fr-FR' }}</span>
+                      <span
+                        class="text-sm text-slate-800">{{ visitor.createdAt | date: 'd MMM yyyy' : '' : 'fr-FR' }}</span>
                       <span class="text-xs text-slate-500">{{ visitor.createdAt | date: 'HH:mm' }}</span>
                     </div>
                   </td>
 
                   <td class="px-6 h-[4.5rem]">
                     <div class="flex flex-col">
-                      <span class="text-sm text-slate-800">{{ visitor.lastVisitAt | date: 'd MMM yyyy' : '' : 'fr-FR' }}</span>
+                      <span
+                        class="text-sm text-slate-800">{{ visitor.lastVisitAt | date: 'd MMM yyyy' : '' : 'fr-FR' }}</span>
                       <span class="text-xs text-slate-500">{{ visitor.lastVisitAt | date: 'HH:mm' }}</span>
                     </div>
                   </td>
@@ -123,7 +125,8 @@
 
                   <td class="px-6 h-[4.5rem]">
                     @let status = getStatusConfig(visitor.isVerified);
-                    <span class="px-2 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1" [class]="status.bgClass">
+                    <span class="px-2 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1"
+                          [class]="status.bgClass">
                       <span class="w-1.5 h-1.5 rounded-full" [class]="status.dotClass"></span>
                       {{ status.label }}
                     </span>

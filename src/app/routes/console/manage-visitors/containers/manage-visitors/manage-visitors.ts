@@ -1,12 +1,13 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
-import {VisitorService} from '../../../../../core/state/visitor/visitor.service';
-import {VisitorDto} from '../../../../../core/state/visitor/visitor.model';
+import {Component, computed, signal} from '@angular/core';
+import {PaginatedVisitorsResponse, VisitorDto} from '../../../../../core/state/visitor/visitor.model';
 import {DatePipe, registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {SvgSafePipe} from '../../../../../shared/pipes/svg-safe.pipe';
+import {httpResource} from '@angular/common/http';
+import {environment} from '../../../../../../../environments/environments';
 
 registerLocaleData(localeFr);
 
@@ -48,17 +49,28 @@ const PAGE_SIZE_OPTIONS = [5, 10, 20] as const;
   styleUrl: './manage-visitors.scss'
 })
 export class ManageVisitors {
-  private readonly visitorService = inject(VisitorService);
-
   readonly columns = TABLE_COLUMNS;
   readonly pageSizeOptions = PAGE_SIZE_OPTIONS;
 
   readonly page = signal(1);
   readonly limit = signal(5);
-  readonly total = signal(0);
-  readonly totalPages = signal(0);
-  readonly data = signal<VisitorDto[]>([]);
-  readonly loading = signal(true);
+
+  private readonly visitorsResource = httpResource<PaginatedVisitorsResponse>(() => ({
+    url: `${environment.baseUrl}/visitor/all`,
+    method: 'GET',
+    params: {
+      page: this.page().toString(),
+      limit: this.limit().toString()
+    },
+    headers: {'Content-Type': 'application/json'},
+    withCredentials: true
+  }));
+
+  readonly loading = computed(() => this.visitorsResource.isLoading());
+  readonly data = computed(() => this.visitorsResource.value()?.data ?? []);
+  readonly totalPages = computed(() => this.visitorsResource.value()?.totalPages ?? 0);
+
+  readonly skeletonRows = computed(() => Array.from({length: this.limit()}, (_, i) => i));
 
   readonly actionButtons: ActionButton[] = [
     {icon: 'visibility', tooltip: 'Voir les détails', handler: (visitor) => this.onView(visitor)},
@@ -85,28 +97,6 @@ export class ManageVisitors {
 
     return pages;
   });
-
-  constructor() {
-    effect(() => {
-      const currentPage = this.page();
-      this.loadVisitors(currentPage);
-    });
-  }
-
-  private loadVisitors(page: number): void {
-    this.loading.set(true);
-    this.visitorService.getAllPaginated(page, this.limit()).subscribe({
-      next: (response) => {
-        this.data.set(response.data);
-        this.total.set(response.total);
-        this.totalPages.set(response.totalPages);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-      }
-    });
-  }
 
   goToPage(page: number | string): void {
     if (typeof page === 'number') {
@@ -178,13 +168,13 @@ export class ManageVisitors {
   getProgressLabel(percentage: number): string {
     const levels = [
       {max: 20, label: 'Nouveau'},
-      {max: 39, label: 'Débutant'},
-      {max: 59, label: 'Intermédiaire'},
-      {max: 79, label: 'Avancé'},
-      {max: 99, label: 'Expert'},
-      {max: 100, label: 'Maître'}
+      {max: 39, label: 'Curieux'},
+      {max: 59, label: 'Engagé'},
+      {max: 79, label: 'Explorateur'},
+      {max: 99, label: 'Investi'},
+      {max: 100, label: 'Complet'}
     ];
-    return levels.find(l => percentage <= l.max)?.label || 'Maître';
+    return levels.find(l => percentage <= l.max)?.label || 'Complet';
   }
 
   getStatusConfig(isVerified: boolean) {
