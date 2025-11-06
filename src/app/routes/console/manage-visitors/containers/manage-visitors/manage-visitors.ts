@@ -26,8 +26,8 @@ interface ActionButton {
 }
 
 const TABLE_COLUMNS: TableColumn[] = [
-  {key: 'visitor', label: 'Visiteur', width: '18.75rem'},
-  {key: 'createdAt', label: 'Créé le', width: '10rem'},
+  {key: 'visitor', label: 'Visiteur', width: '16rem'},
+  {key: 'createdAt', label: 'Première visite', width: '10rem'},
   {key: 'lastVisitAt', label: 'Dernière visite', width: '10rem'},
   {key: 'achievements', label: 'Succès', width: '12.5rem'},
   {key: 'status', label: 'Statut', width: '8.75rem'},

@@ -37,7 +37,8 @@
             @for (column of columns; track column.key) {
               <th
                 class="px-6 h-[3rem] text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
-                [style.width]="column.width"
+                [style.min-width]="column.width"
+                [style.max-width]="column.width"
               >
                 {{ column.label }}
               </th>

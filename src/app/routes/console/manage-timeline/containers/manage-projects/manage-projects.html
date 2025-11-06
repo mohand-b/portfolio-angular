@@ -1,10 +1,17 @@
-<div class="flex items-center justify-between mb-6">
-  <h1 class="text-2xl font-semibold">{{ "Projets" | uppercase }}</h1>
+<div class="flex flex-col h-full">
+  <div
+    class="sticky top-0 z-10 flex items-center justify-between min-h-[5rem] px-[1.25rem] border-b border-neutral-200 bg-white"
+  >
+    <h1 class="text-2xl font-semibold text-neutral-800">Projets</h1>
 
-  <button (click)="openPanel()" class="secondary" matButton="filled">
-    <mat-icon>add</mat-icon>
-    Ajouter un projet
-  </button>
+    <button (click)="openPanel()" matButton="filled">
+      <mat-icon>add</mat-icon>
+      Ajouter un projet
+    </button>
+  </div>
+
+  <div class="flex flex-col flex-1 gap-[1.5rem] bg-neutral-100 p-[1.25rem]">
+  </div>
 </div>
 
 <app-side-panel (closed)="onCloseRequested()" [isOpen]="panelOpen()">
