@@ -14,4 +14,7 @@ export class VisitorService {
     return this.http.post<VisitorAuthResponseDto>(this.visitorBaseUrl, authDto);
   }
 
+  delete(id: string): Observable<{message: string}> {
+    return this.http.delete<{message: string}>(`${this.visitorBaseUrl}/${id}`);
+  }
 }

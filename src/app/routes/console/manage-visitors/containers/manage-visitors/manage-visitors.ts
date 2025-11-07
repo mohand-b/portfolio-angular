@@ -1,4 +1,4 @@
-import {Component, computed, signal} from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
 import {PaginatedVisitorsResponse, VisitorDto, VisitorStats} from '../../../../../core/state/visitor/visitor.model';
 import {DatePipe, registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
@@ -9,6 +9,7 @@ import {SvgSafePipe} from '../../../../../shared/pipes/svg-safe.pipe';
 import {httpResource} from '@angular/common/http';
 import {environment} from '../../../../../../../environments/environments';
 import {KpiCard} from '../../../../../shared/components/kpi-card/kpi-card';
+import {VisitorService} from '../../../../../core/state/visitor/visitor.service';
 
 registerLocaleData(localeFr);
 
@@ -51,11 +52,14 @@ const PAGE_SIZE_OPTIONS = [5, 10, 20] as const;
   styleUrl: './manage-visitors.scss'
 })
 export class ManageVisitors {
+  private readonly visitorService = inject(VisitorService);
+
   readonly columns = TABLE_COLUMNS;
   readonly pageSizeOptions = PAGE_SIZE_OPTIONS;
 
   readonly page = signal(1);
   readonly limit = signal(5);
+  readonly deleting = signal(false);
 
   private readonly visitorsResource = httpResource<PaginatedVisitorsResponse>(() => ({
     url: `${environment.baseUrl}/visitor/all`,
@@ -141,7 +145,17 @@ export class ManageVisitors {
   }
 
   onRemove(visitor: VisitorDto): void {
-    console.log('Remove visitor:', visitor);
+    this.deleting.set(true);
+    this.visitorService.delete(visitor.id).subscribe({
+      next: () => {
+        this.deleting.set(false);
+        this.visitorsResource.reload();
+        this.statsResource.reload();
+      },
+      error: () => {
+        this.deleting.set(false);
+      }
+    });
   }
 
   onLimitChange(event: Event): void {
