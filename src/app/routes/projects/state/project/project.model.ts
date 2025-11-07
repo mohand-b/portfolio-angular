@@ -26,3 +26,18 @@ export interface UpdateProjectDto {
   startDate: Date;
   endDate?: Date;
 }
+
+export interface PaginatedProjectsResponseDto {
+  data: ProjectDto[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface ProjectFilters {
+  title?: string;
+  projectTypes?: string[];
+  skillIds?: string[];
+  isPersonal?: boolean;
+}

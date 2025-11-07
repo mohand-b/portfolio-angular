@@ -10,10 +10,38 @@
     </button>
   </div>
 
-  <div class="flex flex-col flex-1 gap-[1.5rem] bg-neutral-100 p-[1.25rem]">
+  <div class="flex flex-col flex-1 gap-[1.5rem] bg-neutral-100 p-[1.25rem] overflow-auto">
+    @if (facade.projects().length > 0) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+           [class.opacity-50]="facade.projectsIsLoading()">
+        @for (project of facade.projects(); track project.id) {
+          <app-project-item [project]="project"/>
+        }
+      </div>
+
+      <div class="flex items-center justify-between mt-6 px-6 h-[3.5rem] bg-white rounded-lg border border-slate-200">
+        <div class="text-sm text-slate-600">
+          Affichage
+          <span class="font-medium text-slate-900">{{ facade.projectsStartIndex() }}
+            - {{ facade.projectsEndIndex() }}</span>
+          sur
+          <span class="font-medium text-slate-900">{{ facade.projectsTotal() }}</span>
+          projet{{ facade.projectsTotal() > 1 ? 's' : '' }}
+        </div>
+
+        <app-pagination
+          [currentPage]="facade.projectsPage()"
+          [totalPages]="facade.projectsTotalPages()"
+          [isLoading]="facade.projectsIsLoading()"
+          (pageChange)="facade.setProjectsPage($event)"
+          (previousPage)="facade.previousProjectsPage()"
+          (nextPage)="facade.nextProjectsPage()"
+        />
+      </div>
+    }
   </div>
 </div>
 
-<app-side-panel (closed)="onCloseRequested()" [isOpen]="panelOpen()">
-  <app-project-create (created)="onCloseRequested()"/>
+<app-side-panel (closed)="closePanel()" [isOpen]="panelOpen()">
+  <app-project-create (created)="closePanel()"/>
 </app-side-panel>

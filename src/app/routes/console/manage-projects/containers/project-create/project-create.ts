@@ -129,7 +129,10 @@ export class ProjectCreate implements OnInit {
       grouped.get(skill.category)!.push(skill);
     });
 
-    return Array.from(grouped.entries());
+    const categoryOrder = Object.values(SkillCategory);
+    return Array.from(grouped.entries()).sort((a, b) => {
+      return categoryOrder.indexOf(a[0]) - categoryOrder.indexOf(b[0]);
+    });
   }
 
   next() {

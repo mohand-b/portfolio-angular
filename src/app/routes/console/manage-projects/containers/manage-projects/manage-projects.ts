@@ -1,10 +1,11 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
 import {ConsoleFacade} from '../../../console.facade';
-import {ProjectDto} from '../../../../projects/state/project/project.model';
+import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
+import {Pagination} from '../../../../../shared/components/pagination/pagination';
 import {ProjectCreate} from '../project-create/project-create';
+import {ProjectItem} from '../../components/project-item/project-item';
 
 @Component({
   selector: 'app-manage-projects',
@@ -12,27 +13,28 @@ import {ProjectCreate} from '../project-create/project-create';
     MatButtonModule,
     MatIconModule,
     SidePanel,
+    Pagination,
     ProjectCreate,
+    ProjectItem,
   ],
   templateUrl: './manage-projects.html',
   styleUrl: './manage-projects.scss'
 })
-export class ManageProjects implements OnInit {
-  panelOpen = signal(false);
-  projects = signal<ProjectDto[]>([]);
-  isLoading = signal(false);
-  private consoleFacade = inject(ConsoleFacade);
+export class ManageProjects {
+  private readonly PAGE_SIZE = 4;
 
-  ngOnInit() {
+  readonly facade = inject(ConsoleFacade);
+  readonly panelOpen = signal(false);
+
+  constructor() {
+    this.facade.loadProjects({page: 1, limit: this.PAGE_SIZE});
   }
 
-  openPanel() {
+  openPanel(): void {
     this.panelOpen.set(true);
   }
 
-  onCloseRequested() {
+  closePanel(): void {
     this.panelOpen.set(false);
   }
-
-
 }
