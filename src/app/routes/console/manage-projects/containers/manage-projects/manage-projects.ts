@@ -1,20 +1,18 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
-import {ProjectTimelineItemCreate} from '../../components/project-timeline-item-create/project-timeline-item-create';
 import {MatButtonModule} from '@angular/material/button';
-import {UpperCasePipe} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
+import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
 import {ConsoleFacade} from '../../../console.facade';
 import {ProjectDto} from '../../../../projects/state/project/project.model';
+import {ProjectCreate} from '../project-create/project-create';
 
 @Component({
   selector: 'app-manage-projects',
   imports: [
-    SidePanel,
-    ProjectTimelineItemCreate,
     MatButtonModule,
     MatIconModule,
-    UpperCasePipe,
+    SidePanel,
+    ProjectCreate,
   ],
   templateUrl: './manage-projects.html',
   styleUrl: './manage-projects.scss'

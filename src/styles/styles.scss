@@ -27,8 +27,8 @@ html {
     outlined-input-text-color: #414141,
     outlined-input-text-placeholder-color: #41414170,
     select-option-text-color: #414141,
-    enabled-select-arrow-color: #414141,
-    focus-select-arrow-color: #414141,
+    enabled-select-arrow-color: #6B7280,
+    focus-select-arrow-color: #6B7280,
     container-text-size: 14px,
     subscript-text-size: 14px,
   ));
@@ -99,14 +99,43 @@ body {
   flex: 0 0 auto;
 }
 
+/* === Autocomplete (same style as select) === */
+.cdk-overlay-pane .mat-mdc-autocomplete-panel {
+  background-color: white !important;
+}
+
+.cdk-overlay-pane .mat-mdc-autocomplete-panel .mat-mdc-option {
+  font-size: 0.875rem !important;
+  line-height: 2rem !important;
+  color: #1f1b14 !important;
+}
+
+.cdk-overlay-pane .mat-mdc-autocomplete-panel .mat-mdc-option .mdc-list-item__primary-text {
+  font-size: inherit !important;
+  line-height: inherit !important;
+  color: inherit !important;
+}
+
+.cdk-overlay-pane .mat-mdc-autocomplete-panel .mat-mdc-option * {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.cdk-overlay-pane .mat-mdc-autocomplete-panel .mat-mdc-option .skill-category-label {
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+}
+
 /* === Form field (global style) === */
 :root {
   --ff-h: 2.5rem;
   --ff-radius: 8px;
-  --ff-bg: #E3E3E3;
+  --ff-bg: #ffffff;
+  --ff-border: #D1D5DB;
+  --ff-border-focus: #9CA3AF;
   --ff-fs: 0.875rem;
   --ff-text: #414141;
-  --ff-icon: #414141;
+  --ff-icon: #6B7280;
   --ff-pad-x: 12px;
 }
 
@@ -114,8 +143,6 @@ body {
   margin: 0 !important;
   padding: 0 !important;
   display: flex;
-  border-radius: var(--ff-radius);
-  overflow: hidden;
 }
 
 .mat-mdc-form-field.mat-form-field-appearance-outline .mat-mdc-text-field-wrapper {
@@ -123,8 +150,6 @@ body {
   padding: 0 !important;
   display: flex;
   align-items: center;
-  border-radius: inherit;
-  overflow: hidden;
 }
 
 .mat-mdc-form-field.mat-form-field-appearance-outline .mat-mdc-form-field-infix {
@@ -149,6 +174,20 @@ body {
   display: none !important;
 }
 
+.mat-mdc-form-field.mat-form-field-appearance-outline .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-form-field-appearance-outline .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-form-field-appearance-outline .mdc-notched-outline__trailing {
+  border-color: var(--ff-border) !important;
+  border-width: 1px !important;
+}
+
+.mat-mdc-form-field.mat-form-field-appearance-outline.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-form-field-appearance-outline.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-form-field-appearance-outline.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--ff-border-focus) !important;
+  border-width: 1px !important;
+}
+
 .mat-mdc-form-field.mat-form-field-appearance-outline .mdc-notched-outline {
   border-radius: var(--ff-radius);
 }
@@ -164,7 +203,6 @@ body {
 }
 
 .mat-mdc-form-field.mat-form-field-appearance-outline .mat-mdc-form-field-focus-overlay {
-  border-radius: var(--ff-radius);
   background: transparent !important;
 }
 
@@ -180,6 +218,12 @@ body {
 .mat-datepicker-toggle svg,
 .mat-mdc-form-field.mat-form-field-appearance-outline
 .mat-mdc-icon-button svg {
+  color: var(--ff-icon) !important;
+}
+
+/* Force select arrow color to grey even when invalid */
+.mat-mdc-form-field .mat-mdc-select.mat-mdc-select-invalid .mat-mdc-select-arrow,
+.mat-form-field-invalid:not(.mat-form-field-disabled) .mat-mdc-select .mat-mdc-select-arrow {
   color: var(--ff-icon) !important;
 }
 
@@ -214,17 +258,15 @@ body {
   align-items: flex-start !important;
   height: auto !important;
   overflow: visible !important;
-  background: var(--ff-bg);
 }
 
-/* L’infix doit pouvoir grandir pour contenir grid + input */
+/* L'infix doit pouvoir grandir pour contenir grid + input */
 .mat-mdc-form-field.mat-form-field-appearance-outline:has(.mat-mdc-chip-grid)
 .mat-mdc-form-field-infix {
   height: auto !important;
   min-height: 0 !important;
   display: block !important;
   padding: 8px var(--ff-pad-x) !important;
-  background: var(--ff-bg);
 }
 
 /* Les chips doivent pouvoir aller à la ligne */
@@ -250,6 +292,58 @@ input.mat-mdc-input-element {
   height: var(--ff-h) !important;
   display: flex;
   align-items: center;
+}
+
+/* === Buttons (global style) === */
+.mat-mdc-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button {
+  border-radius: 8px !important;
+  min-width: auto !important;
+  padding: 0 20px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+}
+
+.mat-mdc-icon-button {
+  border-radius: 8px !important;
+}
+
+/* === Button Toggle (segmented controls) === */
+.mat-button-toggle-group {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.mat-button-toggle {
+  border: 1px solid #D1D5DB !important;
+  color: #374151 !important;
+  background-color: white !important;
+  transition: border-color 0.2s ease;
+
+  &.mat-button-toggle-checked,
+  &.selected {
+    background-color: white !important;
+    color: #374151 !important;
+    border-color: var(--color-primary) !important;
+  }
+
+  .mat-button-toggle-label-content {
+    line-height: 1 !important;
+    padding: 0 !important;
+  }
+
+  // Cacher l'icône de check
+  .mat-pseudo-checkbox {
+    display: none !important;
+  }
+
+  mat-icon {
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 }
 
 /* === Buttons (secondary variant) === */

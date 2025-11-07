@@ -4,7 +4,6 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {JobCreate} from '../../components/job-create/job-create';
 import {CertificationCreate} from '../../components/certification-create/certification-create';
 import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
-import {UpperCasePipe} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -28,7 +27,6 @@ import {toSignal} from '@angular/core/rxjs-interop';
       JobCreate,
       CertificationCreate,
       SidePanel,
-      UpperCasePipe,
       OtherTimelineItemCreate
     ],
   templateUrl: './manage-timeline.html',

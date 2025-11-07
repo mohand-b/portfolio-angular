@@ -15,5 +15,5 @@
 </div>
 
 <app-side-panel (closed)="onCloseRequested()" [isOpen]="panelOpen()">
-  <app-project-timeline-item-create (created)="onCloseRequested()"/>
+  <app-project-create (created)="onCloseRequested()"/>
 </app-side-panel>

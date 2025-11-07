@@ -1,0 +1,30 @@
+<div class="stepper-container">
+  @for (step of steps(); track $index) {
+    <div class="step-wrapper">
+      <div
+        class="step-circle"
+        [class.active]="$index === currentStep()"
+        [class.completed]="$index < currentStep()"
+        [attr.aria-label]="step.text + ($index === currentStep() ? ' (en cours)' : $index < currentStep() ? ' (terminée)' : '')"
+        [attr.aria-current]="$index === currentStep() ? 'step' : null">
+
+        @if ($index < currentStep()) {
+          <mat-icon class="step-icon">check</mat-icon>
+        } @else {
+          <mat-icon class="step-icon">{{ step.icon }}</mat-icon>
+        }
+      </div>
+
+      <!-- Step label -->
+      <span class="step-label" [class.active]="$index === currentStep()">{{ step.text }}</span>
+
+      <!-- Connector line -->
+      @if ($index < steps().length - 1) {
+        <div
+          class="step-connector"
+          [class.completed]="$index < currentStep()">
+        </div>
+      }
+    </div>
+  }
+</div>

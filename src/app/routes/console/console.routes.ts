@@ -46,7 +46,7 @@ export const consoleRoutes: CustomRoute[] = [
       },
       {
         path: 'projects',
-        loadComponent: () => import('./manage-timeline/containers/manage-projects/manage-projects').then(m => m.ManageProjects),
+        loadComponent: () => import('./manage-projects/containers/manage-projects/manage-projects').then(m => m.ManageProjects),
         title: 'Projets',
         icon: 'folder',
       },

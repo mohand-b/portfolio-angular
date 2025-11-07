@@ -1,47 +1,51 @@
-import {Component, inject, output, signal, WritableSignal} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Component, inject, OnInit, output, signal, WritableSignal} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatDividerModule} from '@angular/material/divider';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {debounceTime, distinctUntilChanged, switchMap, of} from 'rxjs';
 import {ConsoleFacade} from '../../../console.facade';
 import {toFormData} from '../../../../../shared/extensions/object.extension';
+import {StepConfig, Stepper} from '../../../../../shared/components/stepper/stepper';
+import {SkillService} from '../../../../skills/state/skill/skill.service';
+import {SkillDto, SkillCategory, SKILL_CATEGORY_META, SkillCategoryMeta} from '../../../../skills/state/skill/skill.model';
 
 @Component({
-  selector: 'app-project-timeline-item-create',
+  selector: 'app-project-create',
   imports: [
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    ReactiveFormsModule,
     MatIconModule,
-    MatDatepickerModule,
-    MatDividerModule,
     MatProgressBarModule,
-    MatChipsModule,
-    MatButtonToggleModule
+    MatAutocompleteModule,
+    Stepper
   ],
-  templateUrl: './project-timeline-item-create.html',
-  styleUrl: './project-timeline-item-create.scss'
+  templateUrl: './project-create.html',
+  styleUrl: './project-create.scss'
 })
-export class ProjectTimelineItemCreate {
+export class ProjectCreate implements OnInit {
+  private fb = inject(FormBuilder);
+  private skillService = inject(SkillService);
+  private consoleFacade = inject(ConsoleFacade);
+
   readonly step = signal(0);
   readonly isSubmitting = signal(false);
   readonly created = output<void>();
-  readonly stepsMeta = [
-    {icon: 'description', label: 'Étape 1 : Contexte'},
-    {icon: 'build', label: 'Étape 2 : Typologie & stack'},
-    {icon: 'format_list_bulleted', label: 'Étape 3 : Missions'},
-    {icon: 'photo_library', label: 'Étape 4 : Médias & impact'},
-  ] as const;
+
+  readonly stepsMeta: StepConfig[] = [
+    {icon: 'description', text: 'Infos'},
+    {icon: 'build', text: 'Détails'},
+    {icon: 'format_list_bulleted', text: 'Missions'},
+    {icon: 'photo_library', text: 'Images'},
+  ];
+
   readonly projectTypeOptions = [
     'MVP / POC',
     'SaaS',
@@ -50,13 +54,15 @@ export class ProjectTimelineItemCreate {
     'Mobile-like',
     'Data-driven',
   ] as const;
-  readonly scopeOptions = ['Interne', 'Externe'] as const;
-  readonly marketOptions = ['B2B', 'B2C'] as const;
-  missions: WritableSignal<string[]> = signal([]);
-  images = signal<Array<{ file: File; preview: string }>>([]);
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  private fb = inject(FormBuilder);
-  missionControl = this.fb.control('');
+
+  readonly missions: WritableSignal<string[]> = signal([]);
+  readonly images = signal<Array<{ file: File; preview: string }>>([]);
+  readonly selectedSkills: WritableSignal<SkillDto[]> = signal([]);
+  readonly filteredSkills = signal<SkillDto[]>([]);
+
+  readonly missionControl = this.fb.control('');
+  readonly skillSearchControl = this.fb.control('');
+
   readonly eventForm = this.fb.group({
     step1: this.fb.group({
       title: ['', [Validators.required, Validators.minLength(4)]],
@@ -65,16 +71,13 @@ export class ProjectTimelineItemCreate {
       collaboration: [''],
     }),
     step2: this.fb.group({
-      projectTypes: this.fb.control<string[]>([], {
-        validators: [Validators.required, Validators.minLength(1)],
-      }),
-      scope: this.fb.control<string | null>(null, {validators: [Validators.required]}),
-      market: this.fb.control<string | null>(null, {validators: [Validators.required]}),
-      tools: this.fb.control<string[]>([], {validators: [Validators.minLength(1)]}),
+      projectTypes: this.fb.control<string[]>([], [Validators.required, Validators.minLength(1)]),
+      scope: this.fb.control<string | null>(null, [Validators.required]),
+      market: this.fb.control<string | null>(null, [Validators.required]),
     }),
+    step3: this.fb.group({}),
     step4: this.fb.group({}),
-  })
-  private consoleFacade = inject(ConsoleFacade);
+  });
 
   get s1(): FormGroup {
     return this.getStepGroup(0)!;
@@ -84,22 +87,55 @@ export class ProjectTimelineItemCreate {
     return this.getStepGroup(1)!;
   }
 
+  get s3(): FormGroup {
+    return this.getStepGroup(2)!;
+  }
+
   get s4(): FormGroup {
     return this.getStepGroup(3)!;
   }
 
-  get toolsCtrl(): FormControl<string[]> {
-    return this.eventForm.get('step2.tools') as FormControl<string[]>;
+  ngOnInit() {
+    this.skillSearchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(query => {
+        if (typeof query !== 'string' || !query || query.trim().length < 2) {
+          return of([]);
+        }
+        return this.skillService.searchSkills(query.trim(), 5);
+      })
+    ).subscribe(skills => {
+      this.filteredSkills.set(skills);
+    });
   }
 
-  keywords() {
-    return this.toolsCtrl.value ?? [];
+  displaySkillName(skill: SkillDto | null): string {
+    return skill ? skill.name : '';
+  }
+
+  getCategoryMeta(category: SkillCategory): SkillCategoryMeta {
+    return SKILL_CATEGORY_META[category];
+  }
+
+  getSkillsByCategory() {
+    const skills = this.selectedSkills();
+    const grouped = new Map<SkillCategory, SkillDto[]>();
+
+    skills.forEach(skill => {
+      if (!grouped.has(skill.category)) {
+        grouped.set(skill.category, []);
+      }
+      grouped.get(skill.category)!.push(skill);
+    });
+
+    return Array.from(grouped.entries());
   }
 
   next() {
     const idx = this.step();
     const current = this.getStepGroup(idx);
-    if (current && current.invalid) {
+    if (current?.invalid) {
       current.markAllAsTouched();
       return;
     }
@@ -108,10 +144,10 @@ export class ProjectTimelineItemCreate {
     }
   }
 
-  //
-
   prev() {
-    if (this.step() > 0) this.step.update(v => v - 1);
+    if (this.step() > 0) {
+      this.step.update(v => v - 1);
+    }
   }
 
   onSubmit() {
@@ -125,6 +161,7 @@ export class ProjectTimelineItemCreate {
 
     const {step1, step2} = this.eventForm.getRawValue();
     const imageFiles = this.images().map(img => img.file);
+    const skillIds = this.selectedSkills().map(skill => skill.id);
 
     const payload = {
       title: step1.title!.trim(),
@@ -135,7 +172,7 @@ export class ProjectTimelineItemCreate {
       projectTypes: step2.projectTypes!,
       scope: step2.scope!,
       market: step2.market!,
-      tools: step2.tools!,
+      skillIds: skillIds,
     };
 
     const formData = toFormData(payload);
@@ -151,7 +188,9 @@ export class ProjectTimelineItemCreate {
         this.eventForm.reset();
         this.missions.set([]);
         this.images.set([]);
+        this.selectedSkills.set([]);
         this.missionControl.reset('');
+        this.skillSearchControl.reset('');
         this.step.set(0);
         this.isSubmitting.set(false);
       },
@@ -163,24 +202,18 @@ export class ProjectTimelineItemCreate {
     });
   }
 
-  add(event: MatChipInputEvent) {
-    const value = (event.value ?? '').trim();
-    if (!value) return;
-
-    const current = this.keywords();
-    if (!current.some(k => k.toLowerCase() === value.toLowerCase())) {
-      this.toolsCtrl.setValue([...current, value]);
-      this.toolsCtrl.markAsDirty();
-      this.toolsCtrl.updateValueAndValidity();
+  onSkillSelected(event: MatAutocompleteSelectedEvent) {
+    const skill: SkillDto = event.option.value;
+    const current = this.selectedSkills();
+    if (!current.some(s => s.id === skill.id)) {
+      this.selectedSkills.set([...current, skill]);
     }
-
-    event.chipInput?.clear();
+    this.skillSearchControl.setValue('');
+    this.filteredSkills.set([]);
   }
 
-  removeKeyword(keyword: string) {
-    this.toolsCtrl.setValue(this.keywords().filter(k => k !== keyword));
-    this.toolsCtrl.markAsDirty();
-    this.toolsCtrl.updateValueAndValidity();
+  removeSkill(skill: SkillDto) {
+    this.selectedSkills.set(this.selectedSkills().filter(s => s.id !== skill.id));
   }
 
   addMission(e: Event) {
@@ -199,29 +232,23 @@ export class ProjectTimelineItemCreate {
   onFilesSelected(e: Event) {
     const input = e.target as HTMLInputElement;
     const files = Array.from(input.files || []);
-
     if (!files.length) return;
 
     const MAX_IMAGES = 4;
-    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    const MAX_SIZE = 5 * 1024 * 1024;
     const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
-
-    const currentCount = this.images().length;
-    const availableSlots = MAX_IMAGES - currentCount;
+    const availableSlots = MAX_IMAGES - this.images().length;
 
     if (availableSlots <= 0) {
       alert(`Maximum ${MAX_IMAGES} images autorisées`);
       return;
     }
 
-    const filesToAdd = files.slice(0, availableSlots);
-
-    filesToAdd.forEach(file => {
+    files.slice(0, availableSlots).forEach(file => {
       if (!ALLOWED_TYPES.includes(file.type)) {
         alert(`Type non autorisé: ${file.name}. Formats acceptés: PNG, JPEG, WEBP`);
         return;
       }
-
       if (file.size > MAX_SIZE) {
         alert(`Fichier trop volumineux: ${file.name}. Max 5MB`);
         return;
@@ -229,10 +256,7 @@ export class ProjectTimelineItemCreate {
 
       const reader = new FileReader();
       reader.onload = () => {
-        this.images.update(imgs => [...imgs, {
-          file,
-          preview: reader.result as string
-        }]);
+        this.images.update(imgs => [...imgs, {file, preview: reader.result as string}]);
       };
       reader.readAsDataURL(file);
     });
@@ -244,9 +268,15 @@ export class ProjectTimelineItemCreate {
     this.images.update(imgs => imgs.filter((_, i) => i !== index));
   }
 
+  setScope(value: string) {
+    this.s2.get('scope')?.setValue(value);
+  }
+
+  setMarket(value: string) {
+    this.s2.get('market')?.setValue(value);
+  }
+
   private getStepGroup(idx: number): FormGroup | null {
     return this.eventForm.get(`step${idx + 1}`) as FormGroup | null;
   }
-
-
 }

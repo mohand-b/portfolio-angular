@@ -29,4 +29,11 @@ export class SkillService {
   updateSkillLevel(id: string, level: number): Observable<SkillDto> {
     return this.http.patch<SkillDto>(`${this.skillBaseUrl}/${id}/level`, {level}, {withCredentials: true});
   }
+
+  searchSkills(query: string, limit: number = 5): Observable<SkillDto[]> {
+    return this.http.get<SkillDto[]>(`${this.skillBaseUrl}/search`, {
+      params: { q: query, limit: limit.toString() },
+      withCredentials: true
+    });
+  }
 }
