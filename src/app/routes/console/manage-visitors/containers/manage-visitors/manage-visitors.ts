@@ -10,6 +10,8 @@ import {httpResource} from '@angular/common/http';
 import {environment} from '../../../../../../../environments/environments';
 import {KpiCard} from '../../../../../shared/components/kpi-card/kpi-card';
 import {VisitorService} from '../../../../../core/state/visitor/visitor.service';
+import {ConfirmationModal} from '../../../../../shared/components/confirmation-modal/confirmation-modal';
+import {ToastService} from '../../../../../shared/services/toast.service';
 
 registerLocaleData(localeFr);
 
@@ -46,20 +48,29 @@ const PAGE_SIZE_OPTIONS = [5, 10, 20] as const;
     MatButtonModule,
     MatTooltipModule,
     SvgSafePipe,
-    KpiCard
+    KpiCard,
+    ConfirmationModal
   ],
   templateUrl: './manage-visitors.html',
   styleUrl: './manage-visitors.scss'
 })
 export class ManageVisitors {
   private readonly visitorService = inject(VisitorService);
+  private readonly toastService = inject(ToastService);
 
   readonly columns = TABLE_COLUMNS;
   readonly pageSizeOptions = PAGE_SIZE_OPTIONS;
 
   readonly page = signal(1);
   readonly limit = signal(5);
-  readonly deleting = signal(false);
+  readonly confirmModalOpen = signal(false);
+  readonly visitorToDelete = signal<VisitorDto | null>(null);
+  readonly deletionMessage = computed(() => {
+    const visitor = this.visitorToDelete();
+    return visitor
+      ? `Êtes-vous sûr de vouloir supprimer ${visitor.firstName} ${visitor.lastName} ? Cette action est irréversible.`
+      : '';
+  });
 
   private readonly visitorsResource = httpResource<PaginatedVisitorsResponse>(() => ({
     url: `${environment.baseUrl}/visitor/all`,
@@ -145,17 +156,35 @@ export class ManageVisitors {
   }
 
   onRemove(visitor: VisitorDto): void {
-    this.deleting.set(true);
+    this.visitorToDelete.set(visitor);
+    this.confirmModalOpen.set(true);
+  }
+
+  onConfirmDelete(): void {
+    const visitor = this.visitorToDelete();
+    if (!visitor) return;
+
+    this.closeModal();
+
     this.visitorService.delete(visitor.id).subscribe({
       next: () => {
-        this.deleting.set(false);
         this.visitorsResource.reload();
         this.statsResource.reload();
+        this.toastService.success('Visiteur supprimé avec succès');
       },
       error: () => {
-        this.deleting.set(false);
+        this.toastService.error('Erreur lors de la suppression du visiteur');
       }
     });
+  }
+
+  onCancelDelete(): void {
+    this.closeModal();
+  }
+
+  private closeModal(): void {
+    this.confirmModalOpen.set(false);
+    this.visitorToDelete.set(null);
   }
 
   onLimitChange(event: Event): void {

@@ -1,0 +1,17 @@
+<div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9999] flex flex-col-reverse gap-2">
+  @for (toast of toasts(); track toast.id) {
+    <div
+      [class]="getToastConfig(toast.type).bgClass + ' flex items-center gap-3 px-4 py-3 rounded-lg shadow-xs min-w-[20rem] max-w-[32rem] ' + (toast.removing ? 'animate-slide-down-out' : 'animate-slide-up-in')"
+    >
+      <mat-icon class="!w-5 !h-5 !text-[20px]">{{ getToastConfig(toast.type).icon }}</mat-icon>
+      <span class="flex-1 text-sm">{{ toast.message }}</span>
+      <button
+        (click)="remove(toast.id)"
+        class="flex items-center justify-center cursor-pointer opacity-60"
+        type="button"
+      >
+        <mat-icon class="!w-5 !h-5 !text-[20px]">close</mat-icon>
+      </button>
+    </div>
+  }
+</div>

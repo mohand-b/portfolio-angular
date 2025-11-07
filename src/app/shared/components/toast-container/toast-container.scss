@@ -1,0 +1,29 @@
+@keyframes slide-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+}
+
+.animate-slide-up-in {
+  animation: slide-up-in 0.3s ease-out;
+}
+
+.animate-slide-down-out {
+  animation: slide-down-out 0.3s ease-out forwards;
+}

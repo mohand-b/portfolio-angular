@@ -236,3 +236,12 @@
     </div>
   </div>
 </div>
+
+<app-confirmation-modal
+  [isOpen]="confirmModalOpen()"
+  title="Supprimer le visiteur"
+  [message]="deletionMessage()"
+  [isDelete]="true"
+  (confirmed)="onConfirmDelete()"
+  (cancelled)="onCancelDelete()"
+/>

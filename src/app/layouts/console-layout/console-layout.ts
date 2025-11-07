@@ -3,10 +3,11 @@ import {RouterOutlet} from '@angular/router';
 import {ConsoleMenu} from '../../routes/console/components/console-menu/console-menu';
 import {CoreFacade} from '../../core/core.facade';
 import {Loader} from '../../shared/components/loader/loader';
+import {ToastContainer} from '../../shared/components/toast-container/toast-container';
 
 @Component({
   selector: 'app-console-layout',
-  imports: [RouterOutlet, ConsoleMenu, Loader],
+  imports: [RouterOutlet, ConsoleMenu, Loader, ToastContainer],
   templateUrl: './console-layout.html',
   styleUrl: './console-layout.scss'
 })
