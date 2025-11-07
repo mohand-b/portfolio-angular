@@ -4,37 +4,46 @@
   class="w-full h-full flex flex-col justify-between"
 >
   <div class="flex flex-col gap-4">
-    <mat-form-field appearance="outline" class="flex-1 min-w-[12rem] unified-field">
-      <mat-select formControlName="category" placeholder="Catégorie">
-        @for (cat of skillCategories; track cat) {
-          <mat-option [value]="cat" class="flex items-center gap-2">
-            <mat-icon
-              fontIcon="{{ skillCategoryCatalog[cat].icon }}"
-              [style.color]="skillCategoryCatalog[cat].color"
-              class="mr-2 align-middle"
-            ></mat-icon>
-            <span class="align-middle">
-          {{ skillCategoryCatalog[cat].label }}
-        </span>
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Catégorie</label>
+      <mat-form-field appearance="outline" class="w-full unified-field">
+        <mat-select formControlName="category" placeholder="Sélectionner une catégorie">
+          @for (cat of skillCategories; track cat) {
+            <mat-option [value]="cat" class="flex items-center gap-2">
+              <mat-icon
+                fontIcon="{{ skillCategoryCatalog[cat].icon }}"
+                [style.color]="skillCategoryCatalog[cat].color"
+                class="mr-2 align-middle"
+              ></mat-icon>
+              <span class="align-middle">
+            {{ skillCategoryCatalog[cat].label }}
+          </span>
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="flex-1 min-w-[12rem]">
-      <input formControlName="name" matInput placeholder="Nom de la compétence"/>
-    </mat-form-field>
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Nom de la compétence</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <input formControlName="name" matInput placeholder="Saisir le nom de la compétence"/>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="flex-1 min-w-[7rem]">
-      <input
-        formControlName="level"
-        matInput
-        max="10"
-        min="1"
-        placeholder="Niveau"
-        type="number"
-      />
-    </mat-form-field>
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Niveau de maîtrise</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <input
+          formControlName="level"
+          matInput
+          max="10"
+          min="1"
+          placeholder="Indiquer le niveau (1-5)"
+          type="number"
+        />
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="flex justify-between w-full justify-end">

@@ -38,7 +38,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.BACKEND]: {
     key: SkillCategory.BACKEND,
     label: 'Développement Backend',
-    subtitle: 'Applications, APIs et services côté serveur',
+    subtitle: 'Technologies côté serveur',
     color: '#16A34A',
     icon: 'terminal',
   },
