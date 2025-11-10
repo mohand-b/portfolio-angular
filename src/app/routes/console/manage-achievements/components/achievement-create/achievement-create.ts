@@ -29,7 +29,7 @@ const ICON_NAMES = [
   'lock', 'verified', 'security', 'key', 'fingerprint',
   'cloud', 'cloud_done', 'cloud_upload', 'cloud_download', 'web', 'dns', 'storage',
   'sports_esports', 'psychology', 'bolt', 'auto_awesome', 'emoji_objects', 'flare',
-  'info', 'help', 'book', 'article', 'description', 'library_books', 'school', 'badge'
+  'info', 'help', 'book', 'article', 'description', 'library_books', 'school', 'badge', 'bedtime'
 ];
 
 const DEFAULT_COLOR = '#6b7280';

@@ -161,7 +161,8 @@
                             type="button"
                             (click)="removeSkill(skill)"
                             class="flex items-center justify-center w-4 h-4 rounded-full hover:bg-black/10 transition-colors cursor-pointer">
-                            <mat-icon class="!text-xs !w-3 !h-3 !leading-none flex items-center justify-center">close</mat-icon>
+                            <mat-icon class="!text-xs !w-3 !h-3 !leading-none flex items-center justify-center">close
+                            </mat-icon>
                           </button>
                         </div>
                       }
@@ -273,9 +274,5 @@
       </button>
     }
   </div>
-
-  @if (isSubmitting()) {
-    <mat-progress-bar mode="indeterminate" class="mt-2"/>
-  }
 
 </form>

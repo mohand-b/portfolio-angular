@@ -16,7 +16,7 @@ import {JobDto} from '../career/state/job/job.model';
 import {JobService} from '../career/state/job/job.service';
 import {CertificationDto} from '../career/state/certification/certification.model';
 import {CertificationService} from '../career/state/certification/certification.service';
-import {ProjectDto, ProjectFilters} from '../projects/state/project/project.model';
+import {ProjectDto, ProjectFilters, ProjectLightDto} from '../projects/state/project/project.model';
 import {ProjectService} from '../projects/state/project/project.service';
 import {ProjectStore} from '../projects/state/project/project.store';
 
@@ -43,7 +43,7 @@ export class ConsoleFacade {
 
   readonly skills: Signal<SkillDto[]> = this.skillStore.skills;
 
-  readonly projects: Signal<ProjectDto[]> = this.projectStore.projects;
+  readonly projects: Signal<ProjectLightDto[]> = this.projectStore.projects;
   readonly projectsTotal: Signal<number> = this.projectStore.total;
   readonly projectsPage: Signal<number> = this.projectStore.page;
   readonly projectsTotalPages: Signal<number> = this.projectStore.totalPages;
@@ -101,6 +101,12 @@ export class ConsoleFacade {
 
   addProject(projectFormData: FormData): Observable<ProjectDto> {
     return this.projectService.createProject(projectFormData).pipe(
+      tap(() => this.projectStore.loadProjects({}))
+    );
+  }
+
+  deleteProject(id: string): Observable<void> {
+    return this.projectService.deleteProject(id).pipe(
       tap(() => this.projectStore.loadProjects({}))
     );
   }

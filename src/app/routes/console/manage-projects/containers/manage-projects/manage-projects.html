@@ -1,33 +1,48 @@
 <div class="flex flex-col h-full">
-  <div
-    class="sticky top-0 z-10 flex items-center justify-between min-h-[5rem] px-[1.25rem] border-b border-neutral-200 bg-white"
-  >
+  <!-- Header -->
+  <header class="sticky top-0 z-10 flex items-center justify-between min-h-20 px-5 border-b border-neutral-200 bg-white">
     <h1 class="text-2xl font-semibold text-neutral-800">Projets</h1>
 
-    <button (click)="openPanel()" matButton="filled">
+    <button
+      type="button"
+      matButton="filled"
+      (click)="openPanel()"
+      aria-label="Ajouter un projet"
+    >
       <mat-icon>add</mat-icon>
       Ajouter un projet
     </button>
-  </div>
+  </header>
 
-  <div class="flex flex-col flex-1 gap-[1.5rem] bg-neutral-100 p-[1.25rem] overflow-auto">
+  <!-- Main Content -->
+  <main class="flex flex-col flex-1 gap-6 bg-neutral-100 p-5 overflow-auto">
     @if (facade.projects().length > 0) {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-           [class.opacity-50]="facade.projectsIsLoading()">
+      <!-- Projects Grid -->
+      <section
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-opacity"
+        [class.opacity-50]="facade.projectsIsLoading()"
+        role="list"
+      >
         @for (project of facade.projects(); track project.id) {
-          <app-project-item [project]="project"/>
+          <app-project-item
+            [project]="project"
+            (edit)="onEdit(project)"
+            (remove)="onRemove(project)"
+          />
         }
-      </div>
+      </section>
 
-      <div class="flex items-center justify-between mt-6 px-6 h-[3.5rem] bg-white rounded-lg border border-slate-200">
-        <div class="text-sm text-slate-600">
+      <!-- Pagination Footer -->
+      <footer class="flex items-center justify-between mt-6 px-6 h-14 bg-white rounded-lg border border-slate-200">
+        <p class="text-sm text-slate-600">
           Affichage
-          <span class="font-medium text-slate-900">{{ facade.projectsStartIndex() }}
-            - {{ facade.projectsEndIndex() }}</span>
+          <span class="font-medium text-slate-900">
+            {{ facade.projectsStartIndex() }} - {{ facade.projectsEndIndex() }}
+          </span>
           sur
           <span class="font-medium text-slate-900">{{ facade.projectsTotal() }}</span>
           projet{{ facade.projectsTotal() > 1 ? 's' : '' }}
-        </div>
+        </p>
 
         <app-pagination
           [currentPage]="facade.projectsPage()"
@@ -37,11 +52,28 @@
           (previousPage)="facade.previousProjectsPage()"
           (nextPage)="facade.nextProjectsPage()"
         />
+      </footer>
+    } @else {
+      <div class="flex items-center justify-center flex-1">
+        <p class="text-gray-500">Aucun projet disponible</p>
       </div>
     }
-  </div>
+  </main>
 </div>
 
-<app-side-panel (closed)="closePanel()" [isOpen]="panelOpen()">
-  <app-project-create (created)="closePanel()"/>
+<!-- Side Panel -->
+<app-side-panel [isOpen]="panelOpen()" (closed)="closePanel()">
+  <app-project-create (created)="onProjectCreated()" />
 </app-side-panel>
+
+<!-- Confirmation Modal -->
+@if (confirmModalOpen()) {
+  <app-confirmation-modal
+    [isOpen]="confirmModalOpen()"
+    title="Supprimer le projet"
+    [message]="deletionMessage()"
+    [isDelete]="true"
+    (confirmed)="confirmDelete()"
+    (cancelled)="cancelDelete()"
+  />
+}
