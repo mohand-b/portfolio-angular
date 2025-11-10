@@ -11,7 +11,7 @@ export interface TimelineItemDto {
 
 export enum TimelineItemType {
   Job = 'job',
-  Certification = 'certification',
+  Education = 'education',
   Project = 'project',
   Other = 'other'
 }
@@ -30,9 +30,9 @@ export const TIMELINE_ITEM_TYPE_META: Record<TimelineItemType, TimelineItemTypeM
     color: '#58acff',
     icon: 'work',
   },
-  [TimelineItemType.Certification]: {
-    key: TimelineItemType.Certification,
-    label: 'Diplômes / Certifications',
+  [TimelineItemType.Education]: {
+    key: TimelineItemType.Education,
+    label: 'Formations',
     color: '#11bd89',
     icon: 'school',
   },

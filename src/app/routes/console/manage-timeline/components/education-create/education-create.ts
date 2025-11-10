@@ -1,4 +1,4 @@
-import {Component, inject, input, output, signal} from '@angular/core';
+import {Component, inject, output, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -8,9 +8,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {ConsoleFacade} from '../../../console.facade';
 import {toFormData} from '../../../../../shared/extensions/object.extension';
 
-
 @Component({
-  selector: 'app-certification-create',
+  selector: 'app-education-create',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -19,50 +18,58 @@ import {toFormData} from '../../../../../shared/extensions/object.extension';
     MatButtonModule,
     MatIconModule
   ],
-  templateUrl: './certification-create.html',
-  styleUrl: './certification-create.scss'
+  templateUrl: './education-create.html',
+  styleUrl: './education-create.scss'
 })
-export class CertificationCreate {
-
+export class EducationCreate {
   readonly created = output<void>();
-  imagePreview = signal<string | null>(null);
+
   private fb = inject(FormBuilder);
-  certificationForm: FormGroup = this.fb.group({
-    certificationName: ['', Validators.required],
-    startDate: [null],
-    endDate: [null, Validators.required],
-    school: ['', Validators.required],
-    location: ['', Validators.required],
-    image: [null as File | null],
-  });
   private consoleFacade = inject(ConsoleFacade);
 
+  imagePreview = signal<string | null>(null);
+
+  educationForm: FormGroup = this.fb.group({
+    title: ['', Validators.required],
+    institution: ['', Validators.required],
+    location: ['', Validators.required],
+    fieldOfStudy: [''],
+    startDate: [null],
+    endDate: [null, Validators.required],
+    image: [null as File | null],
+  });
+
   onSubmit() {
-    if (this.certificationForm.invalid) {
-      this.certificationForm.markAllAsTouched();
+    if (this.educationForm.invalid) {
+      this.educationForm.markAllAsTouched();
       return;
     }
 
-    this.consoleFacade.addCertification(toFormData(this.certificationForm.value)).subscribe({
+    const formData = toFormData(this.educationForm.value);
+
+    this.consoleFacade.addEducation(formData).subscribe({
       next: () => {
+        this.resetForm();
         this.created.emit();
-        this.certificationForm.reset();
-        this.imagePreview.set(null);
       },
-      error: () => this.certificationForm.markAsTouched(),
+      error: () => this.educationForm.markAllAsTouched(),
     });
   }
-
 
   onFileSelected(evt: Event) {
     const input = evt.target as HTMLInputElement;
     const image = input.files?.[0];
     if (!image) return;
 
-    this.certificationForm.patchValue({image});
+    this.educationForm.patchValue({image});
 
     const reader = new FileReader();
     reader.onload = () => this.imagePreview.set(reader.result as string);
     reader.readAsDataURL(image);
+  }
+
+  private resetForm() {
+    this.educationForm.reset();
+    this.imagePreview.set(null);
   }
 }

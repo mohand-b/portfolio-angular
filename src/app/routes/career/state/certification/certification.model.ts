@@ -1,10 +1,10 @@
-import {TimelineItemDto, TimelineItemType} from '../timeline/timeline.model';
+export type {
+  CertificationDto,
+  CreateCertificationDto,
+  UpdateCertificationDto
+} from '../education/education.model';
 
-export interface CertificationDto extends TimelineItemDto {
-  type: TimelineItemType.Certification;
-  school: string;
-  location: string;
-}
-
-export interface CreateCertificationDto extends Omit<CertificationDto, 'id'> {
-}
+export {
+  CertificationType,
+  CERTIFICATION_TYPE_META
+} from '../education/education.model';

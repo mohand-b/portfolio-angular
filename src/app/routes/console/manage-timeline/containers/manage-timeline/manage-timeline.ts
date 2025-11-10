@@ -2,7 +2,7 @@ import {Component, signal} from '@angular/core';
 import {TIMELINE_ITEM_TYPE_META, TimelineItemType} from '../../../../career/state/timeline/timeline.model';
 import {MatTabsModule} from '@angular/material/tabs';
 import {JobCreate} from '../../components/job-create/job-create';
-import {CertificationCreate} from '../../components/certification-create/certification-create';
+import {EducationCreate} from '../../components/education-create/education-create';
 import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
 import {MatButtonModule} from '@angular/material/button';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -25,7 +25,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
       MatTabsModule,
       MatIconModule,
       JobCreate,
-      CertificationCreate,
+      EducationCreate,
       SidePanel,
       OtherTimelineItemCreate
     ],

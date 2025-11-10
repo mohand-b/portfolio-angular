@@ -14,7 +14,9 @@ import {SkillService} from '../skills/state/skill/skill.service';
 import {SkillStore} from '../skills/state/skill/skill.store';
 import {JobDto} from '../career/state/job/job.model';
 import {JobService} from '../career/state/job/job.service';
-import {CertificationDto} from '../career/state/certification/certification.model';
+import {EducationDto} from '../career/state/education/education.model';
+import {EducationService} from '../career/state/education/education.service';
+import {CertificationDto, CreateCertificationDto} from '../career/state/certification/certification.model';
 import {CertificationService} from '../career/state/certification/certification.service';
 import {ProjectDto, ProjectFilters, ProjectLightDto} from '../projects/state/project/project.model';
 import {ProjectService} from '../projects/state/project/project.service';
@@ -31,6 +33,7 @@ export class ConsoleFacade {
   private readonly skillService = inject(SkillService);
 
   private readonly jobService = inject(JobService);
+  private readonly educationService = inject(EducationService);
   private readonly certificationService = inject(CertificationService);
 
   private readonly projectStore = inject(ProjectStore);
@@ -95,8 +98,28 @@ export class ConsoleFacade {
     return this.jobService.createJob(jobFormData);
   }
 
-  addCertification(certificationFormData: FormData): Observable<CertificationDto> {
-    return this.certificationService.createCertification(certificationFormData);
+  addEducation(educationFormData: FormData): Observable<EducationDto> {
+    return this.educationService.create(educationFormData);
+  }
+
+  updateEducation(id: string, educationFormData: FormData): Observable<EducationDto> {
+    return this.educationService.update(id, educationFormData);
+  }
+
+  deleteEducation(id: string): Observable<void> {
+    return this.educationService.delete(id);
+  }
+
+  addCertification(dto: CreateCertificationDto): Observable<CertificationDto> {
+    return this.certificationService.create(dto);
+  }
+
+  updateCertification(id: string, dto: Partial<CreateCertificationDto>): Observable<CertificationDto> {
+    return this.certificationService.update(id, dto);
+  }
+
+  deleteCertification(id: string): Observable<void> {
+    return this.certificationService.delete(id);
   }
 
   addProject(projectFormData: FormData): Observable<ProjectDto> {

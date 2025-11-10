@@ -1,0 +1,106 @@
+<form
+  (submit)="onSubmit()"
+  [formGroup]="educationForm"
+  class="h-full w-full flex flex-col justify-between gap-4"
+>
+  <div class="flex-1 flex flex-col gap-4">
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Intitulé de la formation</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <input formControlName="title" matInput placeholder="Saisir l'intitulé de la formation"/>
+      </mat-form-field>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Établissement</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <input formControlName="institution" matInput placeholder="Saisir le nom de l'établissement"/>
+      </mat-form-field>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Lieu</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <input formControlName="location" matInput placeholder="Saisir le lieu"/>
+      </mat-form-field>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Domaine d'étude</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <input formControlName="fieldOfStudy" matInput placeholder="Saisir le domaine d'étude (optionnel)"/>
+      </mat-form-field>
+    </div>
+
+    <div class="w-full grid grid-cols-2 gap-2">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Date de début</label>
+        <mat-form-field appearance="outline" class="w-full">
+          <input [matDatepicker]="startPicker" formControlName="startDate" matInput placeholder="Début"/>
+          <button (click)="startPicker.open()" mat-icon-button matSuffix type="button">
+            <mat-icon>calendar_month</mat-icon>
+          </button>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Date de fin</label>
+        <mat-form-field appearance="outline" class="w-full">
+          <input
+            [matDatepicker]="endPicker"
+            [min]="educationForm.get('startDate')?.value || null"
+            formControlName="endDate"
+            matInput
+            placeholder="Fin"
+          />
+          <button (click)="endPicker.open()" mat-icon-button matSuffix type="button">
+            <mat-icon>calendar_month</mat-icon>
+          </button>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Image</label>
+
+      <input
+        #fileInput
+        (change)="onFileSelected($event)"
+        accept="image/png,image/jpeg,image/jpg,image/webp"
+        class="hidden"
+        type="file"
+      />
+
+      @if (imagePreview()) {
+        <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+          <img [src]="imagePreview()!" class="h-full w-full object-cover" alt="Aperçu de l'image"/>
+          <button
+            type="button"
+            (click)="imagePreview.set(null); educationForm.patchValue({image: null})"
+            class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-sm"
+          >
+            <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
+          </button>
+        </div>
+      } @else {
+        <button
+          type="button"
+          (click)="fileInput.click()"
+          class="aspect-[4/3] w-full rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center cursor-pointer hover:border-gray-400 hover:bg-gray-100 transition-colors"
+        >
+          <mat-icon class="text-3xl text-gray-400">add_photo_alternate</mat-icon>
+          <span class="text-xs text-gray-500 mt-1">Ajouter une image</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="flex justify-end">
+    <button matButton="filled" type="submit">
+      <mat-icon>add</mat-icon>
+      Ajouter
+    </button>
+  </div>
+</form>
