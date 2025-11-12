@@ -9,5 +9,11 @@ export interface JobDto extends TimelineItemDto {
   projects?: ProjectDto[];
 }
 
+export interface JobMinimalDto {
+  id: string;
+  company: string;
+  logo: string | null;
+}
+
 export interface CreateJobDto extends Omit<JobDto, 'id'> {
 }

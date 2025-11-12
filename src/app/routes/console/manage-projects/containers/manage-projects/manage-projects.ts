@@ -54,7 +54,6 @@ export class ManageProjects {
   closePanel(): void {
     this.panelOpen.set(false);
 
-    // Afficher le toast seulement si un projet vient d'être créé
     if (this.projectJustCreated()) {
       this.toastService.success('Projet créé avec succès');
       this.projectJustCreated.set(false);
@@ -67,7 +66,6 @@ export class ManageProjects {
   }
 
   onEdit(project: ProjectLightDto): void {
-    // TODO: Implement edit functionality
     console.log('Edit project:', project);
   }
 

@@ -1,5 +1,5 @@
-<article class="bg-white rounded-lg border border-gray-200 p-5 hover:border-gray-300 transition-colors h-full flex flex-col">
-  <!-- Header -->
+<article
+  class="bg-white rounded-lg border border-gray-200 p-5 hover:border-gray-300 transition-colors h-full flex flex-col">
   <header class="flex items-start justify-between mb-3 gap-3">
     <h3 class="text-base font-semibold text-gray-900 flex-1 line-clamp-2">
       {{ project().title }}
@@ -8,7 +8,7 @@
     <nav class="flex items-center gap-2 text-slate-400 shrink-0">
       <button
         type="button"
-        class="hover:text-slate-600 transition-colors"
+        class="hover:text-slate-600 transition-colors cursor-pointer"
         (click)="edit.emit()"
         matTooltip="Éditer"
         aria-label="Éditer le projet"
@@ -17,7 +17,7 @@
       </button>
       <button
         type="button"
-        class="hover:text-rose-600 transition-colors"
+        class="hover:text-rose-600 transition-colors cursor-pointer"
         (click)="remove.emit()"
         matTooltip="Supprimer"
         aria-label="Supprimer le projet"
@@ -27,7 +27,6 @@
     </nav>
   </header>
 
-  <!-- Tags -->
   <div class="flex flex-wrap gap-2 mb-3">
     @for (type of project().projectTypes; track type) {
       <span class="px-2 py-1 text-xs font-medium rounded-md bg-purple-100 text-purple-700">
@@ -42,24 +41,27 @@
     </span>
   </div>
 
-  <!-- Description -->
   <p class="text-sm text-gray-600 mb-3 line-clamp-3 flex-1">
     {{ project().description }}
   </p>
 
-  <!-- Company Info -->
   <div class="flex items-center gap-1.5 mb-4">
-    <mat-icon class="!text-base !w-4 !h-4 !text-primary">
+    <mat-icon class="!text-base !w-4 !h-4 !leading-none !text-primary flex-shrink-0">
       {{ companyIcon() }}
     </mat-icon>
-    <p class="text-sm text-primary">{{ companyText() }}</p>
+    @if (project().job) {
+      <p class="text-sm text-gray-600 leading-none">
+        Réalisé chez <span class="text-primary">{{ project().job!.company }}</span>
+      </p>
+    } @else {
+      <p class="text-sm text-gray-600 leading-none">Projet personnel</p>
+    }
   </div>
 
-  <!-- Footer -->
   <footer class="flex justify-end">
     <a
       [routerLink]="['/projects', project().id]"
-      class="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+      class="inline-flex items-center gap-1 text-sm font-medium text-primary cursor-pointer"
     >
       <span>Voir détails</span>
       <mat-icon class="!w-4 !h-4 !text-base">arrow_forward</mat-icon>

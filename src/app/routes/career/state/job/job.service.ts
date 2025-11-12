@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {environment} from '../../../../../../environments/environments';
 import {HttpClient} from '@angular/common/http';
-import {JobDto} from './job.model';
+import {JobDto, JobMinimalDto} from './job.model';
 import {Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
@@ -16,6 +16,10 @@ export class JobService {
 
   getJobs(): Observable<JobDto[]> {
     return this.http.get<JobDto[]>(`${this.jobBaseUrl}`);
+  }
+
+  getJobsMinimal(): Observable<JobMinimalDto[]> {
+    return this.http.get<JobMinimalDto[]>(`${this.jobBaseUrl}/minimal`);
   }
 
 }

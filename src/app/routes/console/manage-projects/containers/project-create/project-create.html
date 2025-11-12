@@ -25,18 +25,6 @@
           </div>
 
           <div class="w-full">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Contexte</label>
-            <mat-form-field appearance="outline" class="w-full">
-              <textarea
-                formControlName="context"
-                matInput
-                placeholder="Préciser le contexte du projet"
-                rows="3"
-              ></textarea>
-            </mat-form-field>
-          </div>
-
-          <div class="w-full">
             <label class="block text-sm font-medium text-gray-700 mb-2">Collaboration</label>
             <mat-form-field appearance="outline" class="w-full">
               <textarea
@@ -47,6 +35,37 @@
               ></textarea>
             </mat-form-field>
           </div>
+
+          <div class="w-full">
+            <div class="flex items-center justify-between py-2">
+              <label class="text-sm font-medium text-gray-700">Projet réalisé en entreprise</label>
+              <mat-slide-toggle formControlName="isCompanyProject" color="primary"></mat-slide-toggle>
+            </div>
+          </div>
+
+          @if (s1.get('isCompanyProject')?.value) {
+            <div class="w-full">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Entreprise</label>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-select formControlName="jobId" placeholder="Sélectionner une entreprise">
+                  @for (job of jobs(); track job.id) {
+                    <mat-option [value]="job.id">
+                      <div class="flex items-center gap-2">
+                        @if (job.logo) {
+                          <img [src]="job.logo" [alt]="job.company" class="w-5 h-5 rounded object-cover flex-shrink-0"/>
+                        } @else {
+                          <div class="w-5 h-5 rounded bg-gray-200 flex items-center justify-center flex-shrink-0">
+                            <mat-icon class="!text-[14px] !w-[14px] !h-[14px] !leading-none text-gray-400">business</mat-icon>
+                          </div>
+                        }
+                        <span class="text-primary">{{ job.company }}</span>
+                      </div>
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          }
         </div>
       }
       @case (1) {
@@ -75,18 +94,18 @@
                 <button
                   type="button"
                   (click)="setScope('Interne')"
-                  class="flex-1 flex items-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
+                  class="flex-1 flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
                   [style.box-shadow]="s2.get('scope')?.value === 'Interne' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-none">business</mat-icon>
-                  <span class="leading-none">Interne</span>
+                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">business</mat-icon>
+                  <span class="leading-[18px]">Interne</span>
                 </button>
                 <button
                   type="button"
                   (click)="setScope('Externe')"
-                  class="flex-1 flex items-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
+                  class="flex-1 flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
                   [style.box-shadow]="s2.get('scope')?.value === 'Externe' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-none">public</mat-icon>
-                  <span class="leading-none">Externe</span>
+                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">public</mat-icon>
+                  <span class="leading-[18px]">Externe</span>
                 </button>
               </div>
             </div>
@@ -97,18 +116,18 @@
                 <button
                   type="button"
                   (click)="setMarket('B2B')"
-                  class="flex-1 flex items-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
+                  class="flex-1 flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
                   [style.box-shadow]="s2.get('market')?.value === 'B2B' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-none">handshake</mat-icon>
-                  <span class="leading-none">B2B</span>
+                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">handshake</mat-icon>
+                  <span class="leading-[18px]">B2B</span>
                 </button>
                 <button
                   type="button"
                   (click)="setMarket('B2C')"
-                  class="flex-1 flex items-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
+                  class="flex-1 flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
                   [style.box-shadow]="s2.get('market')?.value === 'B2C' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-none">groups</mat-icon>
-                  <span class="leading-none">B2C</span>
+                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">groups</mat-icon>
+                  <span class="leading-[18px]">B2C</span>
                 </button>
               </div>
             </div>

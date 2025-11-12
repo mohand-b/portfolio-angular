@@ -6,6 +6,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {debounceTime, distinctUntilChanged, switchMap, of} from 'rxjs';
 import {ConsoleFacade} from '../../../console.facade';
@@ -13,6 +14,8 @@ import {toFormData} from '../../../../../shared/extensions/object.extension';
 import {StepConfig, Stepper} from '../../../../../shared/components/stepper/stepper';
 import {SkillService} from '../../../../skills/state/skill/skill.service';
 import {SkillDto, SkillCategory, SKILL_CATEGORY_META, SkillCategoryMeta} from '../../../../skills/state/skill/skill.model';
+import {JobService} from '../../../../career/state/job/job.service';
+import {JobMinimalDto} from '../../../../career/state/job/job.model';
 
 @Component({
   selector: 'app-project-create',
@@ -24,6 +27,7 @@ import {SkillDto, SkillCategory, SKILL_CATEGORY_META, SkillCategoryMeta} from '.
     MatButtonModule,
     MatIconModule,
     MatProgressBarModule,
+    MatSlideToggleModule,
     MatAutocompleteModule,
     Stepper
   ],
@@ -33,11 +37,13 @@ import {SkillDto, SkillCategory, SKILL_CATEGORY_META, SkillCategoryMeta} from '.
 export class ProjectCreate implements OnInit {
   private fb = inject(FormBuilder);
   private skillService = inject(SkillService);
+  private jobService = inject(JobService);
   private consoleFacade = inject(ConsoleFacade);
 
   readonly step = signal(0);
   readonly isSubmitting = signal(false);
   readonly created = output<void>();
+  readonly jobs = signal<JobMinimalDto[]>([]);
 
   readonly stepsMeta: StepConfig[] = [
     {icon: 'description', text: 'Infos'},
@@ -67,8 +73,9 @@ export class ProjectCreate implements OnInit {
     step1: this.fb.group({
       title: ['', [Validators.required, Validators.minLength(4)]],
       description: [''],
-      context: [''],
       collaboration: [''],
+      isCompanyProject: [false],
+      jobId: [null as string | null],
     }),
     step2: this.fb.group({
       projectTypes: this.fb.control<string[]>([], [Validators.required, Validators.minLength(1)]),
@@ -96,6 +103,16 @@ export class ProjectCreate implements OnInit {
   }
 
   ngOnInit() {
+    this.jobService.getJobsMinimal().subscribe(jobs => {
+      this.jobs.set(jobs);
+    });
+
+    this.s1.get('isCompanyProject')?.valueChanges.subscribe(isCompanyProject => {
+      if (!isCompanyProject) {
+        this.s1.get('jobId')?.setValue(null);
+      }
+    });
+
     this.skillSearchControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
@@ -168,8 +185,8 @@ export class ProjectCreate implements OnInit {
 
     const payload = {
       title: step1.title!.trim(),
+      jobId: step1.isCompanyProject && step1.jobId ? step1.jobId : undefined,
       description: step1.description?.trim() || undefined,
-      context: step1.context?.trim() || '',
       collaboration: step1.collaboration?.trim() || undefined,
       missions: this.missions(),
       projectTypes: step2.projectTypes!,

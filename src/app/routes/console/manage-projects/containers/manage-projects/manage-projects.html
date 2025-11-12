@@ -1,6 +1,6 @@
 <div class="flex flex-col h-full">
-  <!-- Header -->
-  <header class="sticky top-0 z-10 flex items-center justify-between min-h-20 px-5 border-b border-neutral-200 bg-white">
+  <header
+    class="sticky top-0 z-10 flex items-center justify-between min-h-20 px-5 border-b border-neutral-200 bg-white">
     <h1 class="text-2xl font-semibold text-neutral-800">Projets</h1>
 
     <button
@@ -14,10 +14,8 @@
     </button>
   </header>
 
-  <!-- Main Content -->
   <main class="flex flex-col flex-1 gap-6 bg-neutral-100 p-5 overflow-auto">
     @if (facade.projects().length > 0) {
-      <!-- Projects Grid -->
       <section
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-opacity"
         [class.opacity-50]="facade.projectsIsLoading()"
@@ -32,7 +30,6 @@
         }
       </section>
 
-      <!-- Pagination Footer -->
       <footer class="flex items-center justify-between mt-6 px-6 h-14 bg-white rounded-lg border border-slate-200">
         <p class="text-sm text-slate-600">
           Affichage
@@ -61,12 +58,10 @@
   </main>
 </div>
 
-<!-- Side Panel -->
 <app-side-panel [isOpen]="panelOpen()" (closed)="closePanel()">
-  <app-project-create (created)="onProjectCreated()" />
+  <app-project-create (created)="onProjectCreated()"/>
 </app-side-panel>
 
-<!-- Confirmation Modal -->
 @if (confirmModalOpen()) {
   <app-confirmation-modal
     [isOpen]="confirmModalOpen()"

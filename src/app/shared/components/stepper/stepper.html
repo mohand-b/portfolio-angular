@@ -15,10 +15,8 @@
         }
       </div>
 
-      <!-- Step label -->
       <span class="step-label" [class.active]="$index === currentStep()">{{ step.text }}</span>
 
-      <!-- Connector line -->
       @if ($index < steps().length - 1) {
         <div
           class="step-connector"

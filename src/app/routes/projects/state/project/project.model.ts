@@ -7,7 +7,6 @@ export type ProjectMarket = 'B2B' | 'B2C';
 
 export interface ProjectDto extends TimelineItemDto {
   type: TimelineItemType.Project;
-  context: string;
   collaboration?: string;
   missions: string[];
   tools: string[];
