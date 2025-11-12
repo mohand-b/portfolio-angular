@@ -3,7 +3,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {Achievement, AchievementStats} from '../../../../../core/state/achievement/achievement.model';
 import {ConsoleFacade} from '../../../console.facade';
-import {AchievementCreate} from '../../components/achievement-create/achievement-create';
+import {AchievementForm} from '../../components/achievement-form/achievement-form';
 import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
 import {AchievementItem} from '../../components/achievement-item/achievement-item';
 import {KpiCard} from '../../../../../shared/components/kpi-card/kpi-card';
@@ -14,7 +14,7 @@ import {KpiCard} from '../../../../../shared/components/kpi-card/kpi-card';
   imports: [
     MatButtonModule,
     MatIconModule,
-    AchievementCreate,
+    AchievementForm,
     SidePanel,
     AchievementItem,
     KpiCard
@@ -31,17 +31,21 @@ export class ManageAchievements {
   readonly achievementStats: Signal<AchievementStats | null> = this.consoleFacade.achievementStats;
 
   readonly panelOpen = signal(false);
+  readonly selectedAchievement = signal<Achievement | null>(null);
 
   openPanel(): void {
+    this.selectedAchievement.set(null);
     this.panelOpen.set(true);
   }
 
   onCloseRequested(): void {
     this.panelOpen.set(false);
+    this.selectedAchievement.set(null);
   }
 
   onEdit(achievement: Achievement): void {
-    console.log('Edit achievement:', achievement);
+    this.selectedAchievement.set(achievement);
+    this.panelOpen.set(true);
   }
 
   onRemove(achievement: Achievement): void {

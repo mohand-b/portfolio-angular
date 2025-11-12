@@ -19,6 +19,14 @@ export interface AchievementCreate {
   isActive: boolean;
 }
 
+export interface UpdateAchievementDto {
+  label: string;
+  description?: string;
+  icon: string;
+  color: string;
+  isActive: boolean;
+}
+
 export interface AchievementUnlockLog {
   id: string;
   unlockedAt: Date;

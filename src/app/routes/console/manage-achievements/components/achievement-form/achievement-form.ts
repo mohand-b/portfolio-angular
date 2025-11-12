@@ -1,4 +1,4 @@
-import {Component, computed, inject, output, signal} from '@angular/core';
+import {Component, computed, effect, inject, input, output, signal} from '@angular/core';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
@@ -15,6 +15,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {ConsoleFacade} from '../../../console.facade';
+import {Achievement} from '../../../../../core/state/achievement/achievement.model';
+import {ToastService} from '../../../../../shared/services/toast.service';
 
 const ICON_NAMES = [
   'home', 'search', 'explore', 'language', 'menu', 'visibility',
@@ -40,7 +42,7 @@ function iconValidator(control: AbstractControl): ValidationErrors | null {
 }
 
 @Component({
-  selector: 'app-achievement-create',
+  selector: 'app-achievement-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -50,16 +52,19 @@ function iconValidator(control: AbstractControl): ValidationErrors | null {
     MatInputModule,
     MatSlideToggleModule
   ],
-  templateUrl: './achievement-create.html'
+  templateUrl: './achievement-form.html'
 })
-export class AchievementCreate {
+export class AchievementForm {
   private readonly consoleFacade = inject(ConsoleFacade);
+  private readonly toastService = inject(ToastService);
   private readonly fb = inject(FormBuilder);
 
-  readonly created = output<void>();
+  readonly achievement = input<Achievement | null>(null);
+  readonly saved = output<void>();
 
   readonly showPanel = signal(false);
   readonly selectedIcon = signal('');
+  readonly isEditing = computed(() => !!this.achievement());
 
   readonly form = this.fb.nonNullable.group({
     icon: ['', [Validators.required, iconValidator]],
@@ -86,6 +91,28 @@ export class AchievementCreate {
     return query ? ICON_NAMES.filter(name => name.toLowerCase().includes(query)) : ICON_NAMES;
   });
 
+  constructor() {
+    effect(() => {
+      const ach = this.achievement();
+      if (ach) {
+        this.form.patchValue({
+          icon: ach.icon,
+          color: ach.color,
+          code: ach.code,
+          label: ach.label,
+          description: ach.description || '',
+          isActive: ach.isActive
+        });
+        this.selectedIcon.set(ach.icon);
+        this.form.get('code')?.disable();
+      } else {
+        this.form.reset({color: DEFAULT_COLOR, isActive: true});
+        this.selectedIcon.set('');
+        this.form.get('code')?.enable();
+      }
+    });
+  }
+
   selectIcon(iconName: string): void {
     this.iconCtrl.setValue(iconName);
     this.selectedIcon.set(iconName);
@@ -111,16 +138,31 @@ export class AchievementCreate {
     }
   }
 
-  addAchievement(): void {
+  onSubmit(): void {
     if (this.form.invalid) return;
 
-    this.consoleFacade.createAchievement(this.form.getRawValue()).subscribe({
+    const formValue = this.form.getRawValue();
+    const operation$ = this.isEditing()
+      ? this.consoleFacade.updateAchievement(this.achievement()!.code, formValue)
+      : this.consoleFacade.createAchievement(formValue);
+
+    operation$.subscribe({
       next: () => {
-        this.form.reset({color: DEFAULT_COLOR, isActive: true});
-        this.selectedIcon.set('');
-        this.created.emit();
+        const message = this.isEditing() ? 'Succès modifié avec succès' : 'Succès créé avec succès';
+        this.toastService.success(message);
+        if (!this.isEditing()) {
+          this.form.reset({color: DEFAULT_COLOR, isActive: true});
+          this.selectedIcon.set('');
+        }
+        this.saved.emit();
       },
-      error: () => this.form.markAsTouched()
+      error: () => {
+        const message = this.isEditing()
+          ? 'Erreur lors de la modification du succès'
+          : 'Erreur lors de la création du succès';
+        this.toastService.error(message);
+        this.form.markAsTouched();
+      }
     });
   }
 }

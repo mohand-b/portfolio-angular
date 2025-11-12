@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {environment} from '../../../../../environments/environments';
 import {HttpClient} from '@angular/common/http';
-import {Achievement, AchievementCreate, AchievementStats} from './achievement.model';
+import {Achievement, AchievementCreate, AchievementStats, UpdateAchievementDto} from './achievement.model';
 import {Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
@@ -20,6 +20,10 @@ export class AchievementService {
 
   createAchievement(achievement: AchievementCreate): Observable<Achievement> {
     return this.http.post<Achievement>(`${this.achievementBaseUrl}`, achievement, {withCredentials: true});
+  }
+
+  updateAchievement(code: string, dto: UpdateAchievementDto): Observable<Achievement> {
+    return this.http.patch<Achievement>(`${this.achievementBaseUrl}/code/${code}`, dto, {withCredentials: true});
   }
 
   deleteAchievementByCode(code: string): Observable<void> {

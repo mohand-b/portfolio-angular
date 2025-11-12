@@ -4,7 +4,8 @@ import {
   Achievement,
   AchievementCreate,
   AchievementStats,
-  AchievementUnlockLog
+  AchievementUnlockLog,
+  UpdateAchievementDto
 } from '../../core/state/achievement/achievement.model';
 import {AchievementService} from '../../core/state/achievement/achievement.service';
 import {AchievementStore} from '../../core/state/achievement/achievement.store';
@@ -61,6 +62,12 @@ export class ConsoleFacade {
   createAchievement(achievement: AchievementCreate): Observable<Achievement> {
     return this.achievementService.createAchievement(achievement).pipe(
       tap(achievement => this.achievementStore.addAchievement(achievement))
+    );
+  }
+
+  updateAchievement(code: string, dto: UpdateAchievementDto): Observable<Achievement> {
+    return this.achievementService.updateAchievement(code, dto).pipe(
+      tap(achievement => this.achievementStore.updateAchievement(code, achievement))
     );
   }
 

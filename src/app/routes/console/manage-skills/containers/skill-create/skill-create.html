@@ -6,8 +6,8 @@
   <div class="flex flex-col gap-4">
     <div class="w-full">
       <label class="block text-sm font-medium text-gray-700 mb-2">Catégorie</label>
-      <mat-form-field appearance="outline" class="w-full unified-field">
-        <mat-select formControlName="category" placeholder="Sélectionner une catégorie">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-select formControlName="category" class="unified-field" placeholder="Sélectionner une catégorie">
           @for (cat of skillCategories; track cat) {
             <mat-option [value]="cat" class="flex items-center gap-2">
               <mat-icon

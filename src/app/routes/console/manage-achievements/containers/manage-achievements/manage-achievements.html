@@ -53,5 +53,5 @@
 </div>
 
 <app-side-panel (closed)="onCloseRequested()" [isOpen]="panelOpen()">
-  <app-achievement-create (created)="onCloseRequested()"/>
+  <app-achievement-form [achievement]="selectedAchievement()" (saved)="onCloseRequested()"/>
 </app-side-panel>
