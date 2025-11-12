@@ -43,7 +43,6 @@
           </div>
         </div>
       }
-
       @case (1) {
         <div formGroupName="step2" class="flex flex-col gap-4">
           <div class="w-full">
@@ -94,7 +93,6 @@
           </div>
         </div>
       }
-
       @case (2) {
         <div class="flex flex-col gap-4">
           <div class="w-full">
@@ -113,7 +111,8 @@
           @if (missions().length > 0) {
             <div class="flex flex-col gap-2">
               @for (mission of missions(); track mission; let i = $index) {
-                <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                <div
+                  class="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
                   <mat-icon class="!text-green-700 !text-[18px] !w-[18px] !h-[18px] flex-shrink-0">
                     check_circle
                   </mat-icon>
@@ -157,8 +156,4 @@
       </button>
     }
   </div>
-
-  @if (isSubmitting()) {
-    <mat-progress-bar mode="indeterminate" class="mt-2"/>
-  }
 </form>

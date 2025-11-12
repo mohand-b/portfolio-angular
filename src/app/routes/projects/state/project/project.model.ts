@@ -26,6 +26,11 @@ export interface ProjectLightDto extends Pick<TimelineItemDto, 'id' | 'title' | 
   job?: Pick<JobDto, 'id' | 'title' | 'company'> | null;
 }
 
+export interface ProjectMinimalResponseDto {
+  id: string;
+  title: string;
+}
+
 export interface CreateProjectDto extends Omit<ProjectDto, 'id'> {
 }
 

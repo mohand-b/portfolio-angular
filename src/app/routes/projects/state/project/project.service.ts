@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../../../../environments/environments';
-import {ProjectDto, PaginatedProjectsResponseDto, ProjectFilters} from './project.model';
+import {ProjectDto, PaginatedProjectsResponseDto, ProjectFilters, ProjectMinimalResponseDto, UpdateProjectDto} from './project.model';
 
 @Injectable({providedIn: 'root'})
 export class ProjectService {
@@ -36,5 +36,13 @@ export class ProjectService {
 
   deleteProject(id: string): Observable<void> {
     return this.http.delete<void>(`${this.projectBaseUrl}/${id}`, {withCredentials: true});
+  }
+
+  getUnlinkedProjects(): Observable<ProjectMinimalResponseDto[]> {
+    return this.http.get<ProjectMinimalResponseDto[]>(`${this.projectBaseUrl}/unlinked`, {withCredentials: true});
+  }
+
+  updateProject(id: string, dto: UpdateProjectDto): Observable<ProjectDto> {
+    return this.http.patch<ProjectDto>(`${this.projectBaseUrl}/${id}`, dto, {withCredentials: true});
   }
 }

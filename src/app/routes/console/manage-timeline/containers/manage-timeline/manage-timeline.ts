@@ -3,6 +3,7 @@ import {TIMELINE_ITEM_TYPE_META, TimelineItemType} from '../../../../career/stat
 import {MatTabsModule} from '@angular/material/tabs';
 import {JobCreate} from '../../components/job-create/job-create';
 import {EducationCreate} from '../../components/education-create/education-create';
+import {ProjectTimelineLink} from '../../components/project-timeline-link/project-timeline-link';
 import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
 import {MatButtonModule} from '@angular/material/button';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -26,6 +27,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
       MatIconModule,
       JobCreate,
       EducationCreate,
+      ProjectTimelineLink,
       SidePanel,
       OtherTimelineItemCreate
     ],

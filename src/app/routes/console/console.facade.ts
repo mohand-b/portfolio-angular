@@ -18,7 +18,7 @@ import {EducationDto} from '../career/state/education/education.model';
 import {EducationService} from '../career/state/education/education.service';
 import {CertificationDto, CreateCertificationDto} from '../career/state/certification/certification.model';
 import {CertificationService} from '../career/state/certification/certification.service';
-import {ProjectDto, ProjectFilters, ProjectLightDto} from '../projects/state/project/project.model';
+import {ProjectDto, ProjectFilters, ProjectLightDto, ProjectMinimalResponseDto, UpdateProjectDto} from '../projects/state/project/project.model';
 import {ProjectService} from '../projects/state/project/project.service';
 import {ProjectStore} from '../projects/state/project/project.store';
 
@@ -148,5 +148,13 @@ export class ConsoleFacade {
 
   previousProjectsPage(): void {
     this.projectStore.previousPage();
+  }
+
+  getUnlinkedProjects(): Observable<ProjectMinimalResponseDto[]> {
+    return this.projectService.getUnlinkedProjects();
+  }
+
+  linkProjectToTimeline(id: string, dto: UpdateProjectDto): Observable<ProjectDto> {
+    return this.projectService.updateProject(id, dto);
   }
 }

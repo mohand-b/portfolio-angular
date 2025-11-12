@@ -16,7 +16,7 @@
 
 <app-side-panel (closed)="onCloseRequested()" [isOpen]="panelOpen()">
   <div class="h-full flex flex-col">
-    <div class="shrink-0">
+    <div class="shrink-0 mb-6">
       <mat-form-field appearance="outline" class="w-full">
         <mat-select [formControl]="typeControl" class="unified-field" placeholder="Catégorie">
           @for (t of types; track t) {
@@ -31,7 +31,6 @@
           }
         </mat-select>
       </mat-form-field>
-      <div class="mb-4"></div>
     </div>
 
     <div class="flex-1">
@@ -43,7 +42,7 @@
           <app-education-create (created)="onCloseRequested()"/>
         }
         @case (TimelineItemType.Project) {
-          <div>Ajout d'un projet</div>
+          <app-project-timeline-link (created)="onCloseRequested()"/>
         }
         @case (TimelineItemType.Other) {
           <app-other-timeline-item-create (created)="onCloseRequested()"/>

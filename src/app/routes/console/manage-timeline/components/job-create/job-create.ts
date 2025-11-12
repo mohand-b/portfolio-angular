@@ -5,7 +5,6 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {toFormData} from '../../../../../shared/extensions/object.extension';
 import {StepConfig, Stepper} from '../../../../../shared/components/stepper/stepper';
 import {ConsoleFacade} from '../../../console.facade';
@@ -19,7 +18,6 @@ import {ConsoleFacade} from '../../../console.facade';
     MatButtonModule,
     MatIconModule,
     MatDatepickerModule,
-    MatProgressBarModule,
     Stepper,
   ],
   templateUrl: './job-create.html',
