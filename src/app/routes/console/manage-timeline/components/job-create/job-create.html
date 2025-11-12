@@ -1,105 +1,136 @@
-<form (submit)="onSubmit()" [formGroup]="jobForm" class="h-full w-full flex flex-col justify-between gap-4">
-
-  <div class="flex items-center w-full px-1 py-4 gap-4 select-none">
-    @for (s of stepsMeta; track s.icon; let i = $index) {
-      <div
-        class="w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-white"
-        role="img"
-        [attr.aria-label]="s.label + (step()===i ? ' (en cours)' : '')"
-        [attr.aria-current]="step()===i ? 'step' : null"
-        [style.backgroundColor]="i <= step() ? 'var(--color-secondary)' : 'var(--color-neutral-300)'">
-        <mat-icon>{{ s.icon }}</mat-icon>
-      </div>
-
-      @if (i < stepsMeta.length - 1) {
-        <div class="h-0.5 flex-1"
-             [style.backgroundColor]="i < step() ? 'var(--color-secondary)' : 'var(--color-neutral-300)'">
-        </div>
-      }
-    }
-  </div>
+<form [formGroup]="jobForm" (submit)="onSubmit()" class="h-full w-full flex flex-col justify-between gap-4">
+  <app-stepper [steps]="stepsMeta" [(currentStep)]="step"/>
 
   <div class="flex-1 overflow-auto">
-    @if (step() === 0) {
-      <div formGroupName="step1" class="flex flex-col gap-4">
+    @switch (step()) {
+      @default {
+        <div formGroupName="step1" class="flex flex-col gap-4">
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Intitulé du poste</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput formControlName="title" placeholder="Saisir l'intitulé du poste"/>
+            </mat-form-field>
+          </div>
 
-        <mat-form-field appearance="outline" class="w-full">
-          <input matInput placeholder="Ex: Développeur Front-end" formControlName="title"/>
-        </mat-form-field>
+          <div class="w-full grid grid-cols-2 gap-2">
+            <div class="min-w-0 overflow-hidden">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Date de début</label>
+              <mat-form-field appearance="outline" class="w-full min-w-0">
+                <input matInput formControlName="startDate" [matDatepicker]="startPicker" placeholder="Début"/>
+                <button mat-icon-button matSuffix type="button" (click)="startPicker.open()">
+                  <mat-icon>calendar_month</mat-icon>
+                </button>
+                <mat-datepicker #startPicker/>
+              </mat-form-field>
+            </div>
 
-        <mat-form-field appearance="outline" class="w-full">
-          <input [matDatepicker]="startPicker" formControlName="startDate" matInput placeholder="Date de début"/>
-          <button (click)="startPicker.open()" mat-icon-button matSuffix type="button">
-            <mat-icon>calendar_month</mat-icon>
-          </button>
-          <mat-datepicker #startPicker></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="w-full">
-          <input [matDatepicker]="endPicker" [min]="s1.get('startDate')?.value || null"
-                 formControlName="endDate" matInput
-                 placeholder="Date de fin"/>
-          <button (click)="endPicker.open()" mat-icon-button matSuffix type="button">
-            <mat-icon>calendar_month</mat-icon>
-          </button>
-          <mat-datepicker #endPicker></mat-datepicker>
-        </mat-form-field>
-
-      </div>
-    }
-
-    @if (step() === 1) {
-      <div formGroupName="step2" class="flex flex-col gap-4">
-        <div class="w-full">
-          <input
-            #fileInput
-            (change)="onFileSelected($event)"
-            accept="image/*"
-            class="hidden"
-            type="file"
-          />
-          <div
-            (click)="fileInput.click()"
-            class="h-[12rem] w-full rounded-xl border border-black/10 bg-black/5 flex items-center justify-center cursor-pointer"
-          >
-            @if (imagePreview()) {
-              <img [src]="imagePreview()!" class="h-full w-full object-cover rounded-xl"/>
-            } @else {
-              <mat-icon fontIcon="image" class="opacity-40 text-5xl"></mat-icon>
-            }
+            <div class="min-w-0 overflow-hidden">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Date de fin</label>
+              <mat-form-field appearance="outline" class="w-full min-w-0">
+                <input
+                  matInput
+                  formControlName="endDate"
+                  [matDatepicker]="endPicker"
+                  [min]="s1.get('startDate')?.value || null"
+                  placeholder="Fin"
+                />
+                <button mat-icon-button matSuffix type="button" (click)="endPicker.open()">
+                  <mat-icon>calendar_month</mat-icon>
+                </button>
+                <mat-datepicker #endPicker/>
+              </mat-form-field>
+            </div>
           </div>
         </div>
+      }
 
-        <mat-form-field appearance="outline" class="w-full">
-          <input matInput placeholder="Entreprise" formControlName="company">
-        </mat-form-field>
+      @case (1) {
+        <div formGroupName="step2" class="flex flex-col gap-4">
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Image</label>
+            <input
+              #fileInput
+              type="file"
+              accept="image/png,image/jpeg,image/jpg,image/webp"
+              class="hidden"
+              (change)="onFileSelected($event)"
+            />
 
-        <mat-form-field appearance="outline" class="w-full">
-          <input matInput placeholder="Ville / Remote" formControlName="location">
-        </mat-form-field>
-      </div>
-    }
-
-    @if (step() === 2) {
-      <div class="flex flex-col gap-4">
-
-        <mat-form-field appearance="outline" class="w-full">
-          <input matInput placeholder="Ajouter une mission" [formControl]="missionControl"
-                 (keydown.enter)="addMission($event)"/>
-          <mat-icon matSuffix>add</mat-icon>
-        </mat-form-field>
-
-        <div class="divide-y divide-slate-200">
-          @for (m of missions(); track m; let i = $index) {
-            <div class="flex items-center justify-between py-2">
-              <div class="text-base text-slate-800 truncate pr-4">{{ m }}</div>
-              <button type="button" class="text-slate-500 hover:text-red-600 cursor-pointer" (click)="removeMission(i)">
-                <mat-icon>delete</mat-icon>
+            @if (imagePreview()) {
+              <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                <img [src]="imagePreview()!" class="h-full w-full object-cover" alt="Aperçu de l'image"/>
+                <button
+                  type="button"
+                  class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors shadow-sm"
+                  (click)="imagePreview.set(null); s2.patchValue({image: null})"
+                >
+                  <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
+                </button>
+              </div>
+            } @else {
+              <button
+                type="button"
+                class="aspect-[4/3] w-full rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center hover:border-gray-400 hover:bg-gray-100 transition-colors"
+                (click)="fileInput.click()"
+              >
+                <mat-icon class="text-3xl text-gray-400">add_photo_alternate</mat-icon>
+                <span class="text-xs text-gray-500 mt-1">Ajouter une image</span>
               </button>
+            }
+          </div>
+
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Entreprise</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput formControlName="company" placeholder="Saisir le nom de l'entreprise"/>
+            </mat-form-field>
+          </div>
+
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Lieu</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput formControlName="location" placeholder="Saisir le lieu"/>
+            </mat-form-field>
+          </div>
+        </div>
+      }
+
+      @case (2) {
+        <div class="flex flex-col gap-4">
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Missions réalisées</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input
+                matInput
+                [formControl]="missionControl"
+                placeholder="Ajouter une mission"
+                (keydown.enter)="addMission($event)"
+              />
+              <mat-icon matSuffix>add</mat-icon>
+            </mat-form-field>
+          </div>
+
+          @if (missions().length > 0) {
+            <div class="flex flex-col gap-2">
+              @for (mission of missions(); track mission; let i = $index) {
+                <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                  <mat-icon class="!text-green-700 !text-[18px] !w-[18px] !h-[18px] flex-shrink-0">
+                    check_circle
+                  </mat-icon>
+                  <div class="flex-1 text-sm text-gray-700 line-clamp-3">{{ mission }}</div>
+                  <button
+                    type="button"
+                    class="text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
+                    (click)="removeMission(i)"
+                  >
+                    <mat-icon class="!text-[20px] !w-[20px] !h-[20px]">close</mat-icon>
+                  </button>
+                </div>
+              }
             </div>
           }
         </div>
-      </div>
+      }
     }
   </div>
 
@@ -107,28 +138,27 @@
     @if (step() > 0) {
       <button type="button" matButton="text" (click)="prev()">Précédent</button>
     } @else {
-      <span></span>
+      <span/>
     }
 
     @if (step() < stepsMeta.length - 1) {
       <button
         type="button"
         matButton="filled"
+        [disabled]="(step() === 0 && s1.invalid) || (step() === 1 && s2.invalid)"
         (click)="next()"
-        [disabled]="(step()===0 && s1.invalid) || (step()===1 && s2.invalid)">
+      >
         Suivant
       </button>
     } @else {
-      <button type="submit" matButton="filled">
-        <mat-icon class="mr-1">add</mat-icon>
+      <button type="submit" matButton="filled" [disabled]="isSubmitting()">
+        <mat-icon>add</mat-icon>
         Ajouter
       </button>
     }
   </div>
 
-
   @if (isSubmitting()) {
     <mat-progress-bar mode="indeterminate" class="mt-2"/>
   }
-
 </form>

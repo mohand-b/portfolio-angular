@@ -1,10 +1,11 @@
-.image-upload-box {
-  border: 2px solid transparent;
-  background: #f3f6fd80;
-  transition: border-color 0.2s, border-width 0.2s, background 0.2s;
+:host ::ng-deep {
+  .mat-mdc-form-field {
+    max-width: 100%;
 
-  &:hover {
-    border-color: var(--mat-sys-color-primary, #1976D2);
-    background: #f3f6fd;
+    .mat-mdc-text-field-wrapper,
+    .mat-mdc-form-field-infix,
+    .mat-mdc-form-field-infix input {
+      max-width: 100%;
+    }
   }
 }

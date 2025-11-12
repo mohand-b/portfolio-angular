@@ -1,101 +1,100 @@
-import {Component, inject, input, output, signal, WritableSignal} from '@angular/core';
+import {Component, inject, output, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {CreateJobDto} from '../../../../career/state/job/job.model';
-import {MatDividerModule} from '@angular/material/divider';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {ConsoleFacade} from '../../../console.facade';
 import {toFormData} from '../../../../../shared/extensions/object.extension';
+import {StepConfig, Stepper} from '../../../../../shared/components/stepper/stepper';
+import {ConsoleFacade} from '../../../console.facade';
 
 @Component({
   selector: 'app-job-create',
   imports: [
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
     MatButtonModule,
-    ReactiveFormsModule,
     MatIconModule,
     MatDatepickerModule,
-    MatDividerModule,
     MatProgressBarModule,
+    Stepper,
   ],
   templateUrl: './job-create.html',
   styleUrl: './job-create.scss',
 })
 export class JobCreate {
+  private readonly fb = inject(FormBuilder);
+  private readonly consoleFacade = inject(ConsoleFacade);
+
   readonly step = signal(0);
-  readonly stepsMeta = [
-    {icon: 'work', label: 'Étape 1 : Poste'},
-    {icon: 'apartment', label: 'Étape 2 : Société'},
-    {icon: 'format_list_bulleted', label: 'Étape 3 : Missions'},
-  ] as const;
-  jobSubmit = output<CreateJobDto>();
-  imagePreview = signal<string | null>(null);
-  missions: WritableSignal<string[]> = signal([]);
-  readonly created = output<void>();
   readonly isSubmitting = signal(false);
-  protected readonly focus = focus;
-  private consoleFacade = inject(ConsoleFacade);
-  private fb = inject(FormBuilder);
+  readonly imagePreview = signal<string | null>(null);
+  readonly missions = signal<string[]>([]);
+  readonly created = output<void>();
+
+  readonly stepsMeta: StepConfig[] = [
+    {icon: 'work', text: 'Poste'},
+    {icon: 'apartment', text: 'Société'},
+    {icon: 'format_list_bulleted', text: 'Missions'},
+  ];
+
   readonly jobForm = this.fb.group({
     step1: this.fb.group({
       title: ['', [Validators.required, Validators.minLength(4)]],
       startDate: [null as Date | null, Validators.required],
       endDate: [null as Date | null],
     }),
-
     step2: this.fb.group({
       company: ['', Validators.required],
       location: ['', Validators.required],
       image: [null as File | null],
     }),
   });
-  missionControl = this.fb.control('');
+
+  readonly missionControl = this.fb.control('');
 
   get s1(): FormGroup {
-    return this.getStepGroup(0)!;
+    return this.jobForm.get('step1') as FormGroup;
   }
 
   get s2(): FormGroup {
-    return this.getStepGroup(1)!;
+    return this.jobForm.get('step2') as FormGroup;
   }
 
-  next() {
-    const idx = this.step();
-    const current = this.getStepGroup(idx);
-    if (current && current.invalid) {
+  next(): void {
+    const current = this.getCurrentStepGroup();
+    if (current?.invalid) {
       current.markAllAsTouched();
       return;
     }
-    if (idx < this.stepsMeta.length - 1) {
+    if (this.step() < this.stepsMeta.length - 1) {
       this.step.update(v => v + 1);
     }
   }
 
-  prev() {
-    if (this.step() > 0) this.step.update(v => v - 1);
+  prev(): void {
+    if (this.step() > 0) {
+      this.step.update(v => v - 1);
+    }
   }
 
-  addMission(e: Event) {
+  addMission(e: Event): void {
     e.preventDefault();
     e.stopPropagation();
-    const v = (this.missionControl.value ?? '').trim();
-    if (!v) return;
-    this.missions.update(arr => [...arr, v]);
+    const value = (this.missionControl.value ?? '').trim();
+    if (!value) return;
+    this.missions.update(arr => [...arr, value]);
     this.missionControl.reset('');
   }
 
-  removeMission(i: number) {
-    this.missions.update(arr => arr.filter((_, idx) => idx !== i));
+  removeMission(index: number): void {
+    this.missions.update(arr => arr.filter((_, i) => i !== index));
   }
 
-  onFileSelected(e: Event) {
+  onFileSelected(e: Event): void {
     const input = e.target as HTMLInputElement;
     const image = input.files?.[0];
     if (!image) return;
@@ -107,13 +106,10 @@ export class JobCreate {
     reader.readAsDataURL(image);
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.jobForm.invalid) {
-      this.s1.markAllAsTouched();
-      this.s2.markAllAsTouched();
-
+      this.markAllStepsAsTouched();
       this.step.set(this.s1.invalid ? 0 : 1);
-
       return;
     }
 
@@ -131,23 +127,31 @@ export class JobCreate {
     this.isSubmitting.set(true);
     this.consoleFacade.addJob(toFormData(payload)).subscribe({
       next: () => {
+        this.resetForm();
         this.created.emit();
-        this.jobForm.reset();
-        this.missions.set([]);
-        this.missionControl.reset('');
-        this.imagePreview.set(null);
-        this.step.set(0);
-        this.isSubmitting.set(false);
       },
       error: () => {
-        this.s1.markAllAsTouched();
-        this.s2.markAllAsTouched();
+        this.markAllStepsAsTouched();
         this.isSubmitting.set(false);
       },
     });
   }
 
-  private getStepGroup(idx: number): FormGroup | null {
-    return this.jobForm.get(`step${idx + 1}`) as FormGroup | null;
+  private getCurrentStepGroup(): FormGroup | null {
+    return this.jobForm.get(`step${this.step() + 1}`) as FormGroup | null;
+  }
+
+  private markAllStepsAsTouched(): void {
+    this.s1.markAllAsTouched();
+    this.s2.markAllAsTouched();
+  }
+
+  private resetForm(): void {
+    this.jobForm.reset();
+    this.missions.set([]);
+    this.missionControl.reset('');
+    this.imagePreview.set(null);
+    this.step.set(0);
+    this.isSubmitting.set(false);
   }
 }
