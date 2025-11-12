@@ -104,11 +104,9 @@ export class AchievementForm {
           isActive: ach.isActive
         });
         this.selectedIcon.set(ach.icon);
-        this.form.get('code')?.disable();
       } else {
         this.form.reset({color: DEFAULT_COLOR, isActive: true});
         this.selectedIcon.set('');
-        this.form.get('code')?.enable();
       }
     });
   }

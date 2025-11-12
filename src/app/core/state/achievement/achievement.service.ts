@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {environment} from '../../../../../environments/environments';
-import {HttpClient} from '@angular/common/http';
-import {Achievement, AchievementCreate, AchievementStats, UpdateAchievementDto} from './achievement.model';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Achievement, AchievementCreate, AchievementStats, UpdateAchievementDto, PaginatedAchievementsResponse} from './achievement.model';
 import {Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
@@ -12,6 +12,13 @@ export class AchievementService {
 
   fetchAchievements(): Observable<Achievement[]> {
     return this.http.get<Achievement[]>(`${this.achievementBaseUrl}`, {withCredentials: true});
+  }
+
+  fetchPaginatedAchievements(page: number, limit: number): Observable<PaginatedAchievementsResponse> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+    return this.http.get<PaginatedAchievementsResponse>(`${this.achievementBaseUrl}/list`, {params, withCredentials: true});
   }
 
   fetchAchievementStats(): Observable<AchievementStats> {

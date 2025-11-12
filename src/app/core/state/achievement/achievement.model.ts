@@ -41,3 +41,11 @@ export interface AchievementStats {
   totalUnlocked: number;
   completionRate: number;
 }
+
+export interface PaginatedAchievementsResponse {
+  data: Achievement[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}

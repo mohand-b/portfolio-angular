@@ -2,7 +2,7 @@ import {computed, inject} from '@angular/core';
 import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {pipe, switchMap, tap} from 'rxjs';
-import {ProjectLightDto, ProjectFilters} from './project.model';
+import {ProjectFilters, ProjectLightDto} from './project.model';
 import {ProjectService} from './project.service';
 
 interface ProjectState {
@@ -20,7 +20,7 @@ const initialState: ProjectState = {
   projects: [],
   total: 0,
   page: 1,
-  limit: 10,
+  limit: 6,
   totalPages: 0,
   filters: {},
   isLoading: false,

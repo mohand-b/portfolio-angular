@@ -44,6 +44,12 @@ export class ConsoleFacade {
   readonly totalAchievements: Signal<number> = this.achievementStore.totalAchievements;
   readonly totalActiveAchievements: Signal<number> = this.achievementStore.totalActiveAchievements;
   readonly achievementStats: Signal<AchievementStats> = this.achievementStore.stats;
+  readonly achievementsPage: Signal<number> = this.achievementStore.page;
+  readonly achievementsTotalPages: Signal<number> = this.achievementStore.totalPages;
+  readonly achievementsIsLoading: Signal<boolean> = this.achievementStore.isLoading;
+  readonly achievementsStartIndex: Signal<number> = this.achievementStore.startIndex;
+  readonly achievementsEndIndex: Signal<number> = this.achievementStore.endIndex;
+  readonly achievementsTotal: Signal<number> = this.achievementStore.total;
 
   readonly skills: Signal<SkillDto[]> = this.skillStore.skills;
 
@@ -75,6 +81,18 @@ export class ConsoleFacade {
     return this.achievementService.deleteAchievementByCode(code).pipe(
       tap(() => this.achievementStore.removeAchievementByCode(code))
     );
+  }
+
+  setAchievementsPage(page: number): void {
+    this.achievementStore.setPage(page);
+  }
+
+  nextAchievementsPage(): void {
+    this.achievementStore.nextPage();
+  }
+
+  previousAchievementsPage(): void {
+    this.achievementStore.previousPage();
   }
 
   createSkill(skill: SkillCreateDto): Observable<SkillDto> {
