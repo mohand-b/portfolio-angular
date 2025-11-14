@@ -58,8 +58,8 @@
   </main>
 </div>
 
-<app-side-panel [isOpen]="panelOpen()" (closed)="closePanel()">
-  <app-project-create (created)="onProjectCreated()"/>
+<app-side-panel [isOpen]="panelOpen()" (closed)="onCloseRequested()">
+  <app-project-form [project]="selectedProject()" (saved)="onCloseRequested()"/>
 </app-side-panel>
 
 @if (confirmModalOpen()) {

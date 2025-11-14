@@ -35,26 +35,22 @@ export const ProjectStore = signalStore(
     endIndex: computed(() => Math.min(page() * limit(), total())),
   })),
   withMethods((store, projectService = inject(ProjectService)) => {
-    const loadProjects = rxMethod<{ page?: number; limit?: number; filters?: ProjectFilters }>(
+    const loadProjects = rxMethod<{page?: number; limit?: number; filters?: ProjectFilters}>(
       pipe(
         tap(() => patchState(store, {isLoading: true, error: null})),
         switchMap(({page = store.page(), limit = store.limit(), filters = store.filters()}) =>
           projectService.getProjects(page, limit, filters).pipe(
             tap({
-              next: (response) => {
-                patchState(store, {
-                  projects: response.data,
-                  total: response.total,
-                  page: response.page,
-                  limit: response.limit,
-                  totalPages: response.totalPages,
-                  filters,
-                  isLoading: false,
-                });
-              },
-              error: (error) => {
-                patchState(store, {isLoading: false, error: error.message});
-              },
+              next: (response) => patchState(store, {
+                projects: response.data,
+                total: response.total,
+                page: response.page,
+                limit: response.limit,
+                totalPages: response.totalPages,
+                filters,
+                isLoading: false,
+              }),
+              error: (error) => patchState(store, {isLoading: false, error: error.message}),
             })
           )
         )
@@ -72,6 +68,18 @@ export const ProjectStore = signalStore(
         pipe(
           switchMap((id) =>
             projectService.deleteProject(id).pipe(
+              tap({
+                next: () => loadProjects({}),
+                error: (error) => patchState(store, {error: error.message}),
+              })
+            )
+          )
+        )
+      ),
+      updateProject: rxMethod<{id: string; formData: FormData}>(
+        pipe(
+          switchMap(({id, formData}) =>
+            projectService.updateProject(id, formData).pipe(
               tap({
                 next: () => loadProjects({}),
                 error: (error) => patchState(store, {error: error.message}),

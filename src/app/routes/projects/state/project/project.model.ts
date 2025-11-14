@@ -35,8 +35,20 @@ export interface CreateProjectDto extends Omit<ProjectDto, 'id'> {
 }
 
 export interface UpdateProjectDto {
-  startDate: Date;
+  title?: string;
+  description?: string;
+  collaboration?: string;
+  missions?: string[];
+  projectTypes?: string[];
+  scope?: ProjectScope;
+  market?: ProjectMarket;
+  challenges?: string;
+  impact?: string;
+  skillIds?: string[];
+  jobId?: string | null;
+  startDate?: Date;
   endDate?: Date;
+  githubLink?: string;
 }
 
 export interface PaginatedProjectsResponseDto {

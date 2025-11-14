@@ -1,14 +1,15 @@
 import {Component, computed, inject, signal} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {ConsoleFacade} from '../../../console.facade';
-import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
-import {Pagination} from '../../../../../shared/components/pagination/pagination';
-import {ProjectCreate} from '../project-create/project-create';
-import {ProjectItem} from '../../components/project-item/project-item';
-import {ToastService} from '../../../../../shared/services/toast.service';
 import {ConfirmationModal} from '../../../../../shared/components/confirmation-modal/confirmation-modal';
-import {ProjectLightDto} from '../../../../projects/state/project/project.model';
+import {Pagination} from '../../../../../shared/components/pagination/pagination';
+import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
+import {ToastService} from '../../../../../shared/services/toast.service';
+import {ProjectDto, ProjectLightDto} from '../../../../projects/state/project/project.model';
+import {ProjectService} from '../../../../projects/state/project/project.service';
+import {ConsoleFacade} from '../../../console.facade';
+import {ProjectItem} from '../../components/project-item/project-item';
+import {ProjectForm} from '../project-form/project-form';
 
 @Component({
   selector: 'app-manage-projects',
@@ -17,7 +18,7 @@ import {ProjectLightDto} from '../../../../projects/state/project/project.model'
     MatIconModule,
     SidePanel,
     Pagination,
-    ProjectCreate,
+    ProjectForm,
     ProjectItem,
     ConfirmationModal,
   ],
@@ -29,11 +30,12 @@ export class ManageProjects {
 
   readonly facade = inject(ConsoleFacade);
   private readonly toastService = inject(ToastService);
+  private readonly projectService = inject(ProjectService);
 
   readonly panelOpen = signal(false);
+  readonly selectedProject = signal<ProjectDto | null>(null);
   readonly confirmModalOpen = signal(false);
   readonly projectToDelete = signal<ProjectLightDto | null>(null);
-  private readonly projectJustCreated = signal(false);
 
   readonly deletionMessage = computed(() => {
     const project = this.projectToDelete();
@@ -47,26 +49,23 @@ export class ManageProjects {
   }
 
   openPanel(): void {
+    this.selectedProject.set(null);
     this.panelOpen.set(true);
-    this.projectJustCreated.set(false);
   }
 
-  closePanel(): void {
+  onCloseRequested(): void {
     this.panelOpen.set(false);
-
-    if (this.projectJustCreated()) {
-      this.toastService.success('Projet créé avec succès');
-      this.projectJustCreated.set(false);
-    }
-  }
-
-  onProjectCreated(): void {
-    this.projectJustCreated.set(true);
-    this.closePanel();
+    this.selectedProject.set(null);
   }
 
   onEdit(project: ProjectLightDto): void {
-    console.log('Edit project:', project);
+    this.projectService.getProjectById(project.id).subscribe({
+      next: (fullProject) => {
+        this.selectedProject.set(fullProject);
+        this.panelOpen.set(true);
+      },
+      error: () => this.toastService.error('Erreur lors du chargement du projet')
+    });
   }
 
   onRemove(project: ProjectLightDto): void {

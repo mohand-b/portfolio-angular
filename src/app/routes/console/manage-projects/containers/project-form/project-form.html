@@ -1,4 +1,4 @@
-<form (submit)="onSubmit()" [formGroup]="eventForm" class="h-full w-full flex flex-col justify-between gap-4">
+<form (submit)="onSubmit()" [formGroup]="form" class="h-full w-full flex flex-col justify-between gap-4">
   <app-stepper [steps]="stepsMeta" [(currentStep)]="step"></app-stepper>
 
   <div class="flex-1 overflow-auto">
@@ -288,9 +288,9 @@
         Suivant
       </button>
     } @else {
-      <button type="submit" matButton="filled" [disabled]="isSubmitting()">
-        <mat-icon class="mr-1">add</mat-icon>
-        Ajouter
+      <button type="submit" matButton="filled">
+        <mat-icon class="mr-1">{{ isEditing() ? 'check' : 'add' }}</mat-icon>
+        {{ isEditing() ? 'Modifier' : 'Ajouter' }}
       </button>
     }
   </div>

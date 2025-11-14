@@ -2,18 +2,18 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../../../../environments/environments';
-import {ProjectDto, PaginatedProjectsResponseDto, ProjectFilters, ProjectMinimalResponseDto, UpdateProjectDto} from './project.model';
+import {PaginatedProjectsResponseDto, ProjectDto, ProjectFilters, ProjectMinimalResponseDto, UpdateProjectDto} from './project.model';
 
 @Injectable({providedIn: 'root'})
 export class ProjectService {
-  private http = inject(HttpClient);
-  private readonly projectBaseUrl = `${environment.baseUrl}/projects`;
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = `${environment.baseUrl}/projects`;
 
   createProject(projectFormData: FormData): Observable<ProjectDto> {
-    return this.http.post<ProjectDto>(`${this.projectBaseUrl}/create`, projectFormData, {withCredentials: true});
+    return this.http.post<ProjectDto>(`${this.baseUrl}/create`, projectFormData, {withCredentials: true});
   }
 
-  getProjects(page: number = 1, limit: number = 10, filters?: ProjectFilters): Observable<PaginatedProjectsResponseDto> {
+  getProjects(page = 1, limit = 10, filters?: ProjectFilters): Observable<PaginatedProjectsResponseDto> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('limit', limit.toString());
@@ -31,18 +31,26 @@ export class ProjectService {
       params = params.set('isPersonal', filters.isPersonal.toString());
     }
 
-    return this.http.get<PaginatedProjectsResponseDto>(`${this.projectBaseUrl}/list`, {params});
+    return this.http.get<PaginatedProjectsResponseDto>(`${this.baseUrl}/list`, {params});
+  }
+
+  getProjectById(id: string): Observable<ProjectDto> {
+    return this.http.get<ProjectDto>(`${this.baseUrl}/${id}`, {withCredentials: true});
+  }
+
+  updateProject(id: string, projectFormData: FormData): Observable<ProjectDto> {
+    return this.http.patch<ProjectDto>(`${this.baseUrl}/${id}`, projectFormData, {withCredentials: true});
   }
 
   deleteProject(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.projectBaseUrl}/${id}`, {withCredentials: true});
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, {withCredentials: true});
   }
 
   getUnlinkedProjects(): Observable<ProjectMinimalResponseDto[]> {
-    return this.http.get<ProjectMinimalResponseDto[]>(`${this.projectBaseUrl}/unlinked`, {withCredentials: true});
+    return this.http.get<ProjectMinimalResponseDto[]>(`${this.baseUrl}/unlinked`, {withCredentials: true});
   }
 
-  updateProject(id: string, dto: UpdateProjectDto): Observable<ProjectDto> {
-    return this.http.patch<ProjectDto>(`${this.projectBaseUrl}/${id}`, dto, {withCredentials: true});
+  linkProjectToTimeline(id: string, dto: UpdateProjectDto): Observable<ProjectDto> {
+    return this.http.patch<ProjectDto>(`${this.baseUrl}/${id}`, dto, {withCredentials: true});
   }
 }

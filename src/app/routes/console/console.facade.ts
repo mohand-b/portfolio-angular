@@ -153,6 +153,12 @@ export class ConsoleFacade {
     );
   }
 
+  updateProject(id: string, projectFormData: FormData): Observable<ProjectDto> {
+    return this.projectService.updateProject(id, projectFormData).pipe(
+      tap(() => this.projectStore.loadProjects({}))
+    );
+  }
+
   deleteProject(id: string): Observable<void> {
     return this.projectService.deleteProject(id).pipe(
       tap(() => this.projectStore.loadProjects({}))
@@ -180,6 +186,6 @@ export class ConsoleFacade {
   }
 
   linkProjectToTimeline(id: string, dto: UpdateProjectDto): Observable<ProjectDto> {
-    return this.projectService.updateProject(id, dto);
+    return this.projectService.linkProjectToTimeline(id, dto);
   }
 }
