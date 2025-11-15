@@ -16,6 +16,53 @@ export enum TimelineItemType {
   Other = 'other'
 }
 
+// Types pour les données retournées par GET /timeline
+export interface TimelineItemBase {
+  id: string;
+  type: TimelineItemType;
+  title: string;
+  startDate: string | null;
+  endDate: string | null;
+  description: string | null;
+}
+
+export interface CertificationDto {
+  id: string;
+  title: string;
+  certificationType: string;
+}
+
+export interface JobTimelineItem extends TimelineItemBase {
+  type: TimelineItemType.Job;
+  company: string;
+  location: string;
+}
+
+export interface ProjectTimelineItem extends TimelineItemBase {
+  type: TimelineItemType.Project;
+  projectTypes: string[];
+  scope: string;
+  market: string;
+}
+
+export interface EducationTimelineItem extends TimelineItemBase {
+  type: TimelineItemType.Education;
+  institution: string;
+  location: string;
+  fieldOfStudy: string | null;
+  certifications: CertificationDto[];
+}
+
+export interface OtherTimelineItem extends TimelineItemBase {
+  type: TimelineItemType.Other;
+}
+
+export type TimelineItem =
+  | JobTimelineItem
+  | ProjectTimelineItem
+  | EducationTimelineItem
+  | OtherTimelineItem;
+
 export interface TimelineItemTypeMeta {
   key: TimelineItemType;
   label: string;
@@ -27,25 +74,25 @@ export const TIMELINE_ITEM_TYPE_META: Record<TimelineItemType, TimelineItemTypeM
   [TimelineItemType.Job]: {
     key: TimelineItemType.Job,
     label: 'Expériences professionnelles',
-    color: '#58acff',
+    color: '#4A77B5',
     icon: 'work',
   },
   [TimelineItemType.Education]: {
     key: TimelineItemType.Education,
     label: 'Formations',
-    color: '#11bd89',
+    color: '#399570',
     icon: 'school',
   },
   [TimelineItemType.Project]: {
     key: TimelineItemType.Project,
     label: 'Projets personnels',
-    color: '#f465f1',
+    color: '#A47ABC',
     icon: 'lightbulb',
   },
   [TimelineItemType.Other]: {
     key: TimelineItemType.Other,
     label: 'Autre',
-    color: '#ecbd3a',
+    color: '#C9A44A',
     icon: 'more_horiz',
   }
 };

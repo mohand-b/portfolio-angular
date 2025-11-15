@@ -22,6 +22,8 @@ import {CertificationService} from '../career/state/certification/certification.
 import {ProjectDto, ProjectFilters, ProjectLightDto, ProjectMinimalResponseDto, UpdateProjectDto} from '../projects/state/project/project.model';
 import {ProjectService} from '../projects/state/project/project.service';
 import {ProjectStore} from '../projects/state/project/project.store';
+import {TimelineStore} from '../career/state/timeline/timeline.store';
+import {TimelineItem, TimelineItemType} from '../career/state/timeline/timeline.model';
 
 @Injectable({providedIn: 'root'})
 export class ConsoleFacade {
@@ -39,6 +41,8 @@ export class ConsoleFacade {
 
   private readonly projectStore = inject(ProjectStore);
   private readonly projectService = inject(ProjectService);
+
+  private readonly timelineStore = inject(TimelineStore);
 
   readonly achievements: Signal<Achievement[]> = this.achievementStore.achievements;
   readonly totalAchievements: Signal<number> = this.achievementStore.totalAchievements;
@@ -60,6 +64,13 @@ export class ConsoleFacade {
   readonly projectsIsLoading: Signal<boolean> = this.projectStore.isLoading;
   readonly projectsStartIndex: Signal<number> = this.projectStore.startIndex;
   readonly projectsEndIndex: Signal<number> = this.projectStore.endIndex;
+
+  readonly timelineItems: Signal<TimelineItem[]> = this.timelineStore.items;
+  readonly timelineLoading: Signal<boolean> = this.timelineStore.loading;
+  readonly timelineError: Signal<string | null> = this.timelineStore.error;
+  readonly timelineSelectedTypes: Signal<TimelineItemType[]> = this.timelineStore.selectedTypes;
+  readonly timelineFilteredItems: Signal<TimelineItem[]> = this.timelineStore.filteredItems;
+  readonly timelineHasItems: Signal<boolean> = this.timelineStore.hasItems;
 
   getAchievementLogs(): Observable<AchievementUnlockLog[]> {
     return this.achievementLogsService.findAll();
@@ -187,5 +198,13 @@ export class ConsoleFacade {
 
   linkProjectToTimeline(id: string, dto: UpdateProjectDto): Observable<ProjectDto> {
     return this.projectService.linkProjectToTimeline(id, dto);
+  }
+
+  refreshTimeline(): void {
+    this.timelineStore.fetchTimeline();
+  }
+
+  setTimelineTypes(types: TimelineItemType[]): void {
+    this.timelineStore.setSelectedTypes(types);
   }
 }

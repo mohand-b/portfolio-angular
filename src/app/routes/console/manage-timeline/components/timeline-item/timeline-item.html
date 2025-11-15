@@ -1,0 +1,93 @@
+<div class="relative flex justify-center items-center mb-12 w-full">
+  <div
+    class="flex-1 max-w-[calc(50%-16px)]"
+    [class.order-3]="isLeft()"
+    [class.order-1]="!isLeft()"
+  ></div>
+  <div
+    class="relative flex justify-center items-center w-8 shrink-0 z-[2] order-2"
+  >
+    <div
+      class="w-8 h-8 rounded-full flex items-center justify-center shadow-[0_0_0_2px_white]"
+      [style.background-color]="getTypeMeta(item().type).color"
+    >
+      <mat-icon class="!text-white !text-base !w-4 !h-4 !leading-none">{{ getTypeMeta(item().type).icon }}</mat-icon>
+    </div>
+  </div>
+  <div
+    class="flex-1 max-w-[calc(50%-16px)] max-lg:max-w-full flex items-start"
+    [class.order-1]="isLeft()"
+    [class.order-3]="!isLeft()"
+    [class.pr-6]="isLeft()"
+    [class.pl-6]="!isLeft()"
+    [class.justify-end]="isLeft()"
+    [class.justify-start]="!isLeft()"
+  >
+    <div
+      class="bg-white rounded-lg p-5 shadow-sm max-w-[550px] w-full text-left"
+      [class.border-l-[3px]]="!isLeft()"
+      [class.border-r-[3px]]="isLeft()"
+      [style.border-color]="getTypeMeta(item().type).color"
+    >
+      <div class="flex justify-between items-start gap-3 mb-3.5">
+        <h3 class="m-0 text-base font-semibold text-neutral-800 flex-1">{{ item().title }}</h3>
+        <span
+          class="inline-block py-0.5 px-2.5 rounded text-[0.7rem] font-medium text-white whitespace-nowrap shrink-0 opacity-90"
+          [style.background-color]="getTypeMeta(item().type).color"
+        >
+          {{ getTypeMeta(item().type).label }}
+        </span>
+      </div>
+
+      @if (item().startDate || item().endDate) {
+        <div class="flex items-center gap-1.5 mb-2 text-neutral-600 text-[0.8125rem]">
+          <mat-icon class="!text-base !w-4 !h-4 !leading-none text-neutral-400">event</mat-icon>
+          <span>
+            {{ item().startDate | date:'MM/yyyy' }}
+            @if (item().endDate) {
+              - {{ item().endDate | date:'MM/yyyy' }}
+            } @else {
+              - Présent
+            }
+            @if (getDuration(item().startDate, item().endDate)) {
+              <span class="text-neutral-500 font-medium ml-1">
+                ({{ getDuration(item().startDate, item().endDate) }})
+              </span>
+            }
+          </span>
+        </div>
+      }
+
+      @if (item().type === 'job') {
+        <div class="flex items-center gap-1.5 mb-2 text-neutral-600 text-[0.8125rem]">
+          <mat-icon class="!text-base !w-4 !h-4 !leading-none text-neutral-400">business</mat-icon>
+          <span>{{ $any(item()).company }} • {{ $any(item()).location }}</span>
+        </div>
+      }
+
+      @if (item().type === 'education') {
+        <div class="flex items-center gap-1.5 mb-2 text-neutral-600 text-[0.8125rem]">
+          <mat-icon class="!text-base !w-4 !h-4 !leading-none text-neutral-400">school</mat-icon>
+          <span>{{ $any(item()).institution }} • {{ $any(item()).location }}</span>
+        </div>
+        @if ($any(item()).fieldOfStudy) {
+          <div class="flex items-center gap-1.5 mb-2 text-neutral-600 text-[0.8125rem]">
+            <mat-icon class="!text-base !w-4 !h-4 !leading-none text-neutral-400">menu_book</mat-icon>
+            <span>{{ $any(item()).fieldOfStudy }}</span>
+          </div>
+        }
+      }
+
+      @if (item().type === 'project') {
+        <div class="flex items-center gap-1.5 mb-2 text-neutral-600 text-[0.8125rem]">
+          <mat-icon class="!text-base !w-4 !h-4 !leading-none text-neutral-400">category</mat-icon>
+          <span>{{ $any(item()).projectTypes.join(', ') }}</span>
+        </div>
+        <div class="flex items-center gap-1.5 mb-2 text-neutral-600 text-[0.8125rem]">
+          <mat-icon class="!text-base !w-4 !h-4 !leading-none text-neutral-400">public</mat-icon>
+          <span>{{ $any(item()).scope }} • {{ $any(item()).market }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>
