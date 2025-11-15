@@ -73,19 +73,19 @@ export interface TimelineItemTypeMeta {
 export const TIMELINE_ITEM_TYPE_META: Record<TimelineItemType, TimelineItemTypeMeta> = {
   [TimelineItemType.Job]: {
     key: TimelineItemType.Job,
-    label: 'Expériences professionnelles',
+    label: 'Expérience professionnelle',
     color: '#4A77B5',
     icon: 'work',
   },
   [TimelineItemType.Education]: {
     key: TimelineItemType.Education,
-    label: 'Formations',
+    label: 'Formation',
     color: '#399570',
     icon: 'school',
   },
   [TimelineItemType.Project]: {
     key: TimelineItemType.Project,
-    label: 'Projets personnels',
+    label: 'Projet personnel',
     color: '#A47ABC',
     icon: 'lightbulb',
   },
