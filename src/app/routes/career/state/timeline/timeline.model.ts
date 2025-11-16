@@ -1,3 +1,5 @@
+import {SkillDto} from '../../../skills/state/skill/skill.model';
+
 export interface TimelineItemDto {
   id: string;
   type: TimelineItemType;
@@ -16,7 +18,6 @@ export enum TimelineItemType {
   Other = 'other'
 }
 
-// Types pour les données retournées par GET /timeline
 export interface TimelineItemBase {
   id: string;
   type: TimelineItemType;
@@ -24,6 +25,7 @@ export interface TimelineItemBase {
   startDate: string | null;
   endDate: string | null;
   description: string | null;
+  image: string | null;
 }
 
 export interface CertificationDto {
@@ -43,6 +45,7 @@ export interface ProjectTimelineItem extends TimelineItemBase {
   projectTypes: string[];
   scope: string;
   market: string;
+  skills: SkillDto[];
 }
 
 export interface EducationTimelineItem extends TimelineItemBase {

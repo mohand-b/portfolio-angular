@@ -16,7 +16,7 @@
             <div class="min-w-0 overflow-hidden">
               <label class="block text-sm font-medium text-gray-700 mb-2">Date de début</label>
               <mat-form-field appearance="outline" class="w-full min-w-0">
-                <input matInput formControlName="startDate" [matDatepicker]="startPicker" placeholder="Début"/>
+                <input matInput formControlName="startDate" [matDatepicker]="startPicker" placeholder="Début" readonly (click)="startPicker.open()"/>
                 <button mat-icon-button matSuffix type="button" (click)="startPicker.open()">
                   <mat-icon>calendar_month</mat-icon>
                 </button>
@@ -33,6 +33,8 @@
                   [matDatepicker]="endPicker"
                   [min]="s1.get('startDate')?.value || null"
                   placeholder="Fin"
+                  readonly
+                  (click)="endPicker.open()"
                 />
                 <button mat-icon-button matSuffix type="button" (click)="endPicker.open()">
                   <mat-icon>calendar_month</mat-icon>

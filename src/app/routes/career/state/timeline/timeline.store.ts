@@ -27,7 +27,12 @@ export const TimelineStore = signalStore(
     hasItems: computed(() => store.items().length > 0),
     filteredItems: computed(() => {
       const {items, selectedTypes} = {items: store.items(), selectedTypes: store.selectedTypes()};
-      return selectedTypes.length === 0 ? items : items.filter(item => selectedTypes.includes(item.type));
+      const filtered = selectedTypes.length === 0 ? items : items.filter(item => selectedTypes.includes(item.type));
+      return [...filtered].sort((a, b) => {
+        const aDate = a.endDate ? new Date(a.endDate).getTime() : Date.now();
+        const bDate = b.endDate ? new Date(b.endDate).getTime() : Date.now();
+        return bDate - aDate;
+      });
     })
   })),
   withMethods((store) => ({

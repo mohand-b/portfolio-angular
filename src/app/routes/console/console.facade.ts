@@ -19,11 +19,23 @@ import {EducationDto} from '../career/state/education/education.model';
 import {EducationService} from '../career/state/education/education.service';
 import {CertificationDto, CreateCertificationDto} from '../career/state/certification/certification.model';
 import {CertificationService} from '../career/state/certification/certification.service';
-import {ProjectDto, ProjectFilters, ProjectLightDto, ProjectMinimalResponseDto, UpdateProjectDto} from '../projects/state/project/project.model';
+import {
+  ProjectDto,
+  ProjectFilters,
+  ProjectLightDto,
+  ProjectMinimalResponseDto,
+  UpdateProjectDto
+} from '../projects/state/project/project.model';
 import {ProjectService} from '../projects/state/project/project.service';
 import {ProjectStore} from '../projects/state/project/project.store';
 import {TimelineStore} from '../career/state/timeline/timeline.store';
-import {TimelineItem, TimelineItemType} from '../career/state/timeline/timeline.model';
+import {
+  EducationTimelineItem,
+  JobTimelineItem,
+  ProjectTimelineItem,
+  TimelineItem,
+  TimelineItemType
+} from '../career/state/timeline/timeline.model';
 
 @Injectable({providedIn: 'root'})
 export class ConsoleFacade {
@@ -131,19 +143,27 @@ export class ConsoleFacade {
   }
 
   addJob(jobFormData: FormData): Observable<JobDto> {
-    return this.jobService.createJob(jobFormData);
+    return this.jobService.createJob(jobFormData).pipe(
+      tap(job => this.timelineStore.addItem(this.mapJobToTimelineItem(job)))
+    );
   }
 
   addEducation(educationFormData: FormData): Observable<EducationDto> {
-    return this.educationService.create(educationFormData);
+    return this.educationService.create(educationFormData).pipe(
+      tap(education => this.timelineStore.addItem(this.mapEducationToTimelineItem(education)))
+    );
   }
 
   updateEducation(id: string, educationFormData: FormData): Observable<EducationDto> {
-    return this.educationService.update(id, educationFormData);
+    return this.educationService.update(id, educationFormData).pipe(
+      tap(education => this.timelineStore.updateItem(this.mapEducationToTimelineItem(education)))
+    );
   }
 
   deleteEducation(id: string): Observable<void> {
-    return this.educationService.delete(id);
+    return this.educationService.delete(id).pipe(
+      tap(() => this.timelineStore.deleteItem(id))
+    );
   }
 
   addCertification(dto: CreateCertificationDto): Observable<CertificationDto> {
@@ -197,7 +217,9 @@ export class ConsoleFacade {
   }
 
   linkProjectToTimeline(id: string, dto: UpdateProjectDto): Observable<ProjectDto> {
-    return this.projectService.linkProjectToTimeline(id, dto);
+    return this.projectService.linkProjectToTimeline(id, dto).pipe(
+      tap(project => this.timelineStore.addItem(this.mapProjectToTimelineItem(project)))
+    );
   }
 
   refreshTimeline(): void {
@@ -206,5 +228,55 @@ export class ConsoleFacade {
 
   setTimelineTypes(types: TimelineItemType[]): void {
     this.timelineStore.setSelectedTypes(types);
+  }
+
+  private mapJobToTimelineItem(job: JobDto): JobTimelineItem {
+    return {
+      id: job.id,
+      type: TimelineItemType.Job,
+      title: job.title,
+      startDate: job.startDate ? job.startDate.toString() : null,
+      endDate: job.endDate ? job.endDate.toString() : null,
+      description: job.description || null,
+      image: job.image || null,
+      company: job.company,
+      location: job.location || ''
+    };
+  }
+
+  private mapEducationToTimelineItem(education: EducationDto): EducationTimelineItem {
+    return {
+      id: education.id,
+      type: TimelineItemType.Education,
+      title: education.title,
+      startDate: education.startDate ? education.startDate.toString() : null,
+      endDate: education.endDate ? education.endDate.toString() : null,
+      description: education.description || null,
+      image: education.image || null,
+      institution: education.institution,
+      location: education.location,
+      fieldOfStudy: education.fieldOfStudy || null,
+      certifications: education.certifications?.map(cert => ({
+        id: cert.id,
+        title: cert.title,
+        certificationType: cert.certificationType.toString()
+      })) || []
+    };
+  }
+
+  private mapProjectToTimelineItem(project: ProjectDto): ProjectTimelineItem {
+    return {
+      id: project.id,
+      type: TimelineItemType.Project,
+      title: project.title,
+      startDate: project.startDate ? project.startDate.toString() : null,
+      endDate: project.endDate ? project.endDate.toString() : null,
+      description: project.description || null,
+      image: project.image || null,
+      projectTypes: project.projectTypes || [],
+      scope: project.scope,
+      market: project.market,
+      skills: project.skills,
+    };
   }
 }

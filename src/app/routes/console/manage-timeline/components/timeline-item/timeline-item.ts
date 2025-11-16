@@ -2,7 +2,8 @@ import {Component, input} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {differenceInMonths, differenceInYears, parseISO} from 'date-fns';
-import {TimelineItem as TimelineItemModel, TimelineItemType, TIMELINE_ITEM_TYPE_META} from '../../../../career/state/timeline/timeline.model';
+import {TimelineItem as TimelineItemModel, TimelineItemType, TIMELINE_ITEM_TYPE_META, ProjectTimelineItem} from '../../../../career/state/timeline/timeline.model';
+import {SkillCategory, SKILL_CATEGORY_META} from '../../../../skills/state/skill/skill.model';
 
 @Component({
   selector: 'app-timeline-item',
@@ -35,5 +36,31 @@ export class TimelineItem {
     ].filter(Boolean);
 
     return parts.join(' ');
+  }
+
+  protected getSkillsByCategory(project: ProjectTimelineItem): {category: SkillCategory; count: number; label: string; color: string; icon: string}[] {
+    const categoryMap = new Map<SkillCategory, number>();
+
+    project.skills.forEach(skill => {
+      categoryMap.set(skill.category, (categoryMap.get(skill.category) || 0) + 1);
+    });
+
+    return Array.from(categoryMap.entries()).map(([category, count]) => {
+      const meta = SKILL_CATEGORY_META[category];
+      return {
+        category,
+        count,
+        label: meta.label,
+        color: meta.color,
+        icon: meta.icon || ''
+      };
+    });
+  }
+
+  protected hexToRgba(hex: string, opacity: number): string {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   }
 }
