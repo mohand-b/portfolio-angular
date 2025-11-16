@@ -8,6 +8,11 @@ export interface EducationDto extends TimelineItemDto {
   certifications?: CertificationDto[];
 }
 
+export interface CertificationInputDto {
+  title: string;
+  certificationType: CertificationType;
+}
+
 export interface CreateEducationDto {
   title: string;
   institution: string;
@@ -17,6 +22,7 @@ export interface CreateEducationDto {
   endDate?: Date;
   description?: string;
   image?: File;
+  certifications?: CertificationInputDto[];
 }
 
 export interface UpdateEducationDto {

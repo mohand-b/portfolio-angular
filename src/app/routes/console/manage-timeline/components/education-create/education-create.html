@@ -1,108 +1,196 @@
-<form
-  (submit)="onSubmit()"
-  [formGroup]="educationForm"
-  class="h-full w-full flex flex-col justify-between gap-4"
->
-  <div class="flex-1 flex flex-col gap-4">
-    <div class="w-full">
-      <label class="block text-sm font-medium text-gray-700 mb-2">Intitulé de la formation</label>
-      <mat-form-field appearance="outline" class="w-full">
-        <input formControlName="title" matInput placeholder="Saisir l'intitulé de la formation"/>
-      </mat-form-field>
-    </div>
+<form [formGroup]="educationForm" (submit)="onSubmit()" class="h-full w-full flex flex-col justify-between gap-4">
+  <app-stepper [steps]="stepsMeta" [(currentStep)]="step"/>
 
-    <div class="w-full">
-      <label class="block text-sm font-medium text-gray-700 mb-2">Établissement</label>
-      <mat-form-field appearance="outline" class="w-full">
-        <input formControlName="institution" matInput placeholder="Saisir le nom de l'établissement"/>
-      </mat-form-field>
-    </div>
+  <div class="flex-1 overflow-auto">
+    @switch (step()) {
+      @default {
+        <div formGroupName="step1" class="flex flex-col gap-4">
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Intitulé de la formation</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput formControlName="title" placeholder="Saisir l'intitulé de la formation"/>
+            </mat-form-field>
+          </div>
 
-    <div class="w-full">
-      <label class="block text-sm font-medium text-gray-700 mb-2">Lieu</label>
-      <mat-form-field appearance="outline" class="w-full">
-        <input formControlName="location" matInput placeholder="Saisir le lieu"/>
-      </mat-form-field>
-    </div>
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Domaine d'étude</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput formControlName="fieldOfStudy" placeholder="Saisir le domaine d'étude (optionnel)"/>
+            </mat-form-field>
+          </div>
 
-    <div class="w-full">
-      <label class="block text-sm font-medium text-gray-700 mb-2">Domaine d'étude</label>
-      <mat-form-field appearance="outline" class="w-full">
-        <input formControlName="fieldOfStudy" matInput placeholder="Saisir le domaine d'étude (optionnel)"/>
-      </mat-form-field>
-    </div>
+          <div class="w-full grid grid-cols-2 gap-2">
+            <div class="min-w-0 overflow-hidden">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Date de début</label>
+              <mat-form-field appearance="outline" class="w-full min-w-0">
+                <input matInput formControlName="startDate" [matDatepicker]="startPicker" placeholder="Début" readonly
+                       (click)="startPicker.open()"/>
+                <button mat-icon-button matSuffix type="button" (click)="startPicker.open()">
+                  <mat-icon>calendar_month</mat-icon>
+                </button>
+                <mat-datepicker #startPicker/>
+              </mat-form-field>
+            </div>
 
-    <div class="w-full grid grid-cols-2 gap-2">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Date de début</label>
-        <mat-form-field appearance="outline" class="w-full">
-          <input [matDatepicker]="startPicker" formControlName="startDate" matInput placeholder="Début" readonly (click)="startPicker.open()"/>
-          <button (click)="startPicker.open()" mat-icon-button matSuffix type="button">
-            <mat-icon>calendar_month</mat-icon>
-          </button>
-          <mat-datepicker #startPicker></mat-datepicker>
-        </mat-form-field>
-      </div>
+            <div class="min-w-0 overflow-hidden">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Date de fin</label>
+              <mat-form-field appearance="outline" class="w-full min-w-0">
+                <input
+                  matInput
+                  formControlName="endDate"
+                  [matDatepicker]="endPicker"
+                  [min]="s1.get('startDate')?.value || null"
+                  placeholder="Fin"
+                  readonly
+                  (click)="endPicker.open()"
+                />
+                <button mat-icon-button matSuffix type="button" (click)="endPicker.open()">
+                  <mat-icon>calendar_month</mat-icon>
+                </button>
+                <mat-datepicker #endPicker/>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      }
+      @case (1) {
+        <div formGroupName="step2" class="flex flex-col gap-4">
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Image</label>
+            <input
+              #fileInput
+              type="file"
+              accept="image/png,image/jpeg,image/jpg,image/webp"
+              class="hidden"
+              (change)="onFileSelected($event)"
+            />
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Date de fin</label>
-        <mat-form-field appearance="outline" class="w-full">
-          <input
-            [matDatepicker]="endPicker"
-            [min]="educationForm.get('startDate')?.value || null"
-            formControlName="endDate"
-            matInput
-            placeholder="Fin"
-            readonly
-            (click)="endPicker.open()"
-          />
-          <button (click)="endPicker.open()" mat-icon-button matSuffix type="button">
-            <mat-icon>calendar_month</mat-icon>
-          </button>
-          <mat-datepicker #endPicker></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
+            @if (imagePreview()) {
+              <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                <img [src]="imagePreview()!" class="h-full w-full object-cover" alt="Aperçu de l'image"/>
+                <button
+                  type="button"
+                  class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors shadow-sm"
+                  (click)="imagePreview.set(null); s2.patchValue({image: null})"
+                >
+                  <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
+                </button>
+              </div>
+            } @else {
+              <button
+                type="button"
+                class="aspect-[4/3] w-full rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center hover:border-gray-400 hover:bg-gray-100 transition-colors"
+                (click)="fileInput.click()"
+              >
+                <mat-icon class="text-3xl text-gray-400">add_photo_alternate</mat-icon>
+                <span class="text-xs text-gray-500 mt-1">Ajouter une image</span>
+              </button>
+            }
+          </div>
 
-    <div class="w-full">
-      <label class="block text-sm font-medium text-gray-700 mb-2">Image</label>
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Établissement</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput formControlName="institution" placeholder="Saisir le nom de l'établissement"/>
+            </mat-form-field>
+          </div>
 
-      <input
-        #fileInput
-        (change)="onFileSelected($event)"
-        accept="image/png,image/jpeg,image/jpg,image/webp"
-        class="hidden"
-        type="file"
-      />
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Lieu</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput formControlName="location" placeholder="Saisir le lieu"/>
+            </mat-form-field>
+          </div>
+        </div>
+      }
+      @case (2) {
+        <div [formGroup]="certificationControl" class="flex flex-col gap-4" (keydown.enter)="$event.stopPropagation()">
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Intitulé du diplôme</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput formControlName="title" placeholder="Saisir l'intitulé du diplôme"
+                     (keydown.enter)="addCertification($event)"/>
+            </mat-form-field>
+          </div>
 
-      @if (imagePreview()) {
-        <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-          <img [src]="imagePreview()!" class="h-full w-full object-cover" alt="Aperçu de l'image"/>
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Type de diplôme</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-select formControlName="certificationType" class="unified-field" placeholder="Sélectionner le type">
+                @for (type of certificationTypes; track type) {
+                  <mat-option [value]="type" class="flex items-center gap-2 !text-neutral-700">
+                    <mat-icon class="!text-lg !leading-none">
+                      {{ certificationTypeMeta[type].icon }}
+                    </mat-icon>
+                    {{ certificationTypeMeta[type].label }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
           <button
             type="button"
-            (click)="imagePreview.set(null); educationForm.patchValue({image: null})"
-            class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-sm"
+            matButton="filled"
+            class="w-full"
+            [disabled]="certificationControl.invalid"
+            (click)="addCertification($event)"
           >
-            <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
+            <mat-icon>add</mat-icon>
+            Ajouter le diplôme
           </button>
+
+          @if (certifications().length > 0) {
+            <div class="flex flex-col gap-2">
+              @for (cert of certifications(); track $index) {
+                <div
+                  class="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                  <mat-icon
+                    class="!text-neutral-500 !text-[18px] !w-[18px] !h-[18px] flex-shrink-0"
+                  >
+                    {{ certificationTypeMeta[cert.certificationType].icon }}
+                  </mat-icon>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-medium text-gray-900">{{ cert.title }}</div>
+                    <div class="text-xs text-gray-500">{{ certificationTypeMeta[cert.certificationType].label }}</div>
+                  </div>
+                  <button
+                    type="button"
+                    class="text-gray-400 hover:text-red-500 transition-colors cursor-pointer flex-shrink-0"
+                    (click)="removeCertification($index)"
+                  >
+                    <mat-icon class="!text-[20px] !w-[20px] !h-[20px] !leading-none">close</mat-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          }
         </div>
-      } @else {
-        <button
-          type="button"
-          (click)="fileInput.click()"
-          class="aspect-[4/3] w-full rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center cursor-pointer hover:border-gray-400 hover:bg-gray-100 transition-colors"
-        >
-          <mat-icon class="text-3xl text-gray-400">add_photo_alternate</mat-icon>
-          <span class="text-xs text-gray-500 mt-1">Ajouter une image</span>
-        </button>
       }
-    </div>
+    }
   </div>
 
-  <div class="flex justify-end">
-    <button matButton="filled" type="submit">
-      <mat-icon>add</mat-icon>
-      Ajouter
-    </button>
+  <div class="flex items-center justify-between">
+    @if (step() > 0) {
+      <button type="button" matButton="text" (click)="prev()">Précédent</button>
+    } @else {
+      <span></span>
+    }
+
+    @if (step() < stepsMeta.length - 1) {
+      <button
+        type="button"
+        matButton="filled"
+        [disabled]="(step() === 0 && s1.invalid) || (step() === 1 && s2.invalid)"
+        (click)="next()"
+      >
+        Suivant
+      </button>
+    } @else {
+      <button type="submit" matButton="filled" [disabled]="isSubmitting()">
+        <mat-icon>add</mat-icon>
+        Ajouter
+      </button>
+    }
   </div>
 </form>
