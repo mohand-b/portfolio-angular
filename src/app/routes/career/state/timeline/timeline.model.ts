@@ -15,7 +15,7 @@ export enum TimelineItemType {
   Job = 'job',
   Education = 'education',
   Project = 'project',
-  Other = 'other'
+  Milestone = 'milestone'
 }
 
 export interface TimelineItemBase {
@@ -57,15 +57,15 @@ export interface EducationTimelineItem extends TimelineItemBase {
   certifications: CertificationDto[];
 }
 
-export interface OtherTimelineItem extends TimelineItemBase {
-  type: TimelineItemType.Other;
+export interface MilestoneTimelineItem extends TimelineItemBase {
+  type: TimelineItemType.Milestone;
 }
 
 export type TimelineItem =
   | JobTimelineItem
   | ProjectTimelineItem
   | EducationTimelineItem
-  | OtherTimelineItem;
+  | MilestoneTimelineItem;
 
 export interface TimelineItemTypeMeta {
   key: TimelineItemType;
@@ -93,10 +93,10 @@ export const TIMELINE_ITEM_TYPE_META: Record<TimelineItemType, TimelineItemTypeM
     color: '#A47ABC',
     icon: 'lightbulb',
   },
-  [TimelineItemType.Other]: {
-    key: TimelineItemType.Other,
-    label: 'Autre',
+  [TimelineItemType.Milestone]: {
+    key: TimelineItemType.Milestone,
+    label: 'Moment clé',
     color: '#C9A44A',
-    icon: 'more_horiz',
+    icon: 'star',
   }
 };

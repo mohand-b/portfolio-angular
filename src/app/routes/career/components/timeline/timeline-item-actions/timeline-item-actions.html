@@ -1,0 +1,12 @@
+<div class="flex items-center justify-end gap-2 text-slate-400 mt-4 pt-3 border-t border-neutral-200">
+  @for (action of actions(); track action.type) {
+    <button
+      type="button"
+      class="flex items-center cursor-pointer transition-colors"
+      [class]="'hover:' + action.hoverColor"
+      (click)="actionClicked.emit(action.type)"
+    >
+      <mat-icon class="!text-lg">{{ action.icon }}</mat-icon>
+    </button>
+  }
+</div>

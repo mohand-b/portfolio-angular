@@ -61,8 +61,8 @@
         @case (TimelineItemType.Project) {
           <app-project-timeline-link (created)="onCloseRequested()"/>
         }
-        @case (TimelineItemType.Other) {
-          <app-other-timeline-item-create (created)="onCloseRequested()"/>
+        @case (TimelineItemType.Milestone) {
+          <app-milestone-timeline-item-create (created)="onCloseRequested()"/>
         }
         @default {
           <div class="text-slate-500 text-sm">

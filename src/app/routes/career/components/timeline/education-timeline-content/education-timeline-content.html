@@ -1,0 +1,27 @@
+<div class="flex items-center gap-2 pt-1">
+  <img [src]="education().image" [alt]="education().title" class="w-12 h-12 rounded-xs object-cover"/>
+  <div class="flex-1">
+    <h3 class="text-base font-medium text-neutral-800">{{ education().title }}</h3>
+    <div class="flex items-center gap-1.5 text-neutral-600 text-[0.8125rem]">
+      <mat-icon class="!text-base !w-4 !h-4 !leading-none text-neutral-400">business</mat-icon>
+      <span class="text-primary">{{ education().institution }}</span>
+      <span>à {{ education().location }}</span>
+    </div>
+  </div>
+</div>
+
+@if (certificationGroups().length > 0) {
+  <div class="flex flex-col gap-1.5 mt-3">
+    @for (certGroup of certificationGroups(); track certGroup.type) {
+      <div class="flex items-center gap-2 text-sm">
+        <mat-icon
+          class="!text-base !w-4 !h-4 !leading-none flex-shrink-0"
+          [style.color]="educationColor"
+        >
+          {{ certGroup.icon }}
+        </mat-icon>
+        <span class="text-neutral-700">{{ certGroup.titles.join(', ') }}</span>
+      </div>
+    }
+  </div>
+}

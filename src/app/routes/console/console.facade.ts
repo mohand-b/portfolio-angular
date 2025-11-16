@@ -198,7 +198,13 @@ export class ConsoleFacade {
 
   updateProject(id: string, projectFormData: FormData): Observable<ProjectDto> {
     return this.projectService.updateProject(id, projectFormData).pipe(
-      tap(() => this.projectStore.loadProjects({}))
+      tap(project => {
+        this.projectStore.loadProjects({});
+        const isInTimeline = this.timelineStore.items().some(item => item.id === project.id);
+        if (isInTimeline) {
+          this.timelineStore.updateItem(this.mapProjectToTimelineItem(project));
+        }
+      })
     );
   }
 

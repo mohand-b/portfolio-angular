@@ -14,9 +14,9 @@ import {JobDto} from '../../../../career/state/job/job.model';
 import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
 import {EducationForm} from '../../components/education-form/education-form';
 import {JobForm} from '../../components/job-form/job-form';
-import {OtherTimelineItemCreate} from '../../components/other-timeline-item-create/other-timeline-item-create';
+import {MilestoneTimelineItemCreate} from '../../components/milestone-timeline-item-create/milestone-timeline-item-create';
 import {ProjectTimelineLink} from '../../components/project-timeline-link/project-timeline-link';
-import {TimelineItem} from '../../components/timeline-item/timeline-item';
+import {TimelineItem} from '../../../../career/components/timeline/timeline-item/timeline-item';
 import {ConfirmationModal} from '../../../../../shared/components/confirmation-modal/confirmation-modal';
 import {ConsoleFacade} from '../../../console.facade';
 import {ToastService} from '../../../../../shared/services/toast.service';
@@ -34,7 +34,7 @@ import {ToastService} from '../../../../../shared/services/toast.service';
     SidePanel,
     EducationForm,
     JobForm,
-    OtherTimelineItemCreate,
+    MilestoneTimelineItemCreate,
     ProjectTimelineLink,
     TimelineItem,
     ConfirmationModal

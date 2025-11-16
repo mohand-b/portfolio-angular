@@ -194,8 +194,11 @@ export class ProjectForm {
       skillIds: this.selectedSkills().map(skill => skill.id),
     };
 
-    if (this.isEditing() && this.existingImages().length > 0) {
-      payload.images = this.existingImages();
+    if (this.isEditing()) {
+      payload.isLinkedToJob = step1.isCompanyProject;
+      if (this.existingImages().length > 0) {
+        payload.images = this.existingImages();
+      }
     }
 
     const formData = toFormData(payload);

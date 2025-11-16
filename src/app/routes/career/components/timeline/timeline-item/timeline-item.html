@@ -1,0 +1,58 @@
+<div class="relative flex justify-center max-lg:justify-start items-center mb-12 w-full">
+  <div
+    class="flex-1 max-w-[calc(50%-16px)] max-lg:hidden"
+    [class.order-3]="isLeft()"
+    [class.order-1]="!isLeft()"
+  ></div>
+
+  <div class="relative flex justify-center items-center w-8 shrink-0 z-[2] order-2 max-lg:order-1">
+    <div
+      class="w-8 h-8 rounded-full flex items-center justify-center shadow-[0_0_0_2px_white]"
+      [style.background-color]="typeMeta().color"
+    >
+      <mat-icon class="!text-white !text-base !w-4 !h-4 !leading-none">{{ typeMeta().icon }}</mat-icon>
+    </div>
+  </div>
+
+  <div
+    class="flex-1 max-w-[calc(50%-16px)] max-lg:max-w-full flex items-start max-lg:order-2 max-lg:justify-start max-lg:!pl-6 max-lg:!pr-0"
+    [class.order-1]="isLeft()"
+    [class.order-3]="!isLeft()"
+    [class.pr-6]="isLeft()"
+    [class.pl-6]="!isLeft()"
+    [class.justify-end]="isLeft()"
+    [class.justify-start]="!isLeft()"
+  >
+    <div
+      class="bg-white rounded-lg p-5 shadow-sm max-w-[550px] w-full text-left max-lg:!border-l-[3px] max-lg:!border-r-0"
+      [class.border-l-[3px]]="!isLeft()"
+      [class.border-r-[3px]]="isLeft()"
+      [style.border-color]="typeMeta().color"
+    >
+      <app-timeline-item-header
+        [type]="item().type"
+        [startDate]="item().startDate"
+        [endDate]="item().endDate"
+      />
+
+      @switch (item().type) {
+        @case (TimelineItemType.Job) {
+          <app-job-timeline-content [job]="asJob()"/>
+        }
+        @case (TimelineItemType.Education) {
+          <app-education-timeline-content [education]="asEducation()"/>
+        }
+        @case (TimelineItemType.Project) {
+          <app-project-timeline-content [project]="asProject()"/>
+        }
+      }
+
+      @if (actions().length) {
+        <app-timeline-item-actions
+          [actions]="actions()"
+          (actionClicked)="onActionClick($event)"
+        />
+      }
+    </div>
+  </div>
+</div>
