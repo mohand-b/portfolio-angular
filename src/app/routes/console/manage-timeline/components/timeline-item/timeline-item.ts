@@ -26,6 +26,7 @@ export class TimelineItem {
   readonly isLeft = input.required<boolean>();
   readonly editRequested = output<string>();
   readonly deleteRequested = output<string>();
+  readonly detachRequested = output<string>();
 
   protected readonly typeMeta = TIMELINE_ITEM_TYPE_META;
   protected readonly TimelineItemType = TimelineItemType;

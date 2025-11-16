@@ -58,7 +58,9 @@ export class ManageTimeline {
   protected readonly editEducationPanelOpen = signal(false);
   protected readonly editJobPanelOpen = signal(false);
   protected readonly deleteModalOpen = signal(false);
+  protected readonly detachModalOpen = signal(false);
   protected readonly itemToDelete = signal<{id: string; type: TimelineItemType} | null>(null);
+  protected readonly projectToDetach = signal<string | null>(null);
   protected readonly educationToEdit = signal<EducationDto | null>(null);
   protected readonly jobToEdit = signal<JobDto | null>(null);
 
@@ -101,6 +103,31 @@ export class ManageTimeline {
     }
   }
 
+  onDetachRequested(itemId: string): void {
+    this.projectToDetach.set(itemId);
+    this.detachModalOpen.set(true);
+  }
+
+  onDetachConfirmed(): void {
+    const projectId = this.projectToDetach();
+    if (!projectId) return;
+
+    this.consoleFacade.detachProjectFromTimeline(projectId).subscribe({
+      next: () => {
+        this.toastService.success('Projet détaché de la timeline avec succès');
+        this.closeDetachModal();
+      },
+      error: () => {
+        this.toastService.error('Erreur lors du détachement du projet');
+        this.closeDetachModal();
+      }
+    });
+  }
+
+  onDetachCancelled(): void {
+    this.closeDetachModal();
+  }
+
   onDeleteConfirmed(): void {
     const itemToDelete = this.itemToDelete();
     if (!itemToDelete) return;
@@ -137,5 +164,10 @@ export class ManageTimeline {
   private closeDeleteModal(): void {
     this.deleteModalOpen.set(false);
     this.itemToDelete.set(null);
+  }
+
+  private closeDetachModal(): void {
+    this.detachModalOpen.set(false);
+    this.projectToDetach.set(null);
   }
 }

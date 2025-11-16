@@ -234,6 +234,12 @@ export class ConsoleFacade {
     );
   }
 
+  detachProjectFromTimeline(id: string): Observable<ProjectDto> {
+    return this.projectService.detachProjectFromTimeline(id).pipe(
+      tap(() => this.timelineStore.deleteItem(id))
+    );
+  }
+
   refreshTimeline(): void {
     this.timelineStore.fetchTimeline();
   }

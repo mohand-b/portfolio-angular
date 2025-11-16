@@ -50,6 +50,7 @@ export class ProjectForm {
   readonly step = signal(0);
   readonly missions: WritableSignal<string[]> = signal([]);
   readonly images = signal<Array<{file: File; preview: string}>>([]);
+  readonly existingImages = signal<string[]>([]);
   readonly selectedSkills: WritableSignal<SkillDto[]> = signal([]);
 
   readonly isEditing = computed(() => !!this.project());
@@ -141,6 +142,7 @@ export class ProjectForm {
         this.missions.set(proj.missions || []);
         this.selectedSkills.set(proj.skills || []);
         this.images.set([]);
+        this.existingImages.set(proj.images || []);
       } else {
         this.resetForm();
       }
@@ -180,7 +182,7 @@ export class ProjectForm {
     }
 
     const {step1, step2} = this.form.getRawValue();
-    const payload = {
+    const payload: any = {
       title: step1.title!.trim(),
       jobId: step1.isCompanyProject && step1.jobId ? step1.jobId : undefined,
       description: step1.description?.trim() || undefined,
@@ -191,6 +193,10 @@ export class ProjectForm {
       market: step2.market!,
       skillIds: this.selectedSkills().map(skill => skill.id),
     };
+
+    if (this.isEditing() && this.existingImages().length > 0) {
+      payload.images = this.existingImages();
+    }
 
     const formData = toFormData(payload);
     this.images().forEach(img => formData.append('images', img.file));
@@ -253,7 +259,7 @@ export class ProjectForm {
     const MAX_IMAGES = 4;
     const MAX_SIZE = 5 * 1024 * 1024;
     const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
-    const availableSlots = MAX_IMAGES - this.images().length;
+    const availableSlots = MAX_IMAGES - this.totalImages;
 
     if (availableSlots <= 0) {
       alert(`Maximum ${MAX_IMAGES} images autorisées`);
@@ -282,6 +288,14 @@ export class ProjectForm {
 
   removeImage(index: number): void {
     this.images.update(imgs => imgs.filter((_, i) => i !== index));
+  }
+
+  removeExistingImage(index: number): void {
+    this.existingImages.update(imgs => imgs.filter((_, i) => i !== index));
+  }
+
+  get totalImages(): number {
+    return this.images().length + this.existingImages().length;
   }
 
   setScope(value: string): void {
@@ -321,6 +335,7 @@ export class ProjectForm {
     this.form.reset();
     this.missions.set([]);
     this.images.set([]);
+    this.existingImages.set([]);
     this.selectedSkills.set([]);
     this.missionControl.reset('');
     this.skillSearchControl.reset('');

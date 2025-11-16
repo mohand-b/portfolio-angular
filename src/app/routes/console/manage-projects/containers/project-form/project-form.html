@@ -229,7 +229,7 @@
         <div class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
             <label class="block text-sm font-medium text-gray-700">Images du projet</label>
-            <span class="text-xs text-gray-500 font-normal">{{ images().length }} / 4 images</span>
+            <span class="text-xs text-gray-500 font-normal">{{ totalImages }} / 4 images</span>
           </div>
 
           <input
@@ -242,9 +242,22 @@
           />
 
           <div class="grid grid-cols-2 gap-3">
+            @for (imgUrl of existingImages(); track $index) {
+              <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                <img [src]="imgUrl" class="h-full w-full object-cover" alt="Image existante {{ $index + 1 }}"/>
+                <button
+                  type="button"
+                  (click)="removeExistingImage($index)"
+                  class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-sm"
+                >
+                  <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
+                </button>
+              </div>
+            }
+
             @for (img of images(); track $index) {
               <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-                <img [src]="img.preview" class="h-full w-full object-cover" alt="Image {{ $index + 1 }}"/>
+                <img [src]="img.preview" class="h-full w-full object-cover" alt="Nouvelle image {{ $index + 1 }}"/>
                 <button
                   type="button"
                   (click)="removeImage($index)"
@@ -255,7 +268,7 @@
               </div>
             }
 
-            @if (images().length < 4) {
+            @if (totalImages < 4) {
               <button
                 type="button"
                 (click)="imageInput.click()"

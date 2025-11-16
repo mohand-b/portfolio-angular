@@ -104,7 +104,7 @@
         }
 
         @if ($any(item()).skills && $any(item()).skills.length > 0) {
-          <div class="pt-3 border-t border-neutral-200">
+          <div>
             <div class="text-xs font-medium text-neutral-600 mb-2">Compétences mises en application :</div>
             <div class="flex flex-wrap gap-1.5">
               @for (skillGroup of getSkillsByCategory($any(item())); track skillGroup.category) {
@@ -138,6 +138,17 @@
             (click)="deleteRequested.emit(item().id)"
           >
             <mat-icon class="!text-lg">delete</mat-icon>
+          </button>
+        </div>
+      }
+
+      @if (item().type === TimelineItemType.Project) {
+        <div class="flex items-center justify-end gap-2 text-slate-400 mt-4 pt-3 border-t border-neutral-200">
+          <button
+            class="flex items-center cursor-pointer hover:text-orange-600 transition-colors"
+            (click)="detachRequested.emit(item().id)"
+          >
+            <mat-icon class="!text-lg">link_off</mat-icon>
           </button>
         </div>
       }

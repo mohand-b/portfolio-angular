@@ -23,6 +23,7 @@
             [isLeft]="isEven"
             (editRequested)="onEditRequested($event)"
             (deleteRequested)="onDeleteRequested($event)"
+            (detachRequested)="onDetachRequested($event)"
           />
         }
       </div>
@@ -91,4 +92,14 @@
   [confirmLabel]="'Supprimer'"
   (confirmed)="onDeleteConfirmed()"
   (cancelled)="onDeleteCancelled()"
+/>
+
+<app-confirmation-modal
+  [isOpen]="detachModalOpen()"
+  [title]="'Détacher le projet'"
+  [message]="'Êtes-vous sûr de vouloir détacher ce projet de la timeline ?'"
+  [isDelete]="false"
+  [confirmLabel]="'Détacher'"
+  (confirmed)="onDetachConfirmed()"
+  (cancelled)="onDetachCancelled()"
 />

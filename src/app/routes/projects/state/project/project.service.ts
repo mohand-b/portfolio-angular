@@ -53,4 +53,8 @@ export class ProjectService {
   linkProjectToTimeline(id: string, dto: UpdateProjectDto): Observable<ProjectDto> {
     return this.http.patch<ProjectDto>(`${this.baseUrl}/${id}`, dto, {withCredentials: true});
   }
+
+  detachProjectFromTimeline(id: string): Observable<ProjectDto> {
+    return this.http.patch<ProjectDto>(`${this.baseUrl}/${id}/detach`, {}, {withCredentials: true});
+  }
 }
