@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, output} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {differenceInMonths, differenceInYears, parseISO} from 'date-fns';
@@ -14,7 +14,11 @@ import {SkillCategory, SKILL_CATEGORY_META} from '../../../../skills/state/skill
 export class TimelineItem {
   readonly item = input.required<TimelineItemModel>();
   readonly isLeft = input.required<boolean>();
+  readonly editRequested = output<string>();
+  readonly deleteRequested = output<string>();
+
   protected readonly typeMeta = TIMELINE_ITEM_TYPE_META;
+  protected readonly TimelineItemType = TimelineItemType;
 
   protected getTypeMeta(type: TimelineItemType) {
     return this.typeMeta[type];

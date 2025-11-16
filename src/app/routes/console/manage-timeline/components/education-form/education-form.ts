@@ -1,4 +1,4 @@
-import {Component, inject, output, signal} from '@angular/core';
+import {Component, computed, effect, inject, input, output, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -9,14 +9,27 @@ import {MatSelectModule} from '@angular/material/select';
 import {ConsoleFacade} from '../../../console.facade';
 import {toFormData} from '../../../../../shared/extensions/object.extension';
 import {StepConfig, Stepper} from '../../../../../shared/components/stepper/stepper';
+import {ToastService} from '../../../../../shared/services/toast.service';
 import {
   CERTIFICATION_TYPE_META,
   CertificationInputDto,
-  CertificationType
+  CertificationType,
+  EducationDto
 } from '../../../../career/state/education/education.model';
 
+const DEFAULT_CERTIFICATION = {
+  title: '',
+  certificationType: CertificationType.Academic
+} as const;
+
+const STEPS: StepConfig[] = [
+  {icon: 'info', text: 'Informations'},
+  {icon: 'business', text: 'Établissement'},
+  {icon: 'workspace_premium', text: 'Diplômes'}
+];
+
 @Component({
-  selector: 'app-education-create',
+  selector: 'app-education-form',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -27,25 +40,24 @@ import {
     MatSelectModule,
     Stepper
   ],
-  templateUrl: './education-create.html',
-  styleUrl: './education-create.scss'
+  templateUrl: './education-form.html',
+  styleUrl: './education-form.scss'
 })
-export class EducationCreate {
+export class EducationForm {
   private readonly fb = inject(FormBuilder);
   private readonly consoleFacade = inject(ConsoleFacade);
+  private readonly toastService = inject(ToastService);
+
+  readonly education = input<EducationDto | null>(null);
+  readonly saved = output<void>();
 
   readonly step = signal(0);
   readonly isSubmitting = signal(false);
   readonly imagePreview = signal<string | null>(null);
   readonly certifications = signal<CertificationInputDto[]>([]);
-  readonly created = output<void>();
+  readonly isEditing = computed(() => !!this.education());
 
-  readonly stepsMeta: StepConfig[] = [
-    {icon: 'info', text: 'Informations'},
-    {icon: 'business', text: 'Établissement'},
-    {icon: 'workspace_premium', text: 'Diplômes'}
-  ];
-
+  readonly stepsMeta = STEPS;
   readonly certificationTypes = Object.values(CertificationType);
   readonly certificationTypeMeta = CERTIFICATION_TYPE_META;
 
@@ -64,8 +76,8 @@ export class EducationCreate {
   });
 
   readonly certificationControl = this.fb.group({
-    title: ['', Validators.required],
-    certificationType: [CertificationType.Academic, Validators.required]
+    title: [DEFAULT_CERTIFICATION.title, Validators.required],
+    certificationType: [DEFAULT_CERTIFICATION.certificationType, Validators.required]
   });
 
   get s1(): FormGroup {
@@ -74,6 +86,35 @@ export class EducationCreate {
 
   get s2(): FormGroup {
     return this.educationForm.get('step2') as FormGroup;
+  }
+
+  constructor() {
+    effect(() => {
+      const edu = this.education();
+      if (!edu) return;
+
+      this.s1.patchValue({
+        title: edu.title,
+        fieldOfStudy: edu.fieldOfStudy || '',
+        startDate: edu.startDate ? new Date(edu.startDate) : null,
+        endDate: edu.endDate ? new Date(edu.endDate) : null,
+      });
+
+      this.s2.patchValue({
+        institution: edu.institution,
+        location: edu.location,
+        image: null,
+      });
+
+      this.imagePreview.set(edu.image || null);
+      this.certifications.set(
+        edu.certifications?.map(cert => ({
+          title: cert.title,
+          certificationType: cert.certificationType
+        })) || []
+      );
+      this.certificationControl.reset(DEFAULT_CERTIFICATION);
+    });
   }
 
   next(): void {
@@ -101,12 +142,8 @@ export class EducationCreate {
       return;
     }
 
-    const certification: CertificationInputDto = this.certificationControl.value as CertificationInputDto;
-    this.certifications.update(certs => [...certs, certification]);
-    this.certificationControl.reset({
-      title: '',
-      certificationType: CertificationType.Academic
-    });
+    this.certifications.update(certs => [...certs, this.certificationControl.value as CertificationInputDto]);
+    this.certificationControl.reset(DEFAULT_CERTIFICATION);
   }
 
   removeCertification(index: number): void {
@@ -133,24 +170,40 @@ export class EducationCreate {
     }
 
     const {step1, step2} = this.educationForm.getRawValue();
-    const payload = {
+    const formData = toFormData({
       title: step1.title!.trim(),
-      fieldOfStudy: step1.fieldOfStudy ? step1.fieldOfStudy.trim() : undefined,
-      startDate: step1.startDate ? step1.startDate.toISOString() : undefined,
-      endDate: step1.endDate ? step1.endDate.toISOString() : undefined,
+      fieldOfStudy: step1.fieldOfStudy?.trim() || undefined,
+      startDate: step1.startDate?.toISOString(),
+      endDate: step1.endDate?.toISOString(),
       institution: step2.institution!.trim(),
       location: step2.location!.trim(),
       image: step2.image as File | null,
       certifications: this.certifications(),
-    };
+    });
 
     this.isSubmitting.set(true);
-    this.consoleFacade.addEducation(toFormData(payload)).subscribe({
+
+    const operation$ = this.isEditing()
+      ? this.consoleFacade.updateEducation(this.education()!.id, formData)
+      : this.consoleFacade.addEducation(formData);
+
+    operation$.subscribe({
       next: () => {
-        this.resetForm();
-        this.created.emit();
+        const message = this.isEditing() ? 'Formation modifiée avec succès' : 'Formation créée avec succès';
+        this.toastService.success(message);
+        if (this.isEditing()) {
+          this.isSubmitting.set(false);
+          this.step.set(0);
+        } else {
+          this.resetForm();
+        }
+        this.saved.emit();
       },
       error: () => {
+        const message = this.isEditing()
+          ? 'Erreur lors de la modification de la formation'
+          : 'Erreur lors de la création de la formation';
+        this.toastService.error(message);
         this.markAllStepsAsTouched();
         this.isSubmitting.set(false);
       },
@@ -168,10 +221,7 @@ export class EducationCreate {
 
   private resetForm(): void {
     this.educationForm.reset();
-    this.certificationControl.reset({
-      title: '',
-      certificationType: CertificationType.Academic
-    });
+    this.certificationControl.reset(DEFAULT_CERTIFICATION);
     this.imagePreview.set(null);
     this.certifications.set([]);
     this.step.set(0);

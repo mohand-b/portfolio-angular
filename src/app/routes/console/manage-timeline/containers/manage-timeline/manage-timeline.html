@@ -18,7 +18,12 @@
     <div class="w-full max-w-[1400px] mx-auto p-4">
       <div class="timeline">
         @for (item of timelineStore.filteredItems(); track item.id; let isEven = $even) {
-          <app-timeline-item [item]="item" [isLeft]="isEven" />
+          <app-timeline-item
+            [item]="item"
+            [isLeft]="isEven"
+            (editRequested)="onEditEducationRequested($event)"
+            (deleteRequested)="onDeleteEducationRequested($event)"
+          />
         }
       </div>
     </div>
@@ -50,7 +55,7 @@
           <app-job-create (created)="onCloseRequested()"/>
         }
         @case (TimelineItemType.Education) {
-          <app-education-create (created)="onCloseRequested()"/>
+          <app-education-form [education]="null" (saved)="onCloseRequested()"/>
         }
         @case (TimelineItemType.Project) {
           <app-project-timeline-link (created)="onCloseRequested()"/>
@@ -68,3 +73,18 @@
   </div>
 </app-side-panel>
 
+<app-side-panel (closed)="onEditCloseRequested()" [isOpen]="editPanelOpen()">
+  <div class="h-full flex flex-col">
+    <app-education-form [education]="educationToEdit()" (saved)="onEditCloseRequested()"/>
+  </div>
+</app-side-panel>
+
+<app-confirmation-modal
+  [isOpen]="deleteModalOpen()"
+  [title]="'Supprimer la formation'"
+  [message]="'Êtes-vous sûr de vouloir supprimer cette formation ?'"
+  [isDelete]="true"
+  [confirmLabel]="'Supprimer'"
+  (confirmed)="onDeleteConfirmed()"
+  (cancelled)="onDeleteCancelled()"
+/>
