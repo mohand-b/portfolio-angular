@@ -148,6 +148,18 @@ export class ConsoleFacade {
     );
   }
 
+  updateJob(id: string, jobFormData: FormData): Observable<JobDto> {
+    return this.jobService.updateJob(id, jobFormData).pipe(
+      tap(job => this.timelineStore.updateItem(this.mapJobToTimelineItem(job)))
+    );
+  }
+
+  deleteJob(id: string): Observable<void> {
+    return this.jobService.deleteJob(id).pipe(
+      tap(() => this.timelineStore.deleteItem(id))
+    );
+  }
+
   addEducation(educationFormData: FormData): Observable<EducationDto> {
     return this.educationService.create(educationFormData).pipe(
       tap(education => this.timelineStore.addItem(this.mapEducationToTimelineItem(education)))
@@ -240,7 +252,8 @@ export class ConsoleFacade {
       description: job.description || null,
       image: job.image || null,
       company: job.company,
-      location: job.location || ''
+      location: job.location || '',
+      missions: job.missions || []
     };
   }
 

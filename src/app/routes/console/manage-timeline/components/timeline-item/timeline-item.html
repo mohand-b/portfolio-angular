@@ -117,7 +117,7 @@
                   <mat-icon class="!text-sm !w-3.5 !h-3.5 !leading-none" [style.color]="skillGroup.color">
                     {{ skillGroup.icon }}
                   </mat-icon>
-                  {{ skillGroup.label }} <strong class="font-bold">{{ skillGroup.count }}</strong>
+                  {{ skillGroup.shortLabel }} <strong class="font-bold">{{ skillGroup.count }}</strong>
                 </span>
               }
             </div>
@@ -125,7 +125,7 @@
         }
       }
 
-      @if (item().type === TimelineItemType.Education) {
+      @if (item().type === TimelineItemType.Education || item().type === TimelineItemType.Job) {
         <div class="flex items-center justify-end gap-2 text-slate-400 mt-4 pt-3 border-t border-neutral-200">
           <button
             class="flex items-center cursor-pointer hover:text-slate-600 transition-colors"

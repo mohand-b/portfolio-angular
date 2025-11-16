@@ -10,9 +10,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {TIMELINE_ITEM_TYPE_META, TimelineItemType} from '../../../../career/state/timeline/timeline.model';
 import {TimelineStore} from '../../../../career/state/timeline/timeline.store';
 import {EducationDto} from '../../../../career/state/education/education.model';
+import {JobDto} from '../../../../career/state/job/job.model';
 import {SidePanel} from '../../../../../shared/components/side-panel/side-panel';
 import {EducationForm} from '../../components/education-form/education-form';
-import {JobCreate} from '../../components/job-create/job-create';
+import {JobForm} from '../../components/job-form/job-form';
 import {OtherTimelineItemCreate} from '../../components/other-timeline-item-create/other-timeline-item-create';
 import {ProjectTimelineLink} from '../../components/project-timeline-link/project-timeline-link';
 import {TimelineItem} from '../../components/timeline-item/timeline-item';
@@ -32,7 +33,7 @@ import {ToastService} from '../../../../../shared/services/toast.service';
     MatTabsModule,
     SidePanel,
     EducationForm,
-    JobCreate,
+    JobForm,
     OtherTimelineItemCreate,
     ProjectTimelineLink,
     TimelineItem,
@@ -54,10 +55,12 @@ export class ManageTimeline {
   protected readonly selectedType = toSignal(this.typeControl.valueChanges, {initialValue: this.typeControl.value});
   protected readonly TimelineItemType = TimelineItemType;
   protected readonly panelOpen = signal(false);
-  protected readonly editPanelOpen = signal(false);
+  protected readonly editEducationPanelOpen = signal(false);
+  protected readonly editJobPanelOpen = signal(false);
   protected readonly deleteModalOpen = signal(false);
-  protected readonly educationToDelete = signal<string | null>(null);
+  protected readonly itemToDelete = signal<{id: string; type: TimelineItemType} | null>(null);
   protected readonly educationToEdit = signal<EducationDto | null>(null);
+  protected readonly jobToEdit = signal<JobDto | null>(null);
 
   openPanel(): void {
     this.panelOpen.set(true);
@@ -68,35 +71,60 @@ export class ManageTimeline {
     this.panelOpen.set(false);
   }
 
-  onEditCloseRequested(): void {
-    this.editPanelOpen.set(false);
+  onEditEducationCloseRequested(): void {
+    this.editEducationPanelOpen.set(false);
     this.educationToEdit.set(null);
   }
 
-  onDeleteEducationRequested(educationId: string): void {
-    this.educationToDelete.set(educationId);
+  onEditJobCloseRequested(): void {
+    this.editJobPanelOpen.set(false);
+    this.jobToEdit.set(null);
+  }
+
+  onDeleteRequested(itemId: string): void {
+    const item = this.timelineStore.items().find(i => i.id === itemId);
+    if (!item) return;
+    this.itemToDelete.set({id: itemId, type: item.type});
     this.deleteModalOpen.set(true);
   }
 
-  onEditEducationRequested(educationId: string): void {
-    const education = this.timelineStore.items().find(item => item.id === educationId);
-    if (education && education.type === TimelineItemType.Education) {
-      this.educationToEdit.set(education as unknown as EducationDto);
-      this.editPanelOpen.set(true);
+  onEditRequested(itemId: string): void {
+    const item = this.timelineStore.items().find(i => i.id === itemId);
+    if (!item) return;
+
+    if (item.type === TimelineItemType.Education) {
+      this.educationToEdit.set(item as unknown as EducationDto);
+      this.editEducationPanelOpen.set(true);
+    } else if (item.type === TimelineItemType.Job) {
+      this.jobToEdit.set(item as unknown as JobDto);
+      this.editJobPanelOpen.set(true);
     }
   }
 
   onDeleteConfirmed(): void {
-    const id = this.educationToDelete();
-    if (!id) return;
+    const itemToDelete = this.itemToDelete();
+    if (!itemToDelete) return;
 
-    this.consoleFacade.deleteEducation(id).subscribe({
+    const {id, type} = itemToDelete;
+    const operation$ = type === TimelineItemType.Education
+      ? this.consoleFacade.deleteEducation(id)
+      : this.consoleFacade.deleteJob(id);
+
+    const successMessage = type === TimelineItemType.Education
+      ? 'Formation supprimée avec succès'
+      : 'Expérience supprimée avec succès';
+
+    const errorMessage = type === TimelineItemType.Education
+      ? 'Erreur lors de la suppression de la formation'
+      : 'Erreur lors de la suppression de l\'expérience';
+
+    operation$.subscribe({
       next: () => {
-        this.toastService.success('Formation supprimée avec succès');
+        this.toastService.success(successMessage);
         this.closeDeleteModal();
       },
       error: () => {
-        this.toastService.error('Erreur lors de la suppression de la formation');
+        this.toastService.error(errorMessage);
         this.closeDeleteModal();
       }
     });
@@ -108,6 +136,6 @@ export class ManageTimeline {
 
   private closeDeleteModal(): void {
     this.deleteModalOpen.set(false);
-    this.educationToDelete.set(null);
+    this.itemToDelete.set(null);
   }
 }

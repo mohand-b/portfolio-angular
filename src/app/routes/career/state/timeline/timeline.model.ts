@@ -38,6 +38,7 @@ export interface JobTimelineItem extends TimelineItemBase {
   type: TimelineItemType.Job;
   company: string;
   location: string;
+  missions: string[];
 }
 
 export interface ProjectTimelineItem extends TimelineItemBase {

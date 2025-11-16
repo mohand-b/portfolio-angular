@@ -2,9 +2,18 @@ import {Component, input, output} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {differenceInMonths, differenceInYears, parseISO} from 'date-fns';
-import {TimelineItem as TimelineItemModel, TimelineItemType, TIMELINE_ITEM_TYPE_META, ProjectTimelineItem} from '../../../../career/state/timeline/timeline.model';
-import {SkillCategory, SKILL_CATEGORY_META} from '../../../../skills/state/skill/skill.model';
-import {CERTIFICATION_TYPE_META, CertificationType, EducationDto} from '../../../../career/state/education/education.model';
+import {
+  ProjectTimelineItem,
+  TIMELINE_ITEM_TYPE_META,
+  TimelineItem as TimelineItemModel,
+  TimelineItemType
+} from '../../../../career/state/timeline/timeline.model';
+import {SKILL_CATEGORY_META, SkillCategory} from '../../../../skills/state/skill/skill.model';
+import {
+  CERTIFICATION_TYPE_META,
+  CertificationType,
+  EducationDto
+} from '../../../../career/state/education/education.model';
 
 @Component({
   selector: 'app-timeline-item',
@@ -26,7 +35,11 @@ export class TimelineItem {
     return this.typeMeta[type];
   }
 
-  protected getCertificationsByType(education: EducationDto): {type: CertificationType; titles: string[]; icon: string}[] {
+  protected getCertificationsByType(education: EducationDto): {
+    type: CertificationType;
+    titles: string[];
+    icon: string
+  }[] {
     if (!education.certifications || education.certifications.length === 0) return [];
 
     const grouped = new Map<CertificationType, string[]>();
@@ -63,7 +76,14 @@ export class TimelineItem {
     return parts.join(' ');
   }
 
-  protected getSkillsByCategory(project: ProjectTimelineItem): {category: SkillCategory; count: number; label: string; color: string; icon: string}[] {
+  protected getSkillsByCategory(project: ProjectTimelineItem): {
+    category: SkillCategory;
+    count: number;
+    label: string;
+    shortLabel: string;
+    color: string;
+    icon: string
+  }[] {
     const categoryMap = new Map<SkillCategory, number>();
 
     project.skills.forEach(skill => {
@@ -76,6 +96,7 @@ export class TimelineItem {
         category,
         count,
         label: meta.label,
+        shortLabel: meta.shortLabel,
         color: meta.color,
         icon: meta.icon || ''
       };

@@ -22,6 +22,7 @@ export enum SkillCategory {
 export interface SkillCategoryMeta {
   key: SkillCategory;
   label: string;
+  shortLabel: string;
   color: string;
   icon?: string;
   subtitle?: string;
@@ -31,6 +32,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.FRONTEND]: {
     key: SkillCategory.FRONTEND,
     label: 'Développement Frontend',
+    shortLabel: 'Dév Frontend',
     subtitle: 'Technologies côté client',
     color: '#2563EB',
     icon: 'code',
@@ -38,6 +40,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.BACKEND]: {
     key: SkillCategory.BACKEND,
     label: 'Développement Backend',
+    shortLabel: 'Dév Backend',
     subtitle: 'Technologies côté serveur',
     color: '#16A34A',
     icon: 'terminal',
@@ -45,6 +48,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.DEVOPS_CLOUD]: {
     key: SkillCategory.DEVOPS_CLOUD,
     label: 'DevOps & Cloud',
+    shortLabel: 'DevOps/Cloud',
     subtitle: 'Déploiement et gestion des environnements serveurs',
     color: '#F59E0B',
     icon: 'cloud',
@@ -52,6 +56,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.DATABASE]: {
     key: SkillCategory.DATABASE,
     label: 'Base de données',
+    shortLabel: 'BDD',
     subtitle: 'Conception et gestion des données d’application',
     color: '#7C3AED',
     icon: 'storage',
@@ -59,6 +64,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.DESIGN]: {
     key: SkillCategory.DESIGN,
     label: 'Design & UX',
+    shortLabel: 'UX/UI',
     subtitle: 'Interface, expérience et accessibilité',
     color: '#E11D48',
     icon: 'palette',
@@ -66,6 +72,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.ARCHITECTURE]: {
     key: SkillCategory.ARCHITECTURE,
     label: 'Architecture & Patterns',
+    shortLabel: 'Arch/Patterns',
     subtitle: 'Structure, patterns et bonnes pratiques',
     color: '#475569',
     icon: 'account_tree',
@@ -73,6 +80,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.TESTING]: {
     key: SkillCategory.TESTING,
     label: 'Tests & Qualité',
+    shortLabel: 'Tests',
     subtitle: 'Tests, couverture et fiabilité',
     color: '#0D9488',
     icon: 'rule',
@@ -80,6 +88,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.TOOLING]: {
     key: SkillCategory.TOOLING,
     label: 'Outils & Productivité',
+    shortLabel: 'Tooling',
     subtitle: 'Outils du quotidien pour développer efficacement',
     color: '#F97316',
     icon: 'build',
@@ -87,6 +96,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
   [SkillCategory.METHODOLOGY]: {
     key: SkillCategory.METHODOLOGY,
     label: 'Méthodologie & Management',
+    shortLabel: 'Méthodo',
     subtitle: 'Organisation, agilité et pilotage projet',
     color: '#6366F1',
     icon: 'view_kanban',

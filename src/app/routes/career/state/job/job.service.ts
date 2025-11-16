@@ -22,4 +22,11 @@ export class JobService {
     return this.http.get<JobMinimalDto[]>(`${this.jobBaseUrl}/minimal`);
   }
 
+  updateJob(id: string, jobFormData: FormData): Observable<JobDto> {
+    return this.http.patch<JobDto>(`${this.jobBaseUrl}/${id}`, jobFormData, {withCredentials: true});
+  }
+
+  deleteJob(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.jobBaseUrl}/${id}`, {withCredentials: true});
+  }
 }

@@ -1,4 +1,4 @@
-import {Component, inject, output, signal} from '@angular/core';
+import {Component, computed, effect, inject, input, output, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDatepickerModule} from '@angular/material/datepicker';
@@ -8,9 +8,17 @@ import {MatInputModule} from '@angular/material/input';
 import {toFormData} from '../../../../../shared/extensions/object.extension';
 import {StepConfig, Stepper} from '../../../../../shared/components/stepper/stepper';
 import {ConsoleFacade} from '../../../console.facade';
+import {ToastService} from '../../../../../shared/services/toast.service';
+import {JobDto} from '../../../../career/state/job/job.model';
+
+const STEPS: StepConfig[] = [
+  {icon: 'work', text: 'Poste'},
+  {icon: 'apartment', text: 'Société'},
+  {icon: 'format_list_bulleted', text: 'Missions'},
+];
 
 @Component({
-  selector: 'app-job-create',
+  selector: 'app-job-form',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -20,24 +28,24 @@ import {ConsoleFacade} from '../../../console.facade';
     MatDatepickerModule,
     Stepper,
   ],
-  templateUrl: './job-create.html',
-  styleUrl: './job-create.scss',
+  templateUrl: './job-form.html',
+  styleUrl: './job-form.scss',
 })
-export class JobCreate {
+export class JobForm {
   private readonly fb = inject(FormBuilder);
   private readonly consoleFacade = inject(ConsoleFacade);
+  private readonly toastService = inject(ToastService);
+
+  readonly job = input<JobDto | null>(null);
+  readonly saved = output<void>();
 
   readonly step = signal(0);
   readonly isSubmitting = signal(false);
   readonly imagePreview = signal<string | null>(null);
   readonly missions = signal<string[]>([]);
-  readonly created = output<void>();
+  readonly isEditing = computed(() => !!this.job());
 
-  readonly stepsMeta: StepConfig[] = [
-    {icon: 'work', text: 'Poste'},
-    {icon: 'apartment', text: 'Société'},
-    {icon: 'format_list_bulleted', text: 'Missions'},
-  ];
+  readonly stepsMeta = STEPS;
 
   readonly jobForm = this.fb.group({
     step1: this.fb.group({
@@ -60,6 +68,29 @@ export class JobCreate {
 
   get s2(): FormGroup {
     return this.jobForm.get('step2') as FormGroup;
+  }
+
+  constructor() {
+    effect(() => {
+      const job = this.job();
+      if (!job) return;
+
+      this.s1.patchValue({
+        title: job.title,
+        startDate: job.startDate ? new Date(job.startDate) : null,
+        endDate: job.endDate ? new Date(job.endDate) : null,
+      });
+
+      this.s2.patchValue({
+        company: job.company,
+        location: job.location || '',
+        image: null,
+      });
+
+      this.imagePreview.set(job.image || null);
+      this.missions.set(job.missions || []);
+      this.missionControl.reset('');
+    });
   }
 
   next(): void {
@@ -112,23 +143,39 @@ export class JobCreate {
     }
 
     const {step1, step2} = this.jobForm.getRawValue();
-    const payload = {
+    const formData = toFormData({
       title: step1.title!.trim(),
-      startDate: step1.startDate!.toISOString(),
-      endDate: step1.endDate ? step1.endDate.toISOString() : null,
+      startDate: step1.startDate?.toISOString(),
+      endDate: step1.endDate?.toISOString(),
       company: step2.company!.trim(),
       location: step2.location!.trim(),
       missions: this.missions(),
       image: step2.image as File | null,
-    };
+    });
 
     this.isSubmitting.set(true);
-    this.consoleFacade.addJob(toFormData(payload)).subscribe({
+
+    const operation$ = this.isEditing()
+      ? this.consoleFacade.updateJob(this.job()!.id, formData)
+      : this.consoleFacade.addJob(formData);
+
+    operation$.subscribe({
       next: () => {
-        this.resetForm();
-        this.created.emit();
+        const message = this.isEditing() ? 'Expérience modifiée avec succès' : 'Expérience créée avec succès';
+        this.toastService.success(message);
+        if (this.isEditing()) {
+          this.isSubmitting.set(false);
+          this.step.set(0);
+        } else {
+          this.resetForm();
+        }
+        this.saved.emit();
       },
       error: () => {
+        const message = this.isEditing()
+          ? 'Erreur lors de la modification de l\'expérience'
+          : 'Erreur lors de la création de l\'expérience';
+        this.toastService.error(message);
         this.markAllStepsAsTouched();
         this.isSubmitting.set(false);
       },

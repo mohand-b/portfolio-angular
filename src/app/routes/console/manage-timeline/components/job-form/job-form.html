@@ -16,7 +16,8 @@
             <div class="min-w-0 overflow-hidden">
               <label class="block text-sm font-medium text-gray-700 mb-2">Date de début</label>
               <mat-form-field appearance="outline" class="w-full min-w-0">
-                <input matInput formControlName="startDate" [matDatepicker]="startPicker" placeholder="Début" readonly (click)="startPicker.open()"/>
+                <input matInput formControlName="startDate" [matDatepicker]="startPicker" placeholder="Début" readonly
+                       (click)="startPicker.open()"/>
                 <button mat-icon-button matSuffix type="button" (click)="startPicker.open()">
                   <mat-icon>calendar_month</mat-icon>
                 </button>
@@ -47,7 +48,7 @@
       }
       @case (1) {
         <div formGroupName="step2" class="flex flex-col gap-4">
-          <div class="w-full">
+          <div class="w-[12rem]">
             <label class="block text-sm font-medium text-gray-700 mb-2">Image</label>
             <input
               #fileInput
@@ -58,11 +59,13 @@
             />
 
             @if (imagePreview()) {
-              <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+              <div
+                class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
                 <img [src]="imagePreview()!" class="h-full w-full object-cover" alt="Aperçu de l'image"/>
                 <button
                   type="button"
-                  class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors shadow-sm"
+                  class="absolute top-2 right-2 w-6 h-6 cursor-pointer rounded-full bg-white/90 backdrop-blur-sm
+                  text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors"
                   (click)="imagePreview.set(null); s2.patchValue({image: null})"
                 >
                   <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
@@ -71,7 +74,7 @@
             } @else {
               <button
                 type="button"
-                class="aspect-[4/3] w-full rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center hover:border-gray-400 hover:bg-gray-100 transition-colors"
+                class="aspect-[4/3] w-full cursor-pointer rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center hover:border-gray-400 hover:bg-gray-100 transition-colors"
                 (click)="fileInput.click()"
               >
                 <mat-icon class="text-3xl text-gray-400">add_photo_alternate</mat-icon>
@@ -153,8 +156,8 @@
       </button>
     } @else {
       <button type="submit" matButton="filled" [disabled]="isSubmitting()">
-        <mat-icon>add</mat-icon>
-        Ajouter
+        <mat-icon>{{ isEditing() ? 'edit' : 'add' }}</mat-icon>
+        {{ isEditing() ? 'Modifier' : 'Ajouter' }}
       </button>
     }
   </div>

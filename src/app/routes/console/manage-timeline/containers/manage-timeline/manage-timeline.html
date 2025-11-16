@@ -21,8 +21,8 @@
           <app-timeline-item
             [item]="item"
             [isLeft]="isEven"
-            (editRequested)="onEditEducationRequested($event)"
-            (deleteRequested)="onDeleteEducationRequested($event)"
+            (editRequested)="onEditRequested($event)"
+            (deleteRequested)="onDeleteRequested($event)"
           />
         }
       </div>
@@ -52,7 +52,7 @@
     <div class="flex-1">
       @switch (selectedType()) {
         @case (TimelineItemType.Job) {
-          <app-job-create (created)="onCloseRequested()"/>
+          <app-job-form [job]="null" (saved)="onCloseRequested()"/>
         }
         @case (TimelineItemType.Education) {
           <app-education-form [education]="null" (saved)="onCloseRequested()"/>
@@ -73,16 +73,20 @@
   </div>
 </app-side-panel>
 
-<app-side-panel (closed)="onEditCloseRequested()" [isOpen]="editPanelOpen()">
+<app-side-panel (closed)="onEditEducationCloseRequested()" [isOpen]="editEducationPanelOpen()">
   <div class="h-full flex flex-col">
-    <app-education-form [education]="educationToEdit()" (saved)="onEditCloseRequested()"/>
+    <app-education-form [education]="educationToEdit()" (saved)="onEditEducationCloseRequested()"/>
   </div>
+</app-side-panel>
+
+<app-side-panel (closed)="onEditJobCloseRequested()" [isOpen]="editJobPanelOpen()">
+  <app-job-form [job]="jobToEdit()" (saved)="onEditJobCloseRequested()"/>
 </app-side-panel>
 
 <app-confirmation-modal
   [isOpen]="deleteModalOpen()"
-  [title]="'Supprimer la formation'"
-  [message]="'Êtes-vous sûr de vouloir supprimer cette formation ?'"
+  [title]="itemToDelete()?.type === TimelineItemType.Education ? 'Supprimer la formation' : 'Supprimer l\'expérience'"
+  [message]="itemToDelete()?.type === TimelineItemType.Education ? 'Êtes-vous sûr de vouloir supprimer cette formation ?' : 'Êtes-vous sûr de vouloir supprimer cette expérience ?'"
   [isDelete]="true"
   [confirmLabel]="'Supprimer'"
   (confirmed)="onDeleteConfirmed()"
