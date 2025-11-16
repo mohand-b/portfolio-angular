@@ -45,6 +45,9 @@
         @case (TimelineItemType.Project) {
           <app-project-timeline-content [project]="asProject()"/>
         }
+        @case (TimelineItemType.Milestone) {
+          <app-milestone-timeline-content [milestone]="asMilestone()"/>
+        }
       }
 
       @if (actions().length) {

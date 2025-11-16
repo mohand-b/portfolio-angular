@@ -84,10 +84,14 @@
   <app-job-form [job]="jobToEdit()" (saved)="onEditJobCloseRequested()"/>
 </app-side-panel>
 
+<app-side-panel (closed)="onEditMilestoneCloseRequested()" [isOpen]="editMilestonePanelOpen()">
+  <app-milestone-form [milestone]="milestoneToEdit()" (saved)="onEditMilestoneCloseRequested()"/>
+</app-side-panel>
+
 <app-confirmation-modal
   [isOpen]="deleteModalOpen()"
-  [title]="itemToDelete()?.type === TimelineItemType.Education ? 'Supprimer la formation' : 'Supprimer l\'expérience'"
-  [message]="itemToDelete()?.type === TimelineItemType.Education ? 'Êtes-vous sûr de vouloir supprimer cette formation ?' : 'Êtes-vous sûr de vouloir supprimer cette expérience ?'"
+  [title]="itemToDelete()?.type === TimelineItemType.Education ? 'Supprimer la formation' : itemToDelete()?.type === TimelineItemType.Job ? 'Supprimer l\'expérience' : 'Supprimer le moment'"
+  [message]="itemToDelete()?.type === TimelineItemType.Education ? 'Êtes-vous sûr de vouloir supprimer cette formation ?' : itemToDelete()?.type === TimelineItemType.Job ? 'Êtes-vous sûr de vouloir supprimer cette expérience ?' : 'Êtes-vous sûr de vouloir supprimer ce moment ?'"
   [isDelete]="true"
   [confirmLabel]="'Supprimer'"
   (confirmed)="onDeleteConfirmed()"

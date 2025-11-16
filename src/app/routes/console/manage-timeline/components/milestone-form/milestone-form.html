@@ -1,0 +1,97 @@
+<form [formGroup]="milestoneForm" (submit)="onSubmit()" class="h-full w-full flex flex-col gap-4">
+  <div class="flex-1 overflow-auto flex flex-col gap-4">
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Titre du moment</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <input matInput formControlName="title" placeholder="Saisir le titre"/>
+      </mat-form-field>
+    </div>
+
+    <div class="w-full grid grid-cols-2 gap-2">
+      <div class="min-w-0 overflow-hidden">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Date de début</label>
+        <mat-form-field appearance="outline" class="w-full min-w-0">
+          <input matInput formControlName="startDate" [matDatepicker]="startPicker" placeholder="Début" readonly
+                 (click)="startPicker.open()"/>
+          <button mat-icon-button matSuffix type="button" (click)="startPicker.open()">
+            <mat-icon>calendar_month</mat-icon>
+          </button>
+          <mat-datepicker #startPicker/>
+        </mat-form-field>
+      </div>
+
+      <div class="min-w-0 overflow-hidden">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Date de fin</label>
+        <mat-form-field appearance="outline" class="w-full min-w-0">
+          <input
+            matInput
+            formControlName="endDate"
+            [matDatepicker]="endPicker"
+            [min]="milestoneForm.get('startDate')?.value || null"
+            placeholder="Fin"
+            readonly
+            (click)="endPicker.open()"
+          />
+          <button mat-icon-button matSuffix type="button" (click)="endPicker.open()">
+            <mat-icon>calendar_month</mat-icon>
+          </button>
+          <mat-datepicker #endPicker/>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <textarea
+          matInput
+          formControlName="description"
+          placeholder="Décrire le moment"
+          rows="6"
+        ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="w-[12rem]">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Image</label>
+      <input
+        #fileInput
+        type="file"
+        accept="image/png,image/jpeg,image/jpg,image/webp"
+        class="hidden"
+        (change)="onFileSelected($event)"
+      />
+
+      @if (imagePreview()) {
+        <div
+          class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+          <img [src]="imagePreview()!" class="h-full w-full object-cover" alt="Aperçu de l'image"/>
+          <button
+            type="button"
+            class="absolute top-2 right-2 w-6 h-6 cursor-pointer rounded-full bg-white/90 backdrop-blur-sm
+            text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors"
+            (click)="imagePreview.set(null); milestoneForm.patchValue({image: null})"
+          >
+            <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
+          </button>
+        </div>
+      } @else {
+        <button
+          type="button"
+          class="aspect-[4/3] w-full cursor-pointer rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center hover:border-gray-400 hover:bg-gray-100 transition-colors"
+          (click)="fileInput.click()"
+        >
+          <mat-icon class="text-3xl text-gray-400">add_photo_alternate</mat-icon>
+          <span class="text-xs text-gray-500 mt-1">Ajouter une image</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end">
+    <button type="submit" matButton="filled" [disabled]="isSubmitting()">
+      <mat-icon>{{ isEditing() ? 'edit' : 'add' }}</mat-icon>
+      {{ isEditing() ? 'Modifier' : 'Ajouter' }}
+    </button>
+  </div>
+</form>

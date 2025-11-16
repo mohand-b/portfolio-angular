@@ -16,6 +16,7 @@ import {
   CertificationType,
   EducationDto
 } from '../../../../career/state/education/education.model';
+import {TIMELINE_ITEM_TYPE_META, TimelineItemType} from '../../../../career/state/timeline/timeline.model';
 
 const DEFAULT_CERTIFICATION = {
   title: '',
@@ -60,6 +61,8 @@ export class EducationForm {
   readonly stepsMeta = STEPS;
   readonly certificationTypes = Object.values(CertificationType);
   readonly certificationTypeMeta = CERTIFICATION_TYPE_META;
+  protected readonly educationColor = TIMELINE_ITEM_TYPE_META[TimelineItemType.Education].color;
+
 
   readonly educationForm = this.fb.group({
     step1: this.fb.group({

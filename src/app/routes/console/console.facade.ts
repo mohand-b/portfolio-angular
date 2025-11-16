@@ -19,6 +19,8 @@ import {EducationDto} from '../career/state/education/education.model';
 import {EducationService} from '../career/state/education/education.service';
 import {CertificationDto, CreateCertificationDto} from '../career/state/certification/certification.model';
 import {CertificationService} from '../career/state/certification/certification.service';
+import {MilestoneDto} from '../career/state/milestone/milestone.model';
+import {MilestoneService} from '../career/state/milestone/milestone.service';
 import {
   ProjectDto,
   ProjectFilters,
@@ -32,6 +34,7 @@ import {TimelineStore} from '../career/state/timeline/timeline.store';
 import {
   EducationTimelineItem,
   JobTimelineItem,
+  MilestoneTimelineItem,
   ProjectTimelineItem,
   TimelineItem,
   TimelineItemType
@@ -50,6 +53,7 @@ export class ConsoleFacade {
   private readonly jobService = inject(JobService);
   private readonly educationService = inject(EducationService);
   private readonly certificationService = inject(CertificationService);
+  private readonly milestoneService = inject(MilestoneService);
 
   private readonly projectStore = inject(ProjectStore);
   private readonly projectService = inject(ProjectService);
@@ -190,6 +194,24 @@ export class ConsoleFacade {
     return this.certificationService.delete(id);
   }
 
+  addMilestone(milestoneFormData: FormData): Observable<MilestoneDto> {
+    return this.milestoneService.create(milestoneFormData).pipe(
+      tap(milestone => this.timelineStore.addItem(this.mapMilestoneToTimelineItem(milestone)))
+    );
+  }
+
+  updateMilestone(id: string, milestoneFormData: FormData): Observable<MilestoneDto> {
+    return this.milestoneService.update(id, milestoneFormData).pipe(
+      tap(milestone => this.timelineStore.updateItem(this.mapMilestoneToTimelineItem(milestone)))
+    );
+  }
+
+  deleteMilestone(id: string): Observable<void> {
+    return this.milestoneService.delete(id).pipe(
+      tap(() => this.timelineStore.deleteItem(id))
+    );
+  }
+
   addProject(projectFormData: FormData): Observable<ProjectDto> {
     return this.projectService.createProject(projectFormData).pipe(
       tap(() => this.projectStore.loadProjects({}))
@@ -302,6 +324,17 @@ export class ConsoleFacade {
       scope: project.scope,
       market: project.market,
       skills: project.skills,
+    };
+  }
+
+  private mapMilestoneToTimelineItem(milestone: MilestoneDto): MilestoneTimelineItem {
+    return {
+      ...milestone,
+      type: TimelineItemType.Milestone,
+      startDate: milestone.startDate?.toString() ?? null,
+      endDate: milestone.endDate?.toString() ?? null,
+      description: milestone.description ?? null,
+      image: milestone.image ?? null
     };
   }
 }

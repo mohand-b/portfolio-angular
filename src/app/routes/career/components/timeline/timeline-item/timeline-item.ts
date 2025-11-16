@@ -3,6 +3,7 @@ import {MatIcon} from '@angular/material/icon';
 import {
   EducationTimelineItem,
   JobTimelineItem,
+  MilestoneTimelineItem,
   ProjectTimelineItem,
   TIMELINE_ITEM_TYPE_META,
   TimelineItem as TimelineItemModel,
@@ -13,6 +14,7 @@ import {ActionConfig, TimelineAction, TimelineItemActions} from '../timeline-ite
 import {JobTimelineContent} from '../job-timeline-content/job-timeline-content';
 import {EducationTimelineContent} from '../education-timeline-content/education-timeline-content';
 import {ProjectTimelineContent} from '../project-timeline-content/project-timeline-content';
+import {MilestoneTimelineContent} from '../milestone-timeline-content/milestone-timeline-content';
 
 @Component({
   selector: 'app-timeline-item',
@@ -22,7 +24,8 @@ import {ProjectTimelineContent} from '../project-timeline-content/project-timeli
     TimelineItemActions,
     JobTimelineContent,
     EducationTimelineContent,
-    ProjectTimelineContent
+    ProjectTimelineContent,
+    MilestoneTimelineContent
   ],
   templateUrl: './timeline-item.html',
   styleUrl: './timeline-item.scss'
@@ -41,7 +44,7 @@ export class TimelineItem {
     if (type === TimelineItemType.Project) {
       return [{type: 'detach', icon: 'link_off', hoverColor: 'text-rose-600'}];
     }
-    if (type === TimelineItemType.Job || type === TimelineItemType.Education) {
+    if (type === TimelineItemType.Job || type === TimelineItemType.Education || type === TimelineItemType.Milestone) {
       return [
         {type: 'edit', icon: 'edit', hoverColor: 'text-slate-600'},
         {type: 'delete', icon: 'delete', hoverColor: 'text-rose-600'}
@@ -63,4 +66,5 @@ export class TimelineItem {
   protected asJob = (): JobTimelineItem => this.item() as JobTimelineItem;
   protected asEducation = (): EducationTimelineItem => this.item() as EducationTimelineItem;
   protected asProject = (): ProjectTimelineItem => this.item() as ProjectTimelineItem;
+  protected asMilestone = (): MilestoneTimelineItem => this.item() as MilestoneTimelineItem;
 }

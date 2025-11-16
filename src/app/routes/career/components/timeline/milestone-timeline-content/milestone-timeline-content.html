@@ -1,0 +1,12 @@
+<div class="flex flex-col gap-3">
+  <div class="flex items-center gap-2">
+    @if (milestone().image) {
+      <img [src]="milestone().image!" [alt]="milestone().title" class="w-12 h-12 rounded-xs object-cover"/>
+    }
+    <h3 class="text-base font-medium text-neutral-800">{{ milestone().title }}</h3>
+  </div>
+
+  @if (milestone().description) {
+    <p class="text-sm text-neutral-700 leading-relaxed line-clamp-3">{{ milestone().description }}</p>
+  }
+</div>
