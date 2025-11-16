@@ -53,9 +53,9 @@
       </div>
 
       @if (item().type === 'job' || item().type === 'education') {
-        <div class="flex gap-2 pt-1">
+        <div class="flex items-center gap-2 pt-1">
           <img src="{{ item().image }}" alt="{{ item().title }}" class="w-12 h-12 rounded-xs object-cover"/>
-          <div>
+          <div class="flex-1">
             <h3 class="text-base font-medium text-neutral-800">{{ item().title }}</h3>
             <div class="flex items-center gap-1.5 text-neutral-600 text-[0.8125rem]">
               <mat-icon class="!text-base !w-4 !h-4 !leading-none text-neutral-400">business</mat-icon>
@@ -64,6 +64,22 @@
             </div>
           </div>
         </div>
+
+        @if (item().type === TimelineItemType.Education && $any(item()).certifications?.length > 0) {
+          <div class="flex flex-col gap-1.5 mt-3">
+            @for (certGroup of getCertificationsByType($any(item())); track certGroup.type) {
+              <div class="flex items-center gap-2 text-sm">
+                <mat-icon
+                  class="!text-base !w-4 !h-4 !leading-none flex-shrink-0"
+                  [style.color]="typeMeta[TimelineItemType.Education].color"
+                >
+                  {{ certGroup.icon }}
+                </mat-icon>
+                <span class="text-neutral-700">{{ certGroup.titles.join(', ') }}</span>
+              </div>
+            }
+          </div>
+        }
       }
 
       @if (item().type === 'project') {
