@@ -4,22 +4,27 @@ export const publicRoutes: Route[] = [
   {
     path: 'home',
     loadComponent: () => import('./home/containers/home/home').then(m => m.Home),
-    title: 'Home',
+    title: 'Accueil',
   },
   {
     path: 'career',
     loadComponent: () => import('./career/containers/career/career').then(m => m.Career),
-    title: 'Career'
+    title: 'Parcours'
+  },
+  {
+    path: 'skills',
+    loadComponent: () => import('./skills/containers/skills/skills').then(m => m.Skills),
+    title: 'Compétences'
+  },
+  {
+    path: 'projects',
+    loadComponent: () => import('./projects/containers/projects/projects').then(m => m.Projects),
+    title: 'Projets'
   },
   {
     path: 'contact',
     loadComponent: () => import('./contact/containers/contact/contact').then(m => m.Contact),
     title: 'Contact'
-  },
-  {
-    path: 'skills',
-    loadComponent: () => import('./skills/containers/skills/skills').then(m => m.Skills),
-    title: 'Skills'
   },
   {
     path: '',

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {MenuEntry} from '../main-menu/main-menu';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
@@ -11,7 +11,6 @@ import {NgClass} from '@angular/common';
   styleUrl: './menu-item.scss'
 })
 export class MenuItem {
-
-  @Input() menuEntry!: MenuEntry;
-
+  readonly menuEntry = input.required<MenuEntry>();
+  readonly variant = input<'console' | 'public'>('console');
 }
