@@ -26,15 +26,16 @@
 
       <app-kpi-card
         title="Total Débloqués"
-        [value]="achievementStats()?.totalUnlocked!"
+        [value]="achievementStats()!.totalUnlocked"
         icon="lock_open"
         color="#3b82f5"/>
 
       <app-kpi-card
         title="Taux Complétion"
-        [value]="achievementStats()?.completionRate!+'%'"
+        [value]="achievementStats()!.completionRate"
         icon="pie_chart"
-        color="#a854f7"/>
+        color="#a854f7"
+        [isPercent]="true"/>
     </section>
 
     @if (achievements().length > 0) {
