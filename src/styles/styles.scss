@@ -23,3 +23,20 @@ body {
 h1, h2 {
   font-family: Lora, Georgia, serif;
 }
+
+@keyframes skill-fall {
+  0% {
+    transform: translateY(var(--start-y));
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(var(--end-y));
+    opacity: 0;
+  }
+}

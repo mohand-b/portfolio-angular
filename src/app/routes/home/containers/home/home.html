@@ -1,10 +1,25 @@
 <div class="flex flex-col">
-  <section class="bg-primary min-h-[22.5rem] flex items-center justify-center p-8">
+  <section class="hero-section min-h-[22.5rem] flex items-center justify-center p-8 relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none">
+      @for (skill of fallingSkills(); track $index) {
+        <div
+          class="absolute font-mono text-xs whitespace-nowrap"
+          [style.left.%]="getSkillLeft($index)"
+          [style.opacity]="skill.opacity"
+          [style.color]="skill.color"
+          [style.--start-y]="skill.startY + 'vh'"
+          [style.--end-y]="skill.endY + 'vh'"
+          [style.animation]="'skill-fall ' + skill.duration + 's linear infinite'"
+          [style.animation-delay.s]="skill.delay"
+          (animationiteration)="onAnimationIteration($index)"
+        >
+          {{ skill.name }}
+        </div>
+      }
+    </div>
 
-    <div class="max-w-3xl flex flex-col items-center gap-6 text-center">
-
-      <div class="w-[7.5rem] h-[7.5rem] rounded-full overflow-hidden border-3 border-white/50">
-      </div>
+    <div class="relative z-10 max-w-3xl flex flex-col items-center gap-6 text-center">
+      <div class="w-[7.5rem] h-[7.5rem] rounded-full overflow-hidden border-3 border-white/50"></div>
 
       <h1 class="text-4xl font-bold text-white tracking-tight">Développeur web</h1>
 
@@ -15,12 +30,15 @@
       </p>
 
       <div class="flex flex-col sm:flex-row gap-4 mt-2 w-full sm:w-auto">
-        <button (click)="navigateToProjects()" matButton="filled" class="!border !border-white w-full sm:w-auto">
-          <mat-icon>work</mat-icon>
+        <button (click)="navigateToCareer()" matButton="filled" class="hero-button-primary w-full sm:w-auto">
+          <mat-icon>timeline</mat-icon>
+          Découvrir mon parcours
+        </button>
+        <button (click)="navigateToProjects()" matButton="filled" class="hero-button-primary w-full sm:w-auto">
+          <mat-icon>folder</mat-icon>
           Voir mes projets
         </button>
-        <button (click)="navigateToContact()" matButton="outlined"
-                class="!bg-white !text-primary !border-white hover:!bg-white/90 w-full sm:w-auto">
+        <button (click)="navigateToContact()" matButton="outlined" class="hero-button-secondary w-full sm:w-auto">
           <mat-icon>email</mat-icon>
           Me contacter
         </button>
@@ -30,22 +48,18 @@
 
   <section class="py-16 px-8">
     <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-
       <div class="text-center">
         <div class="text-5xl font-bold text-primary mb-2 font-serif">{{ yearsOfExperience }}+</div>
         <div class="text-xs text-neutral-500 font-medium uppercase tracking-wider">Années d'expérience</div>
       </div>
-
       <div class="text-center">
         <div class="text-5xl font-bold text-primary mb-2 font-serif">{{ projectsCount }}+</div>
         <div class="text-xs text-neutral-500 font-medium uppercase tracking-wider">Projets réalisés</div>
       </div>
-
       <div class="text-center">
         <div class="text-5xl font-bold text-primary mb-2 font-serif">{{ technologiesCount }}+</div>
         <div class="text-xs text-neutral-500 font-medium uppercase tracking-wider">Technologies maîtrisées</div>
       </div>
-
     </div>
   </section>
 </div>
