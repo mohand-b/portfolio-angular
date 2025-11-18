@@ -56,7 +56,7 @@ export class Home {
         left: Math.random() * 100,
         duration,
         delay: -(Math.random() * duration),
-        opacity: 0.4 + Math.random() * 0.2,
+        opacity: 0.2 + Math.random() * 0.2,
         color: SKILL_CATEGORY_META[skill.category].color,
         startY,
         endY: startY + 40 + Math.random() * 40

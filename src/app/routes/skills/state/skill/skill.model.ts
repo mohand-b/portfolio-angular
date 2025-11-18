@@ -74,7 +74,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
     label: 'Architecture & Patterns',
     shortLabel: 'Arch/Patterns',
     subtitle: 'Structure, patterns et bonnes pratiques',
-    color: '#475569',
+    color: '#94A3B8',
     icon: 'account_tree',
   },
   [SkillCategory.TESTING]: {

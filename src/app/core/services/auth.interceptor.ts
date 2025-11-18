@@ -10,9 +10,10 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
 
   return next(req.clone({withCredentials: true})).pipe(
     catchError((error: HttpErrorResponse) => {
-      const isLoginOrRefresh =
-        req.url.includes('/admin/login') || req.url.includes('/admin/refresh-token');
-      if (error.status === 401 && !isLoginOrRefresh) {
+      const isAdminRequest = req.url.includes('/admin/');
+      const isLoginOrRefresh = req.url.includes('/admin/login') || req.url.includes('/admin/refresh-token');
+
+      if (error.status === 401 && isAdminRequest && !isLoginOrRefresh) {
         return coreFacade.revokeAdminToken().pipe(
           switchMap(() => next(req.clone({withCredentials: true}))),
           catchError((refreshError) => {

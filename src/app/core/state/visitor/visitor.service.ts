@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../../environments/environments';
 import {Observable} from 'rxjs';
-import {VisitorAuthDto, VisitorAuthResponseDto} from './visitor.model';
+import {Visitor, VisitorAuthDto, VisitorAuthResponseDto} from './visitor.model';
 
 @Injectable({providedIn: 'root'})
 export class VisitorService {
@@ -12,6 +12,10 @@ export class VisitorService {
 
   authenticate(authDto: VisitorAuthDto): Observable<VisitorAuthResponseDto> {
     return this.http.post<VisitorAuthResponseDto>(this.visitorBaseUrl, authDto);
+  }
+
+  getMe(): Observable<Visitor> {
+    return this.http.get<Visitor>(`${this.visitorBaseUrl}/me`);
   }
 
   delete(id: string): Observable<{message: string}> {

@@ -9,6 +9,11 @@ export interface Visitor {
   avatarSvg: string;
   createdAt: Date;
   lastVisitAt: Date;
+  achievements?: {
+    unlocked: number;
+    total: number;
+    percentCompletion: number;
+  };
 }
 
 export interface VisitorDto {
@@ -43,6 +48,7 @@ export interface VisitorAuthDto {
 
 export interface VisitorAuthResponseDto extends Visitor {
   accessToken: string;
+  message?: string;
 }
 
 export interface VisitorStats {

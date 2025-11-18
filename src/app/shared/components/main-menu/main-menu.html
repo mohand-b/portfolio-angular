@@ -10,7 +10,18 @@
     }
   </div>
 
-  <button (click)="navigateToLogin()" matButton="outlined" class="shrink-0 !border-primary !text-primary">
-    S'identifier
-  </button>
+  @if (isAuth()) {
+    <div class="shrink-0 flex items-center gap-2 text-sm">
+      <span class="font-medium text-neutral-800">{{ fullName() }}</span>
+      @if (achievements(); as ach) {
+        <span class="text-neutral-600">-</span>
+        <span class="text-primary font-medium">{{ ach.unlocked }}/{{ ach.total }}</span>
+        <span class="text-neutral-600">({{ ach.percentCompletion }}%)</span>
+      }
+    </div>
+  } @else {
+    <button (click)="openAuthModal()" matButton="outlined" class="shrink-0 !border-primary !text-primary">
+      S'identifier
+    </button>
+  }
 </nav>

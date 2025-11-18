@@ -1,9 +1,11 @@
 import {Component, inject} from '@angular/core';
-import {Router} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {MenuItem} from '../menu-item/menu-item';
+import {CoreFacade} from '../../../core/core.facade';
 import {publicRoutes} from '../../../routes/public.routes';
+import {ModalService} from '../../services/modal.service';
+import {MenuItem} from '../menu-item/menu-item';
+import {VisitorAuthModal} from '../visitor-auth-modal/visitor-auth-modal';
 
 export interface MenuEntry {
   title: string;
@@ -18,14 +20,22 @@ export interface MenuEntry {
   styleUrl: './main-menu.scss'
 })
 export class MainMenu {
-  private readonly router = inject(Router);
+  private coreFacade = inject(CoreFacade);
+  private modalService = inject(ModalService);
 
-  menuItems: MenuEntry[] = publicRoutes.filter(route => route.title).map(route => ({
-    title: route.title,
-    path: route.path
-  })) as MenuEntry[];
+  readonly menuItems: MenuEntry[] = publicRoutes
+    .filter(route => route.title)
+    .map(route => ({title: route.title, path: route.path})) as MenuEntry[];
 
-  navigateToLogin(): void {
-    this.router.navigate(['/console/login']);
+  readonly isAuth = this.coreFacade.isVisitorAuthenticated;
+  readonly fullName = this.coreFacade.visitorFullName;
+  readonly achievements = this.coreFacade.visitorAchievements;
+
+  openAuthModal(): void {
+    this.modalService.open(VisitorAuthModal, {
+      width: '500px',
+      maxWidth: '90vw',
+      disableClose: true
+    });
   }
 }
