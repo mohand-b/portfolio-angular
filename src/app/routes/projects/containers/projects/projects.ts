@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {afterNextRender, Component, inject} from '@angular/core';
+import {VisitorService} from '../../../../core/state/visitor/visitor.service';
 
 @Component({
   selector: 'app-projects',
@@ -7,4 +8,14 @@ import {Component} from '@angular/core';
   styleUrl: './projects.scss'
 })
 export class Projects {
+  private visitorService = inject(VisitorService);
+
+  constructor() {
+    afterNextRender(() => {
+      this.visitorService.unlockAchievement('EXPLO').subscribe({
+        next: () => console.log('Achievement EXPLORER unlocked!'),
+        error: (err) => console.error('Failed to unlock achievement:', err)
+      });
+    });
+  }
 }

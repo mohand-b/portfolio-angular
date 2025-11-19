@@ -11,12 +11,40 @@
   </div>
 
   @if (isAuth()) {
-    <div class="shrink-0 flex items-center gap-2 text-sm">
-      <span class="font-medium text-neutral-800">{{ fullName() }}</span>
+    <div class="shrink-0 flex items-center gap-4">
+      <span class="text-sm font-medium text-neutral-800">
+        {{ greeting() }}, {{ firstName() }}
+      </span>
       @if (achievements(); as ach) {
-        <span class="text-neutral-600">-</span>
-        <span class="text-primary font-medium">{{ ach.unlocked }}/{{ ach.total }}</span>
-        <span class="text-neutral-600">({{ ach.percentCompletion }}%)</span>
+        <div class="flex items-center gap-3">
+          <div class="relative flex items-center justify-center w-[32px] h-[32px]">
+            <svg class="absolute" width="32" height="32" viewBox="0 0 32 32">
+              <circle
+                cx="16"
+                cy="16"
+                r="12"
+                fill="none"
+                stroke="#e5e7eb"
+                stroke-width="8"
+                stroke-linecap="round"
+              />
+              <circle
+                cx="16"
+                cy="16"
+                r="12"
+                fill="none"
+                stroke="#f59f0a"
+                stroke-width="8"
+                stroke-linecap="round"
+                [attr.stroke-dasharray]="12 * 2 * 3.14159"
+                [attr.stroke-dashoffset]="12 * 2 * 3.14159 * (1 - ach.percentCompletion / 100)"
+                style="transform: rotate(-90deg); transform-origin: center;"
+              />
+            </svg>
+            <mat-icon class="absolute !leading-none !text-amber-600 !text-[14px] !w-4 !h-4">emoji_events</mat-icon>
+          </div>
+          <span class="text-sm font-semibold text-amber-600">{{ ach.percentCompletion }}%</span>
+        </div>
       }
     </div>
   } @else {

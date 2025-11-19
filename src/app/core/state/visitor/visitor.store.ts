@@ -1,6 +1,6 @@
 import {computed} from '@angular/core';
 import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
-import {Visitor} from './visitor.model';
+import {calculateAchievementPercentage, Visitor} from './visitor.model';
 
 interface VisitorState {
   visitor: Visitor | null;
@@ -27,6 +27,22 @@ export const VisitorStore = signalStore(
       if (currentVisitor) {
         patchState(store, {visitor: {...currentVisitor, achievements}});
       }
+    },
+    incrementAchievements(count: number) {
+      const currentVisitor = store.visitor();
+
+      if (!currentVisitor?.achievements) return;
+
+      const {total} = currentVisitor.achievements;
+      const unlocked = currentVisitor.achievements.unlocked + count;
+      const percentCompletion = calculateAchievementPercentage(unlocked, total);
+
+      patchState(store, {
+        visitor: {
+          ...currentVisitor,
+          achievements: {unlocked, total, percentCompletion}
+        }
+      });
     },
     clear() {
       patchState(store, {visitor: null});

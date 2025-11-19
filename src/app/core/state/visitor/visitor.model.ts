@@ -58,3 +58,7 @@ export interface VisitorStats {
   engagedVisitors: number;
 }
 
+export function calculateAchievementPercentage(unlocked: number, total: number): number {
+  return total > 0 ? Math.round((unlocked / total) * 100) : 0;
+}
+

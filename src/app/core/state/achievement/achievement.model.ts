@@ -49,3 +49,11 @@ export interface PaginatedAchievementsResponse {
   limit: number;
   totalPages: number;
 }
+
+export interface AchievementDto {
+  code: string;
+  label: string;
+  description?: string;
+  icon: string;
+  color: string;
+}
