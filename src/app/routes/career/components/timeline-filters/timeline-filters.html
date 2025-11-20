@@ -1,0 +1,17 @@
+<div class="flex flex-wrap gap-2">
+  @for (type of allTypes; track type) {
+    <button
+      class="flex items-center gap-2 max-lg:p-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border-2"
+      [class.opacity-40]="!isSelected()(type)"
+      [class.hover:opacity-70]="!isSelected()(type)"
+      [class.shadow-sm]="isSelected()(type)"
+      [style.background-color]="isSelected()(type) ? typeMeta[type].color : 'transparent'"
+      [style.border-color]="typeMeta[type].color"
+      [style.color]="isSelected()(type) ? 'white' : typeMeta[type].color"
+      (click)="toggleType(type)"
+    >
+      <mat-icon class="!text-base !w-4 !h-4 !leading-none">{{ typeMeta[type].icon }}</mat-icon>
+      <span class="max-lg:hidden">{{ typeMeta[type].label }}</span>
+    </button>
+  }
+</div>

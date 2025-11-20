@@ -33,6 +33,7 @@ import {MilestoneTimelineContent} from '../milestone-timeline-content/milestone-
 export class TimelineItem {
   readonly item = input.required<TimelineItemModel>();
   readonly isLeft = input.required<boolean>();
+  readonly readonly = input<boolean>(false);
   readonly editRequested = output<string>();
   readonly deleteRequested = output<string>();
   readonly detachRequested = output<string>();
@@ -40,6 +41,8 @@ export class TimelineItem {
   protected readonly TimelineItemType = TimelineItemType;
   protected readonly typeMeta = computed(() => TIMELINE_ITEM_TYPE_META[this.item().type]);
   protected readonly actions = computed<ActionConfig[]>(() => {
+    if (this.readonly()) return [];
+
     const type = this.item().type;
     if (type === TimelineItemType.Project) {
       return [{type: 'detach', icon: 'link_off', hoverColor: 'text-rose-600'}];
