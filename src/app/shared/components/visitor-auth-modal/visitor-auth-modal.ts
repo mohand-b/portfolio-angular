@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, HostListener, inject, signal} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
@@ -22,10 +22,10 @@ import {ToastService} from '../../services/toast.service';
   styleUrl: './visitor-auth-modal.scss'
 })
 export class VisitorAuthModal {
-  private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<VisitorAuthModal>);
-  private coreFacade = inject(CoreFacade);
-  private toastService = inject(ToastService);
+  private readonly fb = inject(FormBuilder);
+  private readonly dialogRef = inject(MatDialogRef<VisitorAuthModal>);
+  private readonly coreFacade = inject(CoreFacade);
+  private readonly toastService = inject(ToastService);
 
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -44,6 +44,14 @@ export class VisitorAuthModal {
     });
   }
 
+  @HostListener('document:keydown', ['$event'])
+  onEnterKey(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !this.authForm.invalid && !this.isSubmitting()) {
+      event.preventDefault();
+      this.onSubmit();
+    }
+  }
+
   onSubmit(): void {
     if (this.authForm.invalid || this.isSubmitting()) return;
 
@@ -59,7 +67,7 @@ export class VisitorAuthModal {
       next: (response) => {
         const message = response.message;
         this.toastService.success('Authentification réussie');
-        if (message) setTimeout(() => this.toastService.warning(message), 2000);
+        if (message) setTimeout(() => this.toastService.warning(message));
         this.dialogRef.close(true);
       },
       error: (err) => {

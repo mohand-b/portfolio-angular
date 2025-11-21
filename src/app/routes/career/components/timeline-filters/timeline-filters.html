@@ -1,7 +1,7 @@
 <div class="flex flex-wrap gap-2">
   @for (type of allTypes; track type) {
     <button
-      class="flex items-center gap-2 max-lg:p-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border-2"
+      class="flex items-center gap-2 max-lg:p-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border-1"
       [class.opacity-40]="!isSelected()(type)"
       [class.hover:opacity-70]="!isSelected()(type)"
       [class.shadow-sm]="isSelected()(type)"

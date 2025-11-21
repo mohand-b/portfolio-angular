@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, HostListener, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -18,17 +18,24 @@ import {Router} from '@angular/router';
   styleUrl: './login.scss'
 })
 export class Login {
+  private readonly router = inject(Router);
+  private readonly coreFacade = inject(CoreFacade);
+  private readonly fb = inject(FormBuilder);
 
-  private router = inject(Router);
-  private coreFacade = inject(CoreFacade);
-  private fb = inject(FormBuilder);
-
-  form: FormGroup = this.fb.group({
+  readonly form: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
 
-  login() {
+  @HostListener('document:keydown', ['$event'])
+  onEnterKey(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !this.form.invalid && !this.form.disabled) {
+      event.preventDefault();
+      this.login();
+    }
+  }
+
+  login(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -43,5 +50,4 @@ export class Login {
       complete: () => this.form.enable(),
     });
   }
-
 }

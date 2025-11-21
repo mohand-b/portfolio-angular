@@ -26,7 +26,7 @@ export function achievementUpdateInterceptor(req: HttpRequest<unknown>, next: Ht
       }
 
       achievements.forEach((achievement: AchievementDto) => {
-        toastService.success(`Succès déverrouillé : ${achievement.label} ${achievement.icon}`, 5000);
+        toastService.achievement(achievement, 6000);
       });
     })
   );

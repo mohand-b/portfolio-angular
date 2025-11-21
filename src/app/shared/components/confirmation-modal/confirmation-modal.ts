@@ -1,4 +1,4 @@
-import {Component, computed, input, output} from '@angular/core';
+import {Component, computed, HostListener, input, output} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 
 @Component({
@@ -26,6 +26,14 @@ export class ConfirmationModal {
       this.isDelete() ? 'bg-red-700' : 'bg-primary'
     }`
   );
+
+  @HostListener('document:keydown', ['$event'])
+  onEnterKey(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && this.isOpen()) {
+      event.preventDefault();
+      this.onConfirm();
+    }
+  }
 
   onConfirm(): void {
     this.confirmed.emit();
