@@ -2,12 +2,12 @@ import {HttpEvent, HttpHandlerFn, HttpRequest, HttpResponse} from '@angular/comm
 import {inject} from '@angular/core';
 import {Observable, tap} from 'rxjs';
 import {AchievementDto} from '../state/achievement/achievement.model';
-import {CoreFacade} from '../core.facade';
+import {VisitorStore} from '../state/visitor/visitor.store';
 import {ToastService} from '../../shared/services/toast.service';
 
 export function achievementUpdateInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const toastService = inject(ToastService);
-  const coreFacade = inject(CoreFacade);
+  const visitorStore = inject(VisitorStore);
 
   return next(req).pipe(
     tap(event => {
@@ -19,15 +19,18 @@ export function achievementUpdateInterceptor(req: HttpRequest<unknown>, next: Ht
       if (!achievements || !Array.isArray(achievements) || achievements.length === 0) return;
 
       const isVisitorAuthResponse = req.url.includes('/visitor/authenticate');
-      const shouldIncrementStore = !isVisitorAuthResponse && coreFacade.isVisitorAuthenticated();
+      const shouldIncrementStore = !isVisitorAuthResponse && visitorStore.isAuthenticated();
 
       if (shouldIncrementStore) {
-        coreFacade.incrementVisitorAchievements(achievements.length);
+        visitorStore.incrementAchievements(achievements.length);
       }
 
-      achievements.forEach((achievement: AchievementDto) => {
-        toastService.achievement(achievement, 6000);
-      });
+      const delay = isVisitorAuthResponse ? 10 : 0;
+      setTimeout(() => {
+        achievements.forEach((achievement: AchievementDto) => {
+          toastService.achievement(achievement, 6000);
+        });
+      }, delay);
     })
   );
 }

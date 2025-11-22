@@ -16,7 +16,6 @@ export const AdminStore = signalStore(
   }),
   withComputed((store) => ({
     canAccessAdmin: computed(() => store.sessionStatus() === 'authenticated'),
-    mustLogin: computed(() => store.sessionStatus() === 'unauthenticated'),
     isLoading: computed(() =>
       store.sessionStatus() === 'checking' || store.sessionStatus() === 'unknown'
     ),
@@ -32,17 +31,6 @@ export const AdminStore = signalStore(
       patchState(store, {
         lastSessionError: error,
       })
-    },
-    clearError() {
-      patchState(store, {
-        lastSessionError: null,
-      });
-    },
-    resetSession() {
-      patchState(store, {
-        sessionStatus: 'unknown',
-        lastSessionError: null,
-      });
     },
   })),
 );

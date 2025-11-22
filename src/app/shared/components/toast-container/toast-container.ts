@@ -2,6 +2,7 @@ import {Component, inject} from '@angular/core';
 import {NgClass} from '@angular/common';
 import {ToastService} from '../../services/toast.service';
 import {MatIconModule} from '@angular/material/icon';
+import {hexWithAlpha} from '../../utils/color.utils';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'achievement';
 
@@ -14,6 +15,7 @@ export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'achievement'
 export class ToastContainer {
   private readonly toastService = inject(ToastService);
   readonly toasts = this.toastService.toasts;
+  readonly hexWithAlpha = hexWithAlpha;
 
   getToastConfig(type: ToastType) {
     const configs: Record<ToastType, { bgClass: string; icon: string; iconClass: string }> = {
@@ -24,20 +26,6 @@ export class ToastContainer {
       achievement: {bgClass: 'bg-neutral-100 text-neutral-800 border border-neutral-200', icon: 'emoji_events', iconClass: 'text-amber-500'}
     };
     return configs[type];
-  }
-
-  lightenColor(hex: string, amount: number = 0.85): string {
-    const sanitized = hex.replace('#', '');
-    const r = parseInt(sanitized.substring(0, 2), 16);
-    const g = parseInt(sanitized.substring(2, 4), 16);
-    const b = parseInt(sanitized.substring(4, 6), 16);
-
-    const lightenedR = Math.round(r + (255 - r) * amount);
-    const lightenedG = Math.round(g + (255 - g) * amount);
-    const lightenedB = Math.round(b + (255 - b) * amount);
-
-    const toHex = (n: number) => n.toString(16).padStart(2, '0');
-    return `#${toHex(lightenedR)}${toHex(lightenedG)}${toHex(lightenedB)}`;
   }
 
   remove(id: number): void {

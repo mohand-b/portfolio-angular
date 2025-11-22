@@ -1,29 +1,33 @@
-import {Component, inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {isPlatformBrowser} from '@angular/common';
-import {VisitorService} from '../../../../core/state/visitor/visitor.service';
+import {Component, inject} from '@angular/core';
+import {httpResource} from '@angular/common/http';
+import {MatIcon} from '@angular/material/icon';
+import {SKILL_CATEGORY_META, SkillCategory} from '../../state/skill/skill.model';
+import {CoreFacade} from '../../../../core/core.facade';
+import {environment} from '../../../../../../environments/environments';
+import {hexWithAlpha} from '../../../../shared/utils/color.utils';
 
 @Component({
   selector: 'app-skills',
-  imports: [],
+  imports: [MatIcon],
   templateUrl: './skills.html',
   styleUrl: './skills.scss'
 })
-export class Skills implements OnInit {
-  private readonly visitorService = inject(VisitorService);
-  private readonly platformId = inject(PLATFORM_ID);
-  private readonly SKILL_VISIT_KEY = 'skillPageVisited';
+export class Skills {
+  private readonly coreFacade = inject(CoreFacade);
 
-  ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.trackSkillPageVisit();
-    }
-  }
+  protected readonly skills = this.coreFacade.skills;
+  protected readonly categories = Object.values(SkillCategory);
+  protected readonly categoryMeta = SKILL_CATEGORY_META;
+  protected readonly hexWithAlpha = hexWithAlpha;
 
-  private trackSkillPageVisit(): void {
-    if (sessionStorage.getItem(this.SKILL_VISIT_KEY)) return;
+  private readonly trackVisit = httpResource<void>(() => ({
+    url: `${environment.baseUrl}/visitor/page-visit/skills`,
+    method: 'POST',
+    body: {},
+    withCredentials: true
+  }));
 
-    this.visitorService.trackSkillVisit().subscribe({
-      next: () => sessionStorage.setItem(this.SKILL_VISIT_KEY, 'true')
-    });
+  protected getSkillsByCategory(category: SkillCategory) {
+    return this.skills().filter(skill => skill.category === category);
   }
 }

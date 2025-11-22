@@ -3,11 +3,18 @@ import {catchError, Observable, tap, throwError} from 'rxjs';
 import {AdminAuthDto, AdminAuthResponseDto} from './state/admin/admin.model';
 import {AdminService} from './state/admin/admin.service';
 import {AdminStore} from './state/admin/admin.store';
-import {calculateAchievementPercentage, Visitor, VisitorAuthDto, VisitorAuthResponseDto} from './state/visitor/visitor.model';
+import {
+  calculateAchievementPercentage,
+  Visitor,
+  VisitorAuthDto,
+  VisitorAuthResponseDto
+} from './state/visitor/visitor.model';
 import {VisitorService} from './state/visitor/visitor.service';
 import {VisitorStore} from './state/visitor/visitor.store';
+import {SkillStore} from '../routes/skills/state/skill/skill.store';
+import {SkillDto} from '../routes/skills/state/skill/skill.model';
 
-type AchievementsInfo = {unlocked: number; total: number; percentCompletion: number};
+type AchievementsInfo = { unlocked: number; total: number; percentCompletion: number };
 
 @Injectable({providedIn: 'root'})
 export class CoreFacade {
@@ -16,13 +23,18 @@ export class CoreFacade {
   private adminStore = inject(AdminStore);
   private visitorService = inject(VisitorService);
   private visitorStore = inject(VisitorStore);
+  private skillStore = inject(SkillStore);
 
   readonly canAccessAdmin: Signal<boolean> = this.adminStore.canAccessAdmin;
-  readonly mustLogin: Signal<boolean> = this.adminStore.mustLogin;
   readonly isLoading: Signal<boolean> = this.adminStore.isLoading;
   readonly isVisitorAuthenticated: Signal<boolean> = this.visitorStore.isAuthenticated;
   readonly visitorFullName: Signal<string | null> = this.visitorStore.fullName;
   readonly visitorAchievements: Signal<AchievementsInfo | null> = this.visitorStore.achievements;
+  readonly skills: Signal<SkillDto[]> = this.skillStore.skills;
+
+  constructor() {
+    this.skillStore.fetchSkills();
+  }
 
   loginAdmin(authDto: AdminAuthDto): Observable<AdminAuthResponseDto> {
     this.adminStore.setSessionStatus('checking');
@@ -35,11 +47,11 @@ export class CoreFacade {
     );
   }
 
-  revokeAdminToken(): Observable<{message: string}> {
+  revokeAdminToken(): Observable<{ message: string }> {
     return this.adminService.revokeToken();
   }
 
-  logoutAdmin(): Observable<{message: string}> {
+  logoutAdmin(): Observable<{ message: string }> {
     return this.adminService.logout().pipe(
       tap(() => this.adminStore.setSessionStatus('unauthenticated')),
       catchError((err) => {
@@ -49,7 +61,7 @@ export class CoreFacade {
     );
   }
 
-  checkAdminSession(): Observable<{isValid: boolean}> {
+  checkAdminSession(): Observable<{ isValid: boolean }> {
     this.adminStore.setSessionStatus('checking');
     return this.adminService.checkSession().pipe(
       tap(() => this.adminStore.setSessionStatus('authenticated')),
@@ -86,10 +98,6 @@ export class CoreFacade {
         return throwError(() => err);
       })
     );
-  }
-
-  logoutVisitor(): void {
-    this.visitorStore.clear();
   }
 
   incrementVisitorAchievements(count: number): void {

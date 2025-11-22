@@ -11,7 +11,7 @@ export class SkillService {
   private readonly skillBaseUrl = `${environment.baseUrl}/skills`;
 
   fetchSkills(): Observable<SkillDto[]> {
-    return this.http.get<SkillDto[]>(`${this.skillBaseUrl}`, {withCredentials: true});
+    return this.http.get<SkillDto[]>(this.skillBaseUrl, {withCredentials: true});
   }
 
   createSkill(skill: SkillCreateDto): Observable<SkillDto> {
@@ -32,7 +32,7 @@ export class SkillService {
 
   searchSkills(query: string, limit: number = 5): Observable<SkillDto[]> {
     return this.http.get<SkillDto[]>(`${this.skillBaseUrl}/search`, {
-      params: { q: query, limit: limit.toString() },
+      params: {q: query, limit: limit.toString()},
       withCredentials: true
     });
   }

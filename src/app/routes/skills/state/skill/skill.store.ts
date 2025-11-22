@@ -1,4 +1,4 @@
-import {patchState, signalStore, withComputed, withHooks, withMethods, withProps} from '@ngrx/signals';
+import {patchState, signalStore, withComputed, withMethods, withProps} from '@ngrx/signals';
 import {addEntity, removeEntities, setEntities, updateEntity, withEntities} from '@ngrx/signals/entities';
 import {computed, inject} from '@angular/core';
 import {SkillService} from './skill.service';
@@ -23,7 +23,7 @@ export const SkillStore = signalStore(
     fetchSkills: rxMethod<void>(
       pipe(
         switchMap(() => store._skillService.fetchSkills()),
-        tap(skills => patchState(store, setEntities(skills))),
+        tap((skills: SkillDto[]) => patchState(store, setEntities(skills))),
       )
     ),
     addSkill(skill: SkillDto): void {
@@ -38,10 +38,5 @@ export const SkillStore = signalStore(
     removeSkillById(id: string): void {
       patchState(store, removeEntities(skill => skill.id === id));
     },
-  })),
-  withHooks({
-    onInit(store) {
-      store.fetchSkills();
-    }
-  })
+  }))
 );

@@ -22,12 +22,6 @@ export const VisitorStore = signalStore(
     setVisitor(visitor: Visitor | null) {
       patchState(store, {visitor});
     },
-    updateAchievements(achievements: {unlocked: number; total: number; percentCompletion: number}) {
-      const currentVisitor = store.visitor();
-      if (currentVisitor) {
-        patchState(store, {visitor: {...currentVisitor, achievements}});
-      }
-    },
     incrementAchievements(count: number) {
       const currentVisitor = store.visitor();
 
@@ -49,4 +43,3 @@ export const VisitorStore = signalStore(
     }
   }))
 );
-

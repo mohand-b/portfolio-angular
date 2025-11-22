@@ -1,32 +1,25 @@
 <div class="min-h-full p-8">
-  <div class="max-w-6xl mx-auto">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-wrap items-center max-lg:justify-start justify-between gap-4 mb-8">
+      <h1 class="text-3xl font-bold text-neutral-800">Mon Parcours</h1>
+      <app-timeline-filters/>
+    </div>
+
     @if (careerFacade.loading()) {
       <div class="flex justify-center items-center py-20">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-neutral-800"></div>
       </div>
-    } @else {
-      <div class="flex flex-wrap items-center max-lg:justify-start justify-between gap-4 mb-8">
-        <h1 class="text-3xl font-bold text-neutral-800">Mon Parcours</h1>
-        <app-timeline-filters/>
+    } @else if (careerFacade.filteredItems().length === 0) {
+      <div class="text-center py-20 text-neutral-600">
+        <p>Aucun élément ne correspond aux filtres sélectionnés.</p>
       </div>
-
-      @if (careerFacade.filteredItems().length === 0) {
-        <div class="text-center py-20 text-neutral-600">
-          <p>Aucun élément ne correspond aux filtres sélectionnés.</p>
-        </div>
-      } @else {
-        <div class="relative">
-          <div class="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-neutral-200 max-lg:left-4"></div>
-
-          @for (item of careerFacade.filteredItems(); track item.id; let i = $index) {
-            <app-timeline-item
-              [item]="item"
-              [isLeft]="i % 2 === 0"
-              [readonly]="true"
-            />
-          }
-        </div>
-      }
+    } @else {
+      <div class="relative">
+        <div class="absolute left-1/2 -translate-x-1/2 w-0.5 h-full bg-neutral-200 max-lg:left-4"></div>
+        @for (item of careerFacade.filteredItems(); track item.id; let i = $index) {
+          <app-timeline-item [item]="item" [isLeft]="i % 2 === 0" [readonly]="true"/>
+        }
+      </div>
     }
   </div>
 </div>
