@@ -22,6 +22,11 @@ export const publicRoutes: Route[] = [
     title: 'Projets'
   },
   {
+    path: 'projects/:id',
+    loadComponent: () => import('./projects/containers/project-detail/project-detail').then(m => m.ProjectDetail),
+    title: 'Détail du projet'
+  },
+  {
     path: 'contact',
     loadComponent: () => import('./contact/containers/contact/contact').then(m => m.Contact),
     title: 'Contact'

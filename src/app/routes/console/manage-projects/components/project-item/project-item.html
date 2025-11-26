@@ -5,26 +5,28 @@
       {{ project().title }}
     </h3>
 
-    <nav class="flex items-center gap-2 text-slate-400 shrink-0">
-      <button
-        type="button"
-        class="hover:text-slate-600 transition-colors cursor-pointer"
-        (click)="edit.emit()"
-        matTooltip="Éditer"
-        aria-label="Éditer le projet"
-      >
-        <mat-icon class="!text-lg">edit</mat-icon>
-      </button>
-      <button
-        type="button"
-        class="hover:text-rose-600 transition-colors cursor-pointer"
-        (click)="remove.emit()"
-        matTooltip="Supprimer"
-        aria-label="Supprimer le projet"
-      >
-        <mat-icon class="!text-lg">delete</mat-icon>
-      </button>
-    </nav>
+    @if (showActions()) {
+      <nav class="flex items-center gap-2 text-slate-400 shrink-0">
+        <button
+          type="button"
+          class="hover:text-slate-600 transition-colors cursor-pointer"
+          (click)="edit.emit()"
+          matTooltip="Éditer"
+          aria-label="Éditer le projet"
+        >
+          <mat-icon class="!text-lg">edit</mat-icon>
+        </button>
+        <button
+          type="button"
+          class="hover:text-rose-600 transition-colors cursor-pointer"
+          (click)="remove.emit()"
+          matTooltip="Supprimer"
+          aria-label="Supprimer le projet"
+        >
+          <mat-icon class="!text-lg">delete</mat-icon>
+        </button>
+      </nav>
+    }
   </header>
 
   <div class="flex flex-wrap gap-2 mb-3">
@@ -41,9 +43,11 @@
     </span>
   </div>
 
-  <p class="text-sm text-gray-600 mb-3 line-clamp-3 flex-1">
-    {{ project().description }}
-  </p>
+  <div class="flex flex-col flex-1">
+    <p class="text-sm text-gray-600 mb-3 line-clamp-3">
+      {{ project().description }}
+    </p>
+  </div>
 
   <div class="flex items-center gap-1.5 mb-4">
     <mat-icon class="!text-base !w-4 !h-4 !leading-none !text-primary flex-shrink-0">

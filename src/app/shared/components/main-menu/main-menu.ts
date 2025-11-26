@@ -24,7 +24,7 @@ export class MainMenu {
   private modalService = inject(ModalService);
 
   readonly menuItems: MenuEntry[] = publicRoutes
-    .filter(route => route.title)
+    .filter(route => route.title && !route.path?.includes(':'))
     .map(route => ({title: route.title, path: route.path})) as MenuEntry[];
 
   readonly isAuth = this.coreFacade.isVisitorAuthenticated;

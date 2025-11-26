@@ -1,10 +1,11 @@
 import {Component, inject} from '@angular/core';
 import {httpResource} from '@angular/common/http';
 import {MatIcon} from '@angular/material/icon';
-import {SKILL_CATEGORY_META, SkillCategory} from '../../state/skill/skill.model';
+import {SKILL_CATEGORY_META, SkillCategory, SkillDto} from '../../state/skill/skill.model';
 import {CoreFacade} from '../../../../core/core.facade';
 import {environment} from '../../../../../../environments/environments';
 import {hexWithAlpha} from '../../../../shared/utils/color.utils';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-skills',
@@ -14,6 +15,7 @@ import {hexWithAlpha} from '../../../../shared/utils/color.utils';
 })
 export class Skills {
   private readonly coreFacade = inject(CoreFacade);
+  private readonly router = inject(Router);
 
   protected readonly skills = this.coreFacade.skills;
   protected readonly categories = Object.values(SkillCategory);
@@ -29,5 +31,11 @@ export class Skills {
 
   protected getSkillsByCategory(category: SkillCategory) {
     return this.skills().filter(skill => skill.category === category);
+  }
+
+  protected navigateToProjects(skill: SkillDto): void {
+    this.router.navigate(['/projects'], {
+      queryParams: {skillId: skill.id}
+    });
   }
 }

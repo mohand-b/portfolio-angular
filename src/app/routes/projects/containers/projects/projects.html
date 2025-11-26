@@ -1,4 +1,96 @@
 <div class="min-h-full p-8">
-  <h1 class="text-3xl font-bold text-neutral-800 mb-4">Projets</h1>
-  <p class="text-neutral-600">La page arrive bientôt...</p>
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col lg:flex-row gap-8 items-start lg:items-center lg:justify-between mb-6">
+      <h1 class="text-3xl font-bold text-neutral-800 whitespace-nowrap">Mes Projets</h1>
+
+      <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto lg:flex-initial compact-filters">
+        <div class="flex-1 min-w-0 max-w-xs">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-select
+              placeholder="Typologie"
+              [value]="selectedTypes()"
+              (selectionChange)="onTypeChange($event.value)"
+              class="unified-field"
+              multiple>
+              <mat-select-trigger>
+                <span class="text-sm">{{ selectedTypes().join(', ') || 'Tous les types' }}</span>
+              </mat-select-trigger>
+              @for (type of allProjectTypes; track type) {
+                <mat-option [value]="type">{{ type }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="flex-1 min-w-0 max-w-xs">
+          <mat-form-field appearance="outline" class="w-full">
+            <input
+              matInput
+              placeholder="Compétences"
+              [formControl]="skillSearchControl"
+              [matAutocomplete]="auto"
+              (keydown.enter)="$event.preventDefault()">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displaySkillName"
+                              (optionSelected)="onSkillSelected($event)">
+              @for (skill of filteredSkills(); track skill.id) {
+                <mat-option [value]="skill">
+                  <div class="flex items-center justify-between w-full gap-2">
+                    <span class="text-sm truncate flex-shrink-0">{{ skill.name }}</span>
+                    <div class="flex items-center gap-0.5 ml-4 flex-shrink-0">
+                      <mat-icon class="!text-[14px] !w-[14px] !h-[14px] !leading-none !mr-1"
+                                [style.color]="getCategoryMeta(skill.category).color">
+                        {{ getCategoryMeta(skill.category).icon }}
+                      </mat-icon>
+                      <span class="opacity-60 skill-category-label">{{ getCategoryMeta(skill.category).label }}</span>
+                    </div>
+                  </div>
+                </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    @if (selectedSkills().length > 0) {
+      <div class="flex flex-wrap gap-2 mb-8 justify-center">
+        @for (skill of sortedSelectedSkills(); track skill.id) {
+          <div
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
+            [style.background-color]="getCategoryMeta(skill.category).color + '20'"
+            [style.color]="getCategoryMeta(skill.category).color">
+            <span>{{ skill.name }}</span>
+            <button
+              type="button"
+              (click)="removeSkill(skill)"
+              class="flex items-center justify-center w-4 h-4 rounded-full hover:bg-black/10 transition-colors cursor-pointer">
+              <mat-icon class="!text-xs !w-3 !h-3 !leading-none flex items-center justify-center">close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    @if (hasSearched() && projects().length === 0 && !isLoading()) {
+      <div class="text-center py-16">
+        <p class="text-neutral-500">Aucun projet ne correspond à vos critères.</p>
+      </div>
+    } @else {
+      @if (projects().length > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8" [class.opacity-50]="isLoading()">
+          @for (project of projects(); track project.id) {
+            <app-project-item [project]="project" [showActions]="false"/>
+          }
+        </div>
+
+        @if (totalPages() > 1) {
+          <app-pagination
+            [currentPage]="page()"
+            [totalPages]="totalPages()"
+            (pageChange)="onPageChange($event)"
+          />
+        }
+      }
+    }
+  </div>
 </div>

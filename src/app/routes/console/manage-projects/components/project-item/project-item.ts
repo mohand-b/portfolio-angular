@@ -12,9 +12,10 @@ import {RouterLink} from '@angular/router';
 })
 export class ProjectItem {
   readonly project = input.required<ProjectLightDto>();
+  readonly showActions = input(true);
   readonly edit = output<void>();
   readonly remove = output<void>();
-  
+
   readonly companyIcon = computed(() =>
     this.project().job ? 'business' : 'account_circle'
   );

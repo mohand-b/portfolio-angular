@@ -18,7 +18,9 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               @for (skill of getSkillsByCategory(category); track skill.id) {
-                <div class="bg-white border border-neutral-200 rounded-lg p-4 flex flex-col gap-3">
+                <div
+                  class="bg-white border border-neutral-200 rounded-lg p-4 flex flex-col gap-3 cursor-pointer transition-all hover:border-neutral-400 hover:shadow-sm"
+                  (click)="navigateToProjects(skill)">
                   <span class="text-sm font-medium text-neutral-900">{{ skill.name }}</span>
                   <div class="flex gap-1">
                     @for (segment of [1, 2, 3, 4, 5]; track segment) {
