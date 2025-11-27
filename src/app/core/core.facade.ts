@@ -28,6 +28,7 @@ export class CoreFacade {
   readonly canAccessAdmin: Signal<boolean> = this.adminStore.canAccessAdmin;
   readonly isLoading: Signal<boolean> = this.adminStore.isLoading;
   readonly isVisitorAuthenticated: Signal<boolean> = this.visitorStore.isAuthenticated;
+  readonly visitor: Signal<Visitor | null> = this.visitorStore.visitor;
   readonly visitorFullName: Signal<string | null> = this.visitorStore.fullName;
   readonly visitorAchievements: Signal<AchievementsInfo | null> = this.visitorStore.achievements;
   readonly skills: Signal<SkillDto[]> = this.skillStore.skills;

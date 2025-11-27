@@ -1,12 +1,14 @@
-import {Component, HostListener, inject, signal} from '@angular/core';
+import {Component, effect, HostListener, inject, signal} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {toSignal} from '@angular/core/rxjs-interop';
 import {CoreFacade} from '../../../core/core.facade';
 import {ToastService} from '../../services/toast.service';
+import {AlertMessage} from '../alert-message/alert-message';
 
 @Component({
   selector: 'app-visitor-auth-modal',
@@ -16,28 +18,30 @@ import {ToastService} from '../../services/toast.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    AlertMessage
   ],
   templateUrl: './visitor-auth-modal.html',
   styleUrl: './visitor-auth-modal.scss'
 })
 export class VisitorAuthModal {
-  private readonly fb = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<VisitorAuthModal>);
   private readonly coreFacade = inject(CoreFacade);
   private readonly toastService = inject(ToastService);
 
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
-
-  readonly authForm = this.fb.group({
+  readonly authForm = inject(FormBuilder).group({
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]]
   });
 
+  private readonly formChanges = toSignal(this.authForm.valueChanges);
+
   constructor() {
-    this.authForm.valueChanges.subscribe(() => {
+    effect(() => {
+      this.formChanges();
       if (this.errorMessage()) {
         this.errorMessage.set(null);
       }
@@ -57,22 +61,21 @@ export class VisitorAuthModal {
 
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
-    const formValue = this.authForm.value;
 
     this.coreFacade.authenticateVisitor({
-      firstName: formValue.firstName!,
-      lastName: formValue.lastName!,
-      email: formValue.email!
+      firstName: this.authForm.value.firstName!,
+      lastName: this.authForm.value.lastName!,
+      email: this.authForm.value.email!
     }).subscribe({
       next: (response) => {
-        const message = response.message;
         this.toastService.success('Authentification réussie');
-        if (message) setTimeout(() => this.toastService.warning(message));
+        if (response.message) {
+          setTimeout(() => this.toastService.warning(response.message!));
+        }
         this.dialogRef.close(true);
       },
       error: (err) => {
-        const message = err.error?.message || err.message || 'Erreur lors de l\'authentification';
-        this.errorMessage.set(message);
+        this.errorMessage.set(err.error?.message || err.message || 'Erreur lors de l\'authentification');
         this.isSubmitting.set(false);
       }
     });
