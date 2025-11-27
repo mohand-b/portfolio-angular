@@ -1,0 +1,28 @@
+{
+  "name": "Mohand Bouras Portfolio",
+  "description": "Angular 20 portfolio application with SSR - mohandb.dev",
+  "repository": "https://github.com/mohandb/portfolio-angular",
+  "keywords": [
+    "angular",
+    "typescript",
+    "ssr",
+    "portfolio",
+    "mohandb"
+  ],
+  "env": {
+    "API_BASE_URL": {
+      "description": "Backend API base URL",
+      "value": "https://api.mohandb.dev",
+      "required": true
+    },
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}

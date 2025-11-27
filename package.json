@@ -5,9 +5,15 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:portfolio-angular": "node dist/portfolio-angular/server/server.mjs"
+    "serve:ssr:portfolio-angular": "node dist/portfolio-angular/server/server.mjs",
+    "heroku-postbuild": "npm run build:prod"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "private": true,
   "dependencies": {
