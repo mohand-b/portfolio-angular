@@ -5,7 +5,7 @@
     "ng": "ng",
     "dev": "ng serve",
     "build": "ng build",
-    "build:ssr": "ng build --configuration production && ng run portfolio-angular:server:production",
+    "build:ssr": "ng build --configuration production",
     "serve:ssr": "node dist/portfolio-angular/server/server.mjs",
     "start": "npm run serve:ssr",
     "watch": "ng build --watch --configuration development",
@@ -13,7 +13,7 @@
     "postinstall": "npm run build:ssr"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": "20.x",
     "npm": ">=10.0.0"
   },
   "private": true,
