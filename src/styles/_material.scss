@@ -317,7 +317,7 @@ input.mat-mdc-input-element {
 /* Target by mat-form-field-disabled class */
 .mat-mdc-form-field.mat-form-field-disabled,
 .mat-form-field-disabled {
-  opacity: 0.65 !important;
+  opacity: 0.9 !important;
   pointer-events: none !important;
 }
 
@@ -347,9 +347,8 @@ input.mat-mdc-input-element {
 .mat-form-field-disabled .mdc-notched-outline__leading,
 .mat-form-field-disabled .mdc-notched-outline__notch,
 .mat-form-field-disabled .mdc-notched-outline__trailing {
-  border-color: #D1D5DB !important;
-  border-style: dashed !important;
-  border-width: 2px !important;
+  border: none !important;
+  border-width: 0 !important;
 }
 
 /* Target by disabled attribute on input/textarea */
@@ -371,7 +370,7 @@ textarea[disabled].mat-mdc-input-element {
 .mat-mdc-form-field:has(input:disabled),
 .mat-mdc-form-field:has(textarea:disabled),
 .mat-mdc-form-field:has(.mat-mdc-input-element:disabled) {
-  opacity: 0.65 !important;
+  opacity: 0.9 !important;
 }
 
 .mat-mdc-form-field:has(input:disabled) .mat-mdc-text-field-wrapper,
@@ -395,7 +394,6 @@ textarea[disabled].mat-mdc-input-element {
 .mat-mdc-form-field:has(.mat-mdc-input-element:disabled) .mdc-notched-outline__leading,
 .mat-mdc-form-field:has(.mat-mdc-input-element:disabled) .mdc-notched-outline__notch,
 .mat-mdc-form-field:has(.mat-mdc-input-element:disabled) .mdc-notched-outline__trailing {
-  border-color: #D1D5DB !important;
-  border-style: dashed !important;
-  border-width: 2px !important;
+  border: none !important;
+  border-width: 0 !important;
 }
