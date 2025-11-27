@@ -6,11 +6,11 @@
     "start": "node dist/portfolio-angular/server/server.mjs",
     "dev": "ng serve",
     "build": "ng build",
-    "build:prod": "ng build --configuration production",
+    "build:ssr": "ng build --configuration production",
+    "serve:ssr": "node dist/portfolio-angular/server/server.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:portfolio-angular": "node dist/portfolio-angular/server/server.mjs",
-    "heroku-postbuild": "ng build --configuration production"
+    "postinstall": "npm run build:ssr"
   },
   "engines": {
     "node": ">=20.0.0",
