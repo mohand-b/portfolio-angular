@@ -1,0 +1,13 @@
+<div class="flex flex-col gap-4">
+  <h3 class="text-lg font-semibold text-neutral-800">Questions déjà posées</h3>
+
+  @if (isLoading()) {
+    <p class="text-center py-8 text-neutral-500">Chargement des questions...</p>
+  } @else if (questions().length === 0) {
+    <p class="text-center py-8 text-neutral-500">Aucune question pour le moment</p>
+  } @else {
+    @for (question of questions(); track question.id) {
+      <app-question-item [question]="question"/>
+    }
+  }
+</div>

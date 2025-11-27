@@ -13,17 +13,17 @@ export interface QuestionResponseDto {
   answer?: string | null;
   rejectionReason?: string | null;
   createdAt: Date;
-  visitor?: Pick<VisitorDto, 'firstName' | 'lastName' | 'email'>;
+  visitor?: Pick<VisitorDto, 'username'>
 }
 
-export interface QuestionPublicResponseDto {
-  id: string;
-  content: string;
-  isAnonymous: boolean;
-  status: QuestionStatusEnum;
-  answer?: string | null;
-  rejectionReason?: string | null;
-  createdAt: Date;
+export interface PaginatedQuestionsResponseDto {
+  data: QuestionResponseDto[];
+  meta?: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }
 
 export enum QuestionStatusEnum {

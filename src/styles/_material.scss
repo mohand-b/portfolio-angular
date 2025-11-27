@@ -116,6 +116,12 @@ html {
   --ff-text: #414141;
   --ff-icon: #6B7280;
   --ff-pad-x: 12px;
+
+  /* Disabled state */
+  --ff-bg-disabled: #E5E7EB;
+  --ff-text-disabled: #6B7280;
+  --ff-border-disabled: #9CA3AF;
+  --ff-icon-disabled: #9CA3AF;
 }
 
 .mat-mdc-form-field.mat-form-field-appearance-outline {
@@ -305,4 +311,91 @@ input.mat-mdc-input-element {
 .mat-mdc-form-field.icon-selector-field:not(.icon-selected) input {
   opacity: 1 !important;
   transition: opacity 0.3s ease-in-out 0.1s, width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disabled form fields - comprehensive targeting */
+/* Target by mat-form-field-disabled class */
+.mat-mdc-form-field.mat-form-field-disabled,
+.mat-form-field-disabled {
+  opacity: 0.65 !important;
+  pointer-events: none !important;
+}
+
+.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-text-field-wrapper,
+.mat-form-field-disabled .mat-mdc-text-field-wrapper {
+  background-color: #F3F4F6 !important;
+}
+
+.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-form-field-infix,
+.mat-form-field-disabled .mat-mdc-form-field-infix {
+  background-color: #F3F4F6 !important;
+}
+
+.mat-mdc-form-field.mat-form-field-disabled input,
+.mat-mdc-form-field.mat-form-field-disabled textarea,
+.mat-form-field-disabled input,
+.mat-form-field-disabled textarea {
+  background-color: #F3F4F6 !important;
+  color: #9CA3AF !important;
+  -webkit-text-fill-color: #9CA3AF !important;
+  cursor: not-allowed !important;
+}
+
+.mat-mdc-form-field.mat-form-field-disabled .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-form-field-disabled .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-form-field-disabled .mdc-notched-outline__trailing,
+.mat-form-field-disabled .mdc-notched-outline__leading,
+.mat-form-field-disabled .mdc-notched-outline__notch,
+.mat-form-field-disabled .mdc-notched-outline__trailing {
+  border-color: #D1D5DB !important;
+  border-style: dashed !important;
+  border-width: 2px !important;
+}
+
+/* Target by disabled attribute on input/textarea */
+input.mat-mdc-input-element:disabled,
+textarea.mat-mdc-input-element:disabled,
+input.mat-input-element:disabled,
+textarea.mat-input-element:disabled,
+.mat-mdc-input-element:disabled,
+input[disabled].mat-mdc-input-element,
+textarea[disabled].mat-mdc-input-element {
+  background-color: #F3F4F6 !important;
+  color: #9CA3AF !important;
+  -webkit-text-fill-color: #9CA3AF !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+}
+
+/* Target parent form field when it has a disabled child */
+.mat-mdc-form-field:has(input:disabled),
+.mat-mdc-form-field:has(textarea:disabled),
+.mat-mdc-form-field:has(.mat-mdc-input-element:disabled) {
+  opacity: 0.65 !important;
+}
+
+.mat-mdc-form-field:has(input:disabled) .mat-mdc-text-field-wrapper,
+.mat-mdc-form-field:has(textarea:disabled) .mat-mdc-text-field-wrapper,
+.mat-mdc-form-field:has(.mat-mdc-input-element:disabled) .mat-mdc-text-field-wrapper {
+  background-color: #F3F4F6 !important;
+}
+
+.mat-mdc-form-field:has(input:disabled) .mat-mdc-form-field-infix,
+.mat-mdc-form-field:has(textarea:disabled) .mat-mdc-form-field-infix,
+.mat-mdc-form-field:has(.mat-mdc-input-element:disabled) .mat-mdc-form-field-infix {
+  background-color: #F3F4F6 !important;
+}
+
+.mat-mdc-form-field:has(input:disabled) .mdc-notched-outline__leading,
+.mat-mdc-form-field:has(input:disabled) .mdc-notched-outline__notch,
+.mat-mdc-form-field:has(input:disabled) .mdc-notched-outline__trailing,
+.mat-mdc-form-field:has(textarea:disabled) .mdc-notched-outline__leading,
+.mat-mdc-form-field:has(textarea:disabled) .mdc-notched-outline__notch,
+.mat-mdc-form-field:has(textarea:disabled) .mdc-notched-outline__trailing,
+.mat-mdc-form-field:has(.mat-mdc-input-element:disabled) .mdc-notched-outline__leading,
+.mat-mdc-form-field:has(.mat-mdc-input-element:disabled) .mdc-notched-outline__notch,
+.mat-mdc-form-field:has(.mat-mdc-input-element:disabled) .mdc-notched-outline__trailing {
+  border-color: #D1D5DB !important;
+  border-style: dashed !important;
+  border-width: 2px !important;
 }

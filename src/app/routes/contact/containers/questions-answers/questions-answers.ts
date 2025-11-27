@@ -1,5 +1,4 @@
 import {Component, computed, inject, signal} from '@angular/core';
-import {DatePipe} from '@angular/common';
 import {httpResource} from '@angular/common/http';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -12,25 +11,27 @@ import {CoreFacade} from '../../../../core/core.facade';
 import {ContactFacade} from '../../contact.facade';
 import {
   CreateQuestionDto,
-  QuestionPublicResponseDto,
+  PaginatedQuestionsResponseDto,
+  QuestionResponseDto,
   QuestionStatusEnum
 } from '../../state/question/question.model';
 import {ModalService} from '../../../../shared/services/modal.service';
 import {VisitorAuthModal} from '../../../../shared/components/visitor-auth-modal/visitor-auth-modal';
 import {AlertMessage} from '../../../../shared/components/alert-message/alert-message';
 import {ToastService} from '../../../../shared/services/toast.service';
+import {QuestionList} from '../../components/question-list/question-list';
 
 @Component({
   selector: 'app-questions-answers',
   imports: [
-    DatePipe,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
     MatButtonModule,
     MatSlideToggleModule,
-    AlertMessage
+    AlertMessage,
+    QuestionList
   ],
   templateUrl: './questions-answers.html',
   styleUrl: './questions-answers.scss'
@@ -45,36 +46,26 @@ export class QuestionsAnswers {
   readonly isSubmitting = signal(false);
   readonly submitError = signal<string | null>(null);
 
-  private readonly newQuestions = signal<QuestionPublicResponseDto[]>([]);
-  private readonly questionsResource = httpResource<QuestionPublicResponseDto[]>(() => ({
-    url: `${environment.baseUrl}/questions/list`,
-    method: 'GET',
-    withCredentials: true
-  }));
+  private readonly newQuestions = signal<QuestionResponseDto[]>([]);
+  private readonly questionsResource = httpResource<PaginatedQuestionsResponseDto>(() => {
+    this.isAuthenticated();
+    return {
+      url: `${environment.baseUrl}/questions/list?page=1&limit=10`,
+      method: 'GET',
+      withCredentials: true
+    };
+  });
 
-  readonly questions = computed(() => [...this.newQuestions(), ...(this.questionsResource.value() ?? [])]);
+  readonly questions = computed(() => [...this.newQuestions(), ...(this.questionsResource.value()?.data ?? [])]);
   readonly isLoadingQuestions = computed(() => this.questionsResource.isLoading());
   readonly hasPendingQuestion = computed(() =>
-    this.questions().some(q => this.isMyQuestion(q) && q.status === QuestionStatusEnum.PENDING)
+    this.questions().some(q => q.status === QuestionStatusEnum.PENDING || q.status === QuestionStatusEnum.REJECTED)
   );
 
-  readonly QuestionStatusEnum = QuestionStatusEnum;
   readonly form = new FormGroup({
     content: new FormControl('', [Validators.required, Validators.minLength(10)]),
     isAnonymous: new FormControl(false)
   });
-
-  private readonly statusLabels: Record<QuestionStatusEnum, string> = {
-    [QuestionStatusEnum.PENDING]: 'En attente',
-    [QuestionStatusEnum.ANSWERED]: 'Répondue',
-    [QuestionStatusEnum.REJECTED]: 'Refusée'
-  };
-
-  private readonly statusColors: Record<QuestionStatusEnum, string> = {
-    [QuestionStatusEnum.PENDING]: 'text-orange-600 bg-orange-50 border-orange-200',
-    [QuestionStatusEnum.ANSWERED]: 'text-green-600 bg-green-50 border-green-200',
-    [QuestionStatusEnum.REJECTED]: 'text-red-600 bg-red-50 border-red-200'
-  };
 
   openAuthModal(): void {
     this.modalService.open(VisitorAuthModal, {
@@ -107,17 +98,5 @@ export class QuestionsAnswers {
         this.submitError.set(err.error?.message || 'Une erreur est survenue');
       }
     });
-  }
-
-  getStatusLabel(status: QuestionStatusEnum): string {
-    return this.statusLabels[status] || '';
-  }
-
-  getStatusColor(status: QuestionStatusEnum): string {
-    return this.statusColors[status] || '';
-  }
-
-  isMyQuestion(question: QuestionPublicResponseDto): boolean {
-    return question.status === QuestionStatusEnum.PENDING || question.status === QuestionStatusEnum.REJECTED;
   }
 }

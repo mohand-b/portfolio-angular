@@ -1,0 +1,35 @@
+<div class="pb-4 border-b border-neutral-200">
+  <div class="flex items-start justify-between gap-3 mb-3">
+    <span class="text-sm font-medium {{ isMyQuestion(question()) ? 'text-neutral-800' : 'text-neutral-600' }}">
+      @if (question().isAnonymous && !isMyQuestion(question())) {
+        Anonyme
+      } @else if (isMyQuestion(question())) {
+        Vous
+      } @else {
+        {{ question().visitor?.username || 'Visiteur' }}
+      }
+    </span>
+
+    <span class="text-xs px-2 py-1 rounded-full border {{ getStatusColor(question().status) }}">
+      {{ getStatusLabel(question().status) }}
+    </span>
+  </div>
+
+  <p class="text-sm text-neutral-700 mb-3">{{ question().content }}</p>
+
+  @if (question().status === QuestionStatusEnum.ANSWERED && question().answer) {
+    <div class="bg-primary/5 border-l-4 border-primary pl-4 py-3 mt-3">
+      <p class="text-sm font-medium text-primary mb-1">Réponse :</p>
+      <p class="text-sm text-neutral-700">{{ question().answer }}</p>
+    </div>
+  }
+
+  @if (question().status === QuestionStatusEnum.REJECTED && question().rejectionReason && isMyQuestion(question())) {
+    <div class="bg-red-50 border-l-4 border-red-400 pl-4 py-3 mt-3">
+      <p class="text-sm font-medium text-red-700 mb-1">Motif du refus :</p>
+      <p class="text-sm text-red-600">{{ question().rejectionReason }}</p>
+    </div>
+  }
+
+  <p class="text-xs text-neutral-400 mt-2">{{ question().createdAt | date: 'dd/MM/yyyy' }}</p>
+</div>

@@ -20,6 +20,7 @@ export interface VisitorDto {
   id: string;
   firstName: string;
   lastName: string;
+  username?: string;
   email: string;
   isVerified: boolean;
   createdAt: string;
