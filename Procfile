@@ -1,1 +1,1 @@
-web: node dist/portfolio-angular/server/server.mjs
+web: npm start

@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node dist/portfolio-angular/server/server.mjs",
     "dev": "ng serve",
     "build": "ng build",
-    "build:ssr": "ng build --configuration production",
+    "build:ssr": "ng build --configuration production && ng run portfolio-angular:server:production",
     "serve:ssr": "node dist/portfolio-angular/server/server.mjs",
+    "start": "npm run serve:ssr",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "postinstall": "npm run build:ssr"
