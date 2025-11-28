@@ -18,15 +18,14 @@ export class VisitorService {
     return this.http.get<Visitor>(`${this.visitorBaseUrl}/me`);
   }
 
-  delete(id: string): Observable<{message: string}> {
-    return this.http.delete<{message: string}>(`${this.visitorBaseUrl}/${id}`);
+  delete(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.visitorBaseUrl}/${id}`);
   }
 
-  unlockAchievement(achievementCode: string): Observable<any> {
-    return this.http.post(`${this.visitorBaseUrl}/achievements/unlock/${achievementCode}`, {});
-  }
 
-  trackSkillVisit(): Observable<any> {
-    return this.http.post(`${this.visitorBaseUrl}/track-skill-visit`, {});
+  verifyEmail(token: string): Observable<{ message: string }> {
+    return this.http.get<{ message: string }>(`${this.visitorBaseUrl}/verify`, {
+      params: {token}
+    });
   }
 }

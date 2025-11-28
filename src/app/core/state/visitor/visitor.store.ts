@@ -38,6 +38,18 @@ export const VisitorStore = signalStore(
         }
       });
     },
+    setVerified() {
+      const currentVisitor = store.visitor();
+
+      if (!currentVisitor) return;
+
+      patchState(store, {
+        visitor: {
+          ...currentVisitor,
+          isVerified: true
+        }
+      });
+    },
     clear() {
       patchState(store, {visitor: null});
     }

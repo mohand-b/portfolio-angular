@@ -32,6 +32,10 @@ export const publicRoutes: Route[] = [
     title: 'Contact'
   },
   {
+    path: 'verify-email',
+    loadComponent: () => import('./verify-email/containers/verify-email/verify-email').then(m => m.VerifyEmail)
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

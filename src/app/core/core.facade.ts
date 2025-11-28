@@ -105,4 +105,13 @@ export class CoreFacade {
     this.visitorStore.incrementAchievements(count);
   }
 
+  verifyEmail(token: string): Observable<{message: string}> {
+    return this.visitorService.verifyEmail(token).pipe(
+      tap(() => this.visitorStore.setVerified()),
+      catchError((err) => {
+        return throwError(() => err);
+      })
+    );
+  }
+
 }
