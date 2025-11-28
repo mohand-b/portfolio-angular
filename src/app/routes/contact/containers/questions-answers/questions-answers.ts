@@ -6,6 +6,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {finalize, tap} from 'rxjs';
 import {environment} from '../../../../../../environments/environments';
 import {CoreFacade} from '../../../../core/core.facade';
 import {ContactFacade} from '../../contact.facade';
@@ -87,17 +88,15 @@ export class QuestionsAnswers {
       isAnonymous: this.form.value.isAnonymous ?? false
     };
 
-    this.contactFacade.askQuestion(dto).subscribe({
-      next: (response) => {
-        this.isSubmitting.set(false);
+    this.contactFacade.askQuestion(dto).pipe(
+      tap(response => {
         this.toastService.success('Votre question a été envoyée avec succès !');
         this.form.reset({isAnonymous: false});
         this.newQuestions.update(questions => [response, ...questions]);
-      },
-      error: (err) => {
-        this.isSubmitting.set(false);
-        this.submitError.set(err.error?.message || 'Une erreur est survenue');
-      }
+      }),
+      finalize(() => this.isSubmitting.set(false))
+    ).subscribe({
+      error: err => this.submitError.set(err.error?.message || 'Une erreur est survenue')
     });
   }
 }
