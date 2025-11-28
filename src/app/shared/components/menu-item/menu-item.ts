@@ -12,5 +12,4 @@ import {NgClass} from '@angular/common';
 })
 export class MenuItem {
   readonly menuEntry = input.required<MenuEntry>();
-  readonly variant = input<'console' | 'public'>('console');
 }

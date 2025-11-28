@@ -108,7 +108,6 @@ export const AchievementStore = signalStore(
             total: store.total() + 1
           });
         }
-        // Recharge la page courante et les stats
         loadAchievements({});
         fetchStats();
       },
@@ -120,7 +119,6 @@ export const AchievementStore = signalStore(
           const updated = [...achievements];
           updated[index] = achievement;
 
-          // Met à jour le compteur si l'état actif a changé
           let totalActive = store.totalActive();
           if (oldAchievement.isActive !== achievement.isActive) {
             totalActive += achievement.isActive ? 1 : -1;
@@ -134,8 +132,6 @@ export const AchievementStore = signalStore(
       },
       removeAchievementByCode(code: string): void {
         const achievement = store.achievements().find(a => a.code === code);
-
-        // Décrémente les compteurs
         if (achievement) {
           if (achievement.isActive) {
             patchState(store, {
