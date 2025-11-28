@@ -43,6 +43,7 @@ export class QuestionsAnswers {
   private readonly toastService = inject(ToastService);
 
   readonly isAuthenticated = this.coreFacade.isVisitorAuthenticated;
+  readonly isVerified = this.coreFacade.isVisitorVerified;
   readonly isSubmitting = signal(false);
   readonly submitError = signal<string | null>(null);
 
@@ -76,7 +77,7 @@ export class QuestionsAnswers {
   }
 
   onSubmit(): void {
-    if (this.form.invalid || this.isSubmitting() || !this.isAuthenticated()) return;
+    if (this.form.invalid || this.isSubmitting() || !this.isAuthenticated() || !this.isVerified()) return;
 
     this.isSubmitting.set(true);
     this.submitError.set(null);

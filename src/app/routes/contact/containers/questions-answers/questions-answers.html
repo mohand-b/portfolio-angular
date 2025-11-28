@@ -15,6 +15,13 @@
           </span>
         </button>
       </div>
+    } @else if (!isVerified()) {
+      <div class="p-6 rounded-lg bg-amber-50 border border-amber-200 text-center">
+        <mat-icon class="!text-4xl !w-10 !h-10 text-amber-600 mb-3">mark_email_unread</mat-icon>
+        <p class="text-sm text-amber-800">
+          Vous devez vérifier votre email avant de pouvoir poser une question. Consultez votre boîte mail.
+        </p>
+      </div>
     } @else if (hasPendingQuestion()) {
       <div class="p-6 rounded-lg bg-amber-50 border border-amber-200 text-center">
         <mat-icon class="!text-4xl !w-10 !h-10 text-amber-600 mb-3">schedule</mat-icon>
