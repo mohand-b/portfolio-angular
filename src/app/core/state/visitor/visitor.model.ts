@@ -14,6 +14,7 @@ export interface Visitor {
     total: number;
     percentCompletion: number;
   };
+  message?: string;
 }
 
 export interface VisitorDto {
@@ -31,6 +32,7 @@ export interface VisitorDto {
     total: number;
     percentCompletion: number;
   };
+  message?: string;
 }
 
 export interface PaginatedVisitorsResponse {

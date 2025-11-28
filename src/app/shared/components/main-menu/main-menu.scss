@@ -12,3 +12,10 @@
 .mobile-menu-dropdown {
   animation: slide-down 0.2s ease-out;
 }
+
+.mobile-menu-item {
+  app-menu-item a {
+    width: 100%;
+    display: block;
+  }
+}

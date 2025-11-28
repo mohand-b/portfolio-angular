@@ -18,6 +18,7 @@ export const VisitorStore = signalStore(
     }),
     achievements: computed(() => store.visitor()?.achievements || null),
     percentCompletion: computed(() => store.visitor()?.achievements?.percentCompletion || 0),
+    verificationMessage: computed(() => store.visitor()?.message || null),
   })),
   withMethods((store) => ({
     setVisitor(visitor: Visitor | null) {

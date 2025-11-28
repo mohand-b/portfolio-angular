@@ -32,6 +32,7 @@ export class CoreFacade {
   readonly visitor: Signal<Visitor | null> = this.visitorStore.visitor;
   readonly visitorFullName: Signal<string | null> = this.visitorStore.fullName;
   readonly visitorAchievements: Signal<AchievementsInfo | null> = this.visitorStore.achievements;
+  readonly visitorVerificationMessage: Signal<string | null> = this.visitorStore.verificationMessage;
   readonly skills: Signal<SkillDto[]> = this.skillStore.skills;
 
   constructor() {

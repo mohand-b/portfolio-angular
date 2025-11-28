@@ -30,17 +30,13 @@
     #rla="routerLinkActive"
     [routerLinkActiveOptions]="{ exact: false }"
     [routerLink]="menuEntry().path"
-    class="relative flex items-center text-sm font-medium
-           transition-colors duration-200 pb-[6px]"
+    class="relative flex items-center text-sm transition-colors duration-200 px-3 py-2 rounded-lg"
     [ngClass]="{
-      'text-primary': rla.isActive,
-      'text-neutral-700 hover:text-neutral-900': !rla.isActive
+      'text-primary font-semibold bg-primary/10': rla.isActive,
+      'text-neutral-700 hover:text-neutral-900 hover:bg-neutral-50 font-medium': !rla.isActive
     }"
     routerLinkActive
   >
     <span class="truncate">{{ menuEntry().title }}</span>
-    @if (rla.isActive) {
-      <div class="absolute bottom-0 left-0 right-0 h-[3px] bg-primary rounded-full"></div>
-    }
   </a>
 }

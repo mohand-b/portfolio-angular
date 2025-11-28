@@ -1,6 +1,7 @@
 import {Component, computed, inject, signal} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {CoreFacade} from '../../../core/core.facade';
 import {publicRoutes} from '../../../routes/public.routes';
 import {ModalService} from '../../services/modal.service';
@@ -15,7 +16,7 @@ export interface MenuEntry {
 
 @Component({
   selector: 'app-main-menu',
-  imports: [MenuItem, MatButtonModule, MatIconModule],
+  imports: [MenuItem, MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './main-menu.html',
   styleUrl: './main-menu.scss'
 })
@@ -31,6 +32,7 @@ export class MainMenu {
   readonly isAuth = this.coreFacade.isVisitorAuthenticated;
   readonly isVerified = this.coreFacade.isVisitorVerified;
   readonly achievements = this.coreFacade.visitorAchievements;
+  readonly verificationMessage = this.coreFacade.visitorVerificationMessage;
 
   readonly greeting = computed(() => {
     const hour = new Date().getHours();
