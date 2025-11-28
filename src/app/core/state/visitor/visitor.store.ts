@@ -11,6 +11,7 @@ export const VisitorStore = signalStore(
   withState<VisitorState>({visitor: null}),
   withComputed((store) => ({
     isAuthenticated: computed(() => !!store.visitor()),
+    isVerified: computed(() => store.visitor()?.isVerified || false),
     fullName: computed(() => {
       const visitor = store.visitor();
       return visitor ? `${visitor.firstName} ${visitor.lastName}` : null;

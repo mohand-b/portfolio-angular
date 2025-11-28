@@ -1,4 +1,4 @@
-import {Component, computed, inject} from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {CoreFacade} from '../../../core/core.facade';
@@ -20,14 +20,16 @@ export interface MenuEntry {
   styleUrl: './main-menu.scss'
 })
 export class MainMenu {
-  private coreFacade = inject(CoreFacade);
-  private modalService = inject(ModalService);
+  private readonly coreFacade = inject(CoreFacade);
+  private readonly modalService = inject(ModalService);
 
+  readonly mobileMenuOpen = signal(false);
   readonly menuItems: MenuEntry[] = publicRoutes
     .filter(route => route.title && !route.path?.includes(':'))
     .map(route => ({title: route.title, path: route.path})) as MenuEntry[];
 
   readonly isAuth = this.coreFacade.isVisitorAuthenticated;
+  readonly isVerified = this.coreFacade.isVisitorVerified;
   readonly achievements = this.coreFacade.visitorAchievements;
 
   readonly greeting = computed(() => {
@@ -39,6 +41,14 @@ export class MainMenu {
     const fullName = this.coreFacade.visitorFullName();
     return fullName ? fullName.split(' ')[0] : '';
   });
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen.update(v => !v);
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
+  }
 
   openAuthModal(): void {
     this.modalService.open(VisitorAuthModal, {
