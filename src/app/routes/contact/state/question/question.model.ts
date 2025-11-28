@@ -13,7 +13,7 @@ export interface QuestionResponseDto {
   answer?: string | null;
   rejectionReason?: string | null;
   createdAt: Date;
-  visitor?: Pick<VisitorDto, 'username'>
+  visitor?: Pick<VisitorDto, 'username' | 'avatarSvg'>
 }
 
 export interface PaginatedQuestionsResponseDto {
@@ -30,4 +30,19 @@ export enum QuestionStatusEnum {
   PENDING = 'pending',
   ANSWERED = 'answered',
   REJECTED = 'rejected'
+}
+
+export interface AnswerQuestionDto {
+  answer: string;
+}
+
+export interface RejectQuestionDto {
+  rejectionReason: string;
+}
+
+export interface QuestionStatsResponseDto {
+  pending: number;
+  answered: number;
+  rejected: number;
+  total: number;
 }

@@ -1,0 +1,144 @@
+<div class="flex flex-col gap-3 bg-white border-b border-slate-200 p-4">
+  <div class="flex items-start justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center flex-shrink-0">
+        @if (!question().isAnonymous && question().visitor?.avatarSvg) {
+          <div [innerHTML]="question().visitor?.avatarSvg! | svgSafe" class="w-full h-full"></div>
+        } @else if (!question().isAnonymous && question().visitor) {
+          <span class="text-sm font-medium text-slate-600">{{ getInitials() }}</span>
+        } @else {
+          <mat-icon class="!text-[20px] !w-[20px] !h-[20px] text-slate-400">person</mat-icon>
+        }
+      </div>
+
+      <div class="flex items-center gap-2">
+        @if (question().isAnonymous) {
+          <span class="text-sm font-medium text-slate-600">Anonyme</span>
+        } @else {
+          <span class="text-sm font-medium text-slate-800">{{ question().visitor?.username || 'Visiteur' }}</span>
+        }
+        <span class="text-xs text-slate-500">{{ question().createdAt | timeAgo }}</span>
+      </div>
+    </div>
+
+    <span class="px-3 py-1 rounded-full text-xs font-semibold border {{ statusConfig[question().status].class }} whitespace-nowrap flex-shrink-0">
+      {{ statusConfig[question().status].label }}
+    </span>
+  </div>
+
+  <p class="text-sm text-slate-700 leading-relaxed">{{ question().content }}</p>
+
+  @if (question().status === QuestionStatusEnum.ANSWERED && question().answer) {
+    <div class="flex flex-col gap-1 bg-green-50 border-l-4 border-green-500 pl-4 py-3">
+      <p class="text-sm font-semibold text-green-800">Réponse :</p>
+      <p class="text-sm text-green-700">{{ question().answer }}</p>
+    </div>
+  }
+
+  @if (question().status === QuestionStatusEnum.REJECTED && question().rejectionReason) {
+    <div class="flex flex-col gap-1 bg-red-50 border-l-4 border-red-500 pl-4 py-3">
+      <p class="text-sm font-semibold text-red-800">Motif du rejet :</p>
+      <p class="text-sm text-red-700">{{ question().rejectionReason }}</p>
+    </div>
+  }
+
+  @if (question().status === QuestionStatusEnum.PENDING) {
+    @if (!showAnswerForm() && !showRejectForm()) {
+      <div class="flex gap-2">
+        <button
+          (click)="toggleAnswerForm()"
+          class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
+        >
+          <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">reply</mat-icon>
+          Répondre
+        </button>
+
+        <button
+          (click)="toggleRejectForm()"
+          class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
+        >
+          <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">block</mat-icon>
+          Rejeter
+        </button>
+      </div>
+    }
+
+    @if (showAnswerForm()) {
+      <div class="flex flex-col gap-3 pt-3 border-t border-slate-200">
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-700">Votre réponse</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <textarea
+              matInput
+              [formControl]="answerControl"
+              rows="4"
+              placeholder="Écrivez votre réponse ici..."
+            ></textarea>
+            @if (answerControl.hasError('required')) {
+              <mat-error>La réponse est obligatoire</mat-error>
+            }
+            @if (answerControl.hasError('minlength')) {
+              <mat-error>La réponse doit contenir au moins 10 caractères</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="flex gap-2">
+          <button
+            (click)="onSubmitAnswer()"
+            [disabled]="answerControl.invalid"
+            class="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center gap-2"
+          >
+            <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">send</mat-icon>
+            Envoyer
+          </button>
+          <button
+            (click)="onCancel()"
+            class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+          >
+            Annuler
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (showRejectForm()) {
+      <div class="flex flex-col gap-3 pt-3 border-t border-slate-200">
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium text-gray-700">Motif du rejet</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <textarea
+              matInput
+              [formControl]="rejectControl"
+              rows="4"
+              placeholder="Expliquez le motif du rejet..."
+            ></textarea>
+            @if (rejectControl.hasError('required')) {
+              <mat-error>Le motif est obligatoire</mat-error>
+            }
+            @if (rejectControl.hasError('minlength')) {
+              <mat-error>Le motif doit contenir au moins 10 caractères</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="flex gap-2">
+          <button
+            (click)="onSubmitReject()"
+            [disabled]="rejectControl.invalid"
+            class="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center gap-2"
+          >
+            <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">block</mat-icon>
+            Rejeter
+          </button>
+          <button
+            (click)="onCancel()"
+            class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+          >
+            Annuler
+          </button>
+        </div>
+      </div>
+    }
+  }
+</div>

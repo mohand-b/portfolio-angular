@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../../../../environments/environments';
-import {CreateQuestionDto, QuestionResponseDto} from './question.model';
+import {AnswerQuestionDto, CreateQuestionDto, QuestionResponseDto, QuestionStatsResponseDto, RejectQuestionDto} from './question.model';
 
 @Injectable({providedIn: 'root'})
 export class QuestionService {
@@ -15,5 +15,17 @@ export class QuestionService {
       dto,
       {withCredentials: true}
     );
+  }
+
+  answerQuestion(id: string, dto: AnswerQuestionDto): Observable<QuestionResponseDto> {
+    return this.http.patch<QuestionResponseDto>(`${this.baseUrl}/${id}/answer`, dto);
+  }
+
+  rejectQuestion(id: string, dto: RejectQuestionDto): Observable<QuestionResponseDto> {
+    return this.http.patch<QuestionResponseDto>(`${this.baseUrl}/${id}/reject`, dto);
+  }
+
+  getStats(): Observable<QuestionStatsResponseDto> {
+    return this.http.get<QuestionStatsResponseDto>(`${this.baseUrl}/stats`, {withCredentials: true});
   }
 }

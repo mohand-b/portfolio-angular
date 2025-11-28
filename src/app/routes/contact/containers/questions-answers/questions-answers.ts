@@ -52,7 +52,7 @@ export class QuestionsAnswers {
   private readonly questionsResource = httpResource<PaginatedQuestionsResponseDto>(() => {
     this.isAuthenticated();
     return {
-      url: `${environment.baseUrl}/questions/list?page=1&limit=10`,
+      url: `${environment.baseUrl}/questions/list?page=1&limit=5`,
       method: 'GET',
       withCredentials: true
     };
@@ -61,7 +61,7 @@ export class QuestionsAnswers {
   readonly questions = computed(() => [...this.newQuestions(), ...(this.questionsResource.value()?.data ?? [])]);
   readonly isLoadingQuestions = computed(() => this.questionsResource.isLoading());
   readonly hasPendingQuestion = computed(() =>
-    this.questions().some(q => q.status === QuestionStatusEnum.PENDING || q.status === QuestionStatusEnum.REJECTED)
+    this.questions().some(q => q.status === QuestionStatusEnum.PENDING)
   );
 
   readonly form = new FormGroup({

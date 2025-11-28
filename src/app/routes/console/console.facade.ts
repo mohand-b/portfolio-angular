@@ -39,6 +39,8 @@ import {
   TimelineItem,
   TimelineItemType
 } from '../career/state/timeline/timeline.model';
+import {AnswerQuestionDto, QuestionResponseDto, RejectQuestionDto} from '../contact/state/question/question.model';
+import {QuestionService} from '../contact/state/question/question.service';
 
 @Injectable({providedIn: 'root'})
 export class ConsoleFacade {
@@ -59,6 +61,8 @@ export class ConsoleFacade {
   private readonly projectService = inject(ProjectService);
 
   private readonly timelineStore = inject(TimelineStore);
+
+  private readonly questionService = inject(QuestionService);
 
   readonly achievements: Signal<Achievement[]> = this.achievementStore.achievements;
   readonly totalAchievements: Signal<number> = this.achievementStore.totalAchievements;
@@ -336,5 +340,13 @@ export class ConsoleFacade {
       description: milestone.description ?? null,
       image: milestone.image ?? null
     };
+  }
+
+  answerQuestion(id: string, dto: AnswerQuestionDto): Observable<QuestionResponseDto> {
+    return this.questionService.answerQuestion(id, dto);
+  }
+
+  rejectQuestion(id: string, dto: RejectQuestionDto): Observable<QuestionResponseDto> {
+    return this.questionService.rejectQuestion(id, dto);
   }
 }

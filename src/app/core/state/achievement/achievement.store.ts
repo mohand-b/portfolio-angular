@@ -25,6 +25,8 @@ const initialState: AchievementState = {
   limit: 6,
   totalPages: 0,
   stats: {
+    total: 0,
+    totalActive: 0,
     totalUnlocked: 0,
     completionRate: 0
   },
@@ -49,12 +51,9 @@ export const AchievementStore = signalStore(
           achievementService.fetchPaginatedAchievements(page, limit).pipe(
             tap({
               next: (response) => {
-                const totalActive = response.data.filter(a => a.isActive).length;
-
                 patchState(store, {
                   achievements: response.data,
                   total: response.total,
-                  ...(page === 1 ? {totalActive: response.data.filter(a => a.isActive).length} : {}),
                   page: response.page,
                   limit: response.limit,
                   totalPages: response.totalPages,
@@ -73,41 +72,24 @@ export const AchievementStore = signalStore(
     const fetchStats = rxMethod<void>(
       pipe(
         switchMap(() => achievementService.fetchAchievementStats()),
-        tap(stats => patchState(store, {stats})),
-      )
-    );
-
-    const loadTotalActiveCounts = rxMethod<void>(
-      pipe(
-        switchMap(() => achievementService.fetchPaginatedAchievements(1, 1000)),
-        tap(response => {
-          const totalActive = response.data.filter(a => a.isActive).length;
-          patchState(store, {
-            total: response.total,
-            totalActive
-          });
-        })
+        tap(stats => patchState(store, {
+          stats,
+          totalActive: stats.totalActive
+        })),
       )
     );
 
     return {
       loadAchievements,
       fetchStats,
-      loadTotalActiveCounts,
       setPage: (page: number) => loadAchievements({page}),
       nextPage: () => store.page() < store.totalPages() && loadAchievements({page: store.page() + 1}),
       previousPage: () => store.page() > 1 && loadAchievements({page: store.page() - 1}),
       addAchievement(achievement: Achievement): void {
-        if (achievement.isActive) {
-          patchState(store, {
-            total: store.total() + 1,
-            totalActive: store.totalActive() + 1
-          });
-        } else {
-          patchState(store, {
-            total: store.total() + 1
-          });
-        }
+        patchState(store, {
+          total: store.total() + 1,
+          totalActive: achievement.isActive ? store.totalActive() + 1 : store.totalActive()
+        });
         loadAchievements({});
         fetchStats();
       },
@@ -120,29 +102,23 @@ export const AchievementStore = signalStore(
           updated[index] = achievement;
 
           let totalActive = store.totalActive();
-          if (oldAchievement.isActive !== achievement.isActive) {
-            totalActive += achievement.isActive ? 1 : -1;
+          if (oldAchievement.isActive && !achievement.isActive) {
+            totalActive -= 1;
+          } else if (!oldAchievement.isActive && achievement.isActive) {
+            totalActive += 1;
           }
 
-          patchState(store, {
-            achievements: updated,
-            totalActive
-          });
+          patchState(store, {achievements: updated, totalActive});
+          fetchStats();
         }
       },
       removeAchievementByCode(code: string): void {
         const achievement = store.achievements().find(a => a.code === code);
         if (achievement) {
-          if (achievement.isActive) {
-            patchState(store, {
-              total: store.total() - 1,
-              totalActive: store.totalActive() - 1
-            });
-          } else {
-            patchState(store, {
-              total: store.total() - 1
-            });
-          }
+          patchState(store, {
+            total: store.total() - 1,
+            totalActive: achievement.isActive ? store.totalActive() - 1 : store.totalActive()
+          });
         }
         loadAchievements({});
         fetchStats();
@@ -153,7 +129,6 @@ export const AchievementStore = signalStore(
   withHooks({
     onInit(store) {
       store.loadAchievements({page: 1});
-      store.loadTotalActiveCounts();
       store.fetchStats();
     }
   })

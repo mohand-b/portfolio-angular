@@ -38,6 +38,8 @@ export interface AchievementUnlockLog {
 }
 
 export interface AchievementStats {
+  total: number;
+  totalActive: number;
   totalUnlocked: number;
   completionRate: number;
 }
