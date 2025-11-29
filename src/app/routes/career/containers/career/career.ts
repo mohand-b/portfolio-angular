@@ -1,11 +1,11 @@
 import {Component, inject} from '@angular/core';
-import {TimelineItem} from '../../components/timeline/timeline-item/timeline-item';
 import {TimelineFilters} from '../../components/timeline-filters/timeline-filters';
 import {CareerFacade} from '../../career.facade';
+import {Timeline} from '../../components/timeline/timeline';
 
 @Component({
   selector: 'app-career',
-  imports: [TimelineItem, TimelineFilters],
+  imports: [Timeline, TimelineFilters],
   templateUrl: './career.html',
   styleUrl: './career.scss'
 })

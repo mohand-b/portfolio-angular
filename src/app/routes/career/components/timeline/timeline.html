@@ -1,0 +1,22 @@
+<div class="relative">
+  <div class="absolute left-1/2 -translate-x-1/2 w-0.5 h-full bg-neutral-200 max-lg:left-4"></div>
+  @for (displayItem of displayItems(); track $index) {
+    @if (displayItem.type === 'year') {
+      <div class="relative flex justify-center items-center my-6 w-full max-lg:justify-start max-lg:pl-4">
+        <div
+          class="bg-neutral-100 rounded px-3 py-1 text-neutral-500 font-serif font-semibold uppercase tracking-wider max-lg:-translate-x-1/2">
+          {{ displayItem.year }}
+        </div>
+      </div>
+    } @else {
+      <app-timeline-item
+        [item]="displayItem.data"
+        [isLeft]="displayItem.index % 2 === 0"
+        [readonly]="readonly()"
+        (editRequested)="editRequested.emit($event)"
+        (deleteRequested)="deleteRequested.emit($event)"
+        (detachRequested)="detachRequested.emit($event)"
+      />
+    }
+  }
+</div>

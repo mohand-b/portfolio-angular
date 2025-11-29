@@ -61,7 +61,7 @@ export interface MilestoneTimelineItem extends TimelineItemBase {
   type: TimelineItemType.Milestone;
 }
 
-export type TimelineItem =
+export type TimelineItemData =
   | JobTimelineItem
   | ProjectTimelineItem
   | EducationTimelineItem

@@ -6,7 +6,7 @@ import {
   MilestoneTimelineItem,
   ProjectTimelineItem,
   TIMELINE_ITEM_TYPE_META,
-  TimelineItem as TimelineItemModel,
+  TimelineItemData,
   TimelineItemType
 } from '../../../state/timeline/timeline.model';
 import {TimelineItemHeader} from '../timeline-item-header/timeline-item-header';
@@ -31,7 +31,7 @@ import {MilestoneTimelineContent} from '../milestone-timeline-content/milestone-
   styleUrl: './timeline-item.scss'
 })
 export class TimelineItem {
-  readonly item = input.required<TimelineItemModel>();
+  readonly item = input.required<TimelineItemData>();
   readonly isLeft = input.required<boolean>();
   readonly readonly = input<boolean>(false);
   readonly editRequested = output<string>();

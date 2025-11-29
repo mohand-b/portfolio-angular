@@ -2,11 +2,11 @@ import {computed, inject} from '@angular/core';
 import {patchState, signalStore, withComputed, withHooks, withMethods, withProps, withState} from '@ngrx/signals';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {pipe, switchMap, tap} from 'rxjs';
-import {TimelineItem, TimelineItemType} from './timeline.model';
+import {TimelineItemData, TimelineItemType} from './timeline.model';
 import {TimelineService} from './timeline.service';
 
 export interface TimelineState {
-  items: TimelineItem[];
+  items: TimelineItemData[];
   loading: boolean;
   error: string | null;
   selectedTypes: TimelineItemType[];
@@ -37,8 +37,8 @@ export const TimelineStore = signalStore(
   })),
   withMethods((store) => ({
     setSelectedTypes: (types: TimelineItemType[]) => patchState(store, {selectedTypes: types}),
-    addItem: (item: TimelineItem) => patchState(store, {items: [...store.items(), item]}),
-    updateItem: (updatedItem: TimelineItem) => patchState(store, {
+    addItem: (item: TimelineItemData) => patchState(store, {items: [...store.items(), item]}),
+    updateItem: (updatedItem: TimelineItemData) => patchState(store, {
       items: store.items().map(item => item.id === updatedItem.id ? updatedItem : item)
     }),
     deleteItem: (itemId: string) => patchState(store, {

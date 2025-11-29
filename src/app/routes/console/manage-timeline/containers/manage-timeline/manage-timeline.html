@@ -16,17 +16,12 @@
     }
 
     <div class="w-full max-w-[1400px] mx-auto p-4">
-      <div class="timeline">
-        @for (item of timelineStore.filteredItems(); track item.id; let isEven = $even) {
-          <app-timeline-item
-            [item]="item"
-            [isLeft]="isEven"
-            (editRequested)="onEditRequested($event)"
-            (deleteRequested)="onDeleteRequested($event)"
-            (detachRequested)="onDetachRequested($event)"
-          />
-        }
-      </div>
+      <app-timeline
+        [items]="timelineStore.filteredItems()"
+        (editRequested)="onEditRequested($event)"
+        (deleteRequested)="onDeleteRequested($event)"
+        (detachRequested)="onDetachRequested($event)"
+      />
     </div>
   </div>
 </div>

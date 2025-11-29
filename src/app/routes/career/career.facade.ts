@@ -1,6 +1,6 @@
 import {inject, Injectable, Signal} from '@angular/core';
 import {TimelineStore} from './state/timeline/timeline.store';
-import {TimelineItem, TimelineItemType} from './state/timeline/timeline.model';
+import {TimelineItemData, TimelineItemType} from './state/timeline/timeline.model';
 
 @Injectable({providedIn: 'root'})
 export class CareerFacade {
@@ -9,7 +9,7 @@ export class CareerFacade {
   readonly loading: Signal<boolean> = this.timelineStore.loading;
   readonly error: Signal<string | null> = this.timelineStore.error;
   readonly hasItems: Signal<boolean> = this.timelineStore.hasItems;
-  readonly filteredItems: Signal<TimelineItem[]> = this.timelineStore.filteredItems;
+  readonly filteredItems: Signal<TimelineItemData[]> = this.timelineStore.filteredItems;
   readonly selectedTypes: Signal<TimelineItemType[]> = this.timelineStore.selectedTypes;
 
   setSelectedTypes(types: TimelineItemType[]): void {

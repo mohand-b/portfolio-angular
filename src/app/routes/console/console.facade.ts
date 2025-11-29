@@ -36,7 +36,7 @@ import {
   JobTimelineItem,
   MilestoneTimelineItem,
   ProjectTimelineItem,
-  TimelineItem,
+  TimelineItemData,
   TimelineItemType
 } from '../career/state/timeline/timeline.model';
 import {AnswerQuestionDto, QuestionResponseDto, RejectQuestionDto} from '../contact/state/question/question.model';
@@ -85,11 +85,11 @@ export class ConsoleFacade {
   readonly projectsStartIndex: Signal<number> = this.projectStore.startIndex;
   readonly projectsEndIndex: Signal<number> = this.projectStore.endIndex;
 
-  readonly timelineItems: Signal<TimelineItem[]> = this.timelineStore.items;
+  readonly timelineItems: Signal<TimelineItemData[]> = this.timelineStore.items;
   readonly timelineLoading: Signal<boolean> = this.timelineStore.loading;
   readonly timelineError: Signal<string | null> = this.timelineStore.error;
   readonly timelineSelectedTypes: Signal<TimelineItemType[]> = this.timelineStore.selectedTypes;
-  readonly timelineFilteredItems: Signal<TimelineItem[]> = this.timelineStore.filteredItems;
+  readonly timelineFilteredItems: Signal<TimelineItemData[]> = this.timelineStore.filteredItems;
   readonly timelineHasItems: Signal<boolean> = this.timelineStore.hasItems;
 
   getAchievementLogs(): Observable<AchievementUnlockLog[]> {

@@ -18,7 +18,7 @@ import {JobForm} from '../../components/job-form/job-form';
 import {MilestoneForm} from '../../components/milestone-form/milestone-form';
 import {MilestoneTimelineItemCreate} from '../../components/milestone-timeline-item-create/milestone-timeline-item-create';
 import {ProjectTimelineLink} from '../../components/project-timeline-link/project-timeline-link';
-import {TimelineItem} from '../../../../career/components/timeline/timeline-item/timeline-item';
+import {Timeline} from '../../../../career/components/timeline/timeline';
 import {ConfirmationModal} from '../../../../../shared/components/confirmation-modal/confirmation-modal';
 import {ConsoleFacade} from '../../../console.facade';
 import {ToastService} from '../../../../../shared/services/toast.service';
@@ -39,7 +39,7 @@ import {ToastService} from '../../../../../shared/services/toast.service';
     MilestoneForm,
     MilestoneTimelineItemCreate,
     ProjectTimelineLink,
-    TimelineItem,
+    Timeline,
     ConfirmationModal
   ],
   templateUrl: './manage-timeline.html',

@@ -14,12 +14,7 @@
         <p>Aucun élément ne correspond aux filtres sélectionnés.</p>
       </div>
     } @else {
-      <div class="relative">
-        <div class="absolute left-1/2 -translate-x-1/2 w-0.5 h-full bg-neutral-200 max-lg:left-4"></div>
-        @for (item of careerFacade.filteredItems(); track item.id; let i = $index) {
-          <app-timeline-item [item]="item" [isLeft]="i % 2 === 0" [readonly]="true"/>
-        }
-      </div>
+      <app-timeline [items]="careerFacade.filteredItems()" [readonly]="true"/>
     }
   </div>
 </div>
