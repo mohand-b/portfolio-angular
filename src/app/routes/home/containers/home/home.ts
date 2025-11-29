@@ -4,6 +4,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {SKILL_CATEGORY_META} from '../../../skills/state/skill/skill.model';
 import {CoreFacade} from '../../../../core/core.facade';
+import {StatusIndicators} from '../../../../shared/components/status-indicators/status-indicators';
 
 interface FallingSkill {
   name: string;
@@ -18,7 +19,7 @@ interface FallingSkill {
 
 @Component({
   selector: 'app-home',
-  imports: [MatButtonModule, MatIconModule],
+  imports: [MatButtonModule, MatIconModule, StatusIndicators],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })

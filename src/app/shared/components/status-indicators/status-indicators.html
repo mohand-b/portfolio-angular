@@ -1,0 +1,19 @@
+<div class="flex flex-wrap gap-4 p-4">
+  @for (indicator of indicators(); track indicator.label) {
+    <div class="flex items-center gap-2 text-xs text-neutral-800" [matTooltip]="indicator.tooltip || ''">
+      @if (typeof indicator.value === 'boolean') {
+        <span
+          class="w-2.5 h-2.5 rounded-full animate-pulse"
+          [class.bg-green-500]="indicator.value"
+          [class.shadow-[0_0_0.5rem_rgba(16,185,129,0.5)]="indicator.value"
+          [class.bg-red-500]="!indicator.value"
+          [class.shadow-[0_0_0.5rem_rgba(239,68,68,0.5)]="!indicator.value">
+            </span>
+      }
+      <span class="font-medium whitespace-nowrap">{{ indicator.label }}</span>
+      @if (typeof indicator.value === 'string') {
+        <span class="text-neutral-600 font-mono text-[0.8125rem]">{{ indicator.value }}</span>
+      }
+    </div>
+  }
+</div>
