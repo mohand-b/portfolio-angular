@@ -1,5 +1,6 @@
 <div class="flex flex-col h-full p-[1.25rem] gap-[1.5rem]">
-  <div class="flex gap-2 flex-wrap justify-end">
+  <div class="flex gap-1 flex-wrap">
+
     <div
       (click)="onFilterByStatus('pending')"
       class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200 cursor-pointer hover:bg-amber-200 transition-colors"
@@ -10,6 +11,7 @@
       <span class="font-semibold">{{ stats().pending }}</span>
       <span>En attente</span>
     </div>
+
     <div
       (click)="onFilterByStatus('answered')"
       class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200 cursor-pointer hover:bg-green-200 transition-colors"
@@ -20,6 +22,7 @@
       <span class="font-semibold">{{ stats().answered }}</span>
       <span>Répondues</span>
     </div>
+
     <div
       (click)="onFilterByStatus('rejected')"
       class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200 cursor-pointer hover:bg-red-200 transition-colors"
@@ -31,6 +34,7 @@
       <span>Rejetées</span>
     </div>
   </div>
+
   @if (isLoading()) {
     <div class="flex flex-col items-center justify-center text-slate-400">
       <p class="text-sm font-medium">Chargement...</p>

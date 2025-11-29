@@ -6,12 +6,12 @@
 
     <button (click)="openPanel()" matButton="filled">
       <mat-icon>add</mat-icon>
-      Créer un nouveau succès
+      Créer un succès
     </button>
   </div>
 
   <main class="flex flex-col flex-1 gap-6 bg-neutral-100 p-5 overflow-auto">
-    <section class="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+    <section class="grid gap-6 grid-cols-2 xl:grid-cols-4">
       <app-kpi-card
         title="Total Succès"
         [value]="facade.achievementsTotal()"

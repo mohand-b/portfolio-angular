@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {environment} from '../../../../../environments/environments';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Achievement, AchievementCreate, AchievementStats, UpdateAchievementDto, PaginatedAchievementsResponse} from './achievement.model';
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class AchievementService {
@@ -22,7 +22,14 @@ export class AchievementService {
   }
 
   fetchAchievementStats(): Observable<AchievementStats> {
-    return this.http.get<AchievementStats>(`${this.achievementBaseUrl}/stats`, {withCredentials: true});
+    return this.http.get<any>(`${this.achievementBaseUrl}/stats`, {withCredentials: true}).pipe(
+      map(response => ({
+        total: response.total,
+        totalActive: response.totalActiveAchievements,
+        totalUnlocked: response.totalUnlocked,
+        completionRate: response.completionRate
+      }))
+    );
   }
 
   createAchievement(achievement: AchievementCreate): Observable<Achievement> {

@@ -5,7 +5,7 @@
 
   <div class="flex flex-col flex-1 gap-[1.5rem] bg-neutral-100 p-[1.25rem]">
     @if (stats()) {
-      <section class="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+      <section class="grid gap-6 grid-cols-2 xl:grid-cols-4">
         <app-kpi-card
           title="Total Visiteurs"
           [value]="stats()!.totalVisitors"
