@@ -1,34 +1,16 @@
 <div class="flex flex-col h-full p-[1.25rem] gap-[1.5rem]">
   <div class="flex gap-1 flex-wrap">
-
-    <div
-      (click)="onFilterByStatus('pending')"
-      class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200 cursor-pointer hover:bg-amber-200 transition-colors"
-      [class.ring-1]="statusFilter() === 'pending'"
-      [class.ring-amber-400]="statusFilter() === 'pending'"
-    >
+    <div (click)="onFilterByStatus('pending')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-orange-50 text-orange-600 border border-orange-200 cursor-pointer hover:bg-orange-100 transition-colors" [class.ring-1]="statusFilter() === 'pending'" [class.ring-orange-400]="statusFilter() === 'pending'">
       <mat-icon class="!text-[16px] !w-[16px] !h-[16px]">schedule</mat-icon>
       <span class="font-semibold">{{ stats().pending }}</span>
       <span>En attente</span>
     </div>
-
-    <div
-      (click)="onFilterByStatus('answered')"
-      class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200 cursor-pointer hover:bg-green-200 transition-colors"
-      [class.ring-1]="statusFilter() === 'answered'"
-      [class.ring-green-400]="statusFilter() === 'answered'"
-    >
+    <div (click)="onFilterByStatus('answered')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-50 text-green-600 border border-green-200 cursor-pointer hover:bg-green-100 transition-colors" [class.ring-1]="statusFilter() === 'answered'" [class.ring-green-400]="statusFilter() === 'answered'">
       <mat-icon class="!text-[16px] !w-[16px] !h-[16px]">check_circle</mat-icon>
       <span class="font-semibold">{{ stats().answered }}</span>
       <span>Répondues</span>
     </div>
-
-    <div
-      (click)="onFilterByStatus('rejected')"
-      class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200 cursor-pointer hover:bg-red-200 transition-colors"
-      [class.ring-1]="statusFilter() === 'rejected'"
-      [class.ring-red-400]="statusFilter() === 'rejected'"
-    >
+    <div (click)="onFilterByStatus('rejected')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-red-50 text-red-600 border border-red-200 cursor-pointer hover:bg-red-100 transition-colors" [class.ring-1]="statusFilter() === 'rejected'" [class.ring-red-400]="statusFilter() === 'rejected'">
       <mat-icon class="!text-[16px] !w-[16px] !h-[16px]">cancel</mat-icon>
       <span class="font-semibold">{{ stats().rejected }}</span>
       <span>Rejetées</span>
@@ -46,24 +28,13 @@
   } @else {
     <div class="grid border border-slate-200 rounded-md overflow-hidden">
       @for (question of questions(); track question.id) {
-        <app-question-admin-item
-          [question]="question"
-          (answerSubmitted)="onAnswerSubmitted($event)"
-          (rejectSubmitted)="onRejectSubmitted($event)"
-        />
+        <app-question-admin-item [question]="question" (answerSubmitted)="onAnswerSubmitted($event)" (rejectSubmitted)="onRejectSubmitted($event)"/>
       }
     </div>
 
     @if (totalPages() > 1) {
       <div class="flex justify-center mt-4">
-        <app-pagination
-          [currentPage]="page()"
-          [totalPages]="totalPages()"
-          [isLoading]="isLoading()"
-          (pageChange)="onPageChange($event)"
-          (previousPage)="onPreviousPage()"
-          (nextPage)="onNextPage()"
-        />
+        <app-pagination [currentPage]="page()" [totalPages]="totalPages()" [isLoading]="isLoading()" (pageChange)="onPageChange($event)" (previousPage)="onPreviousPage()" (nextPage)="onNextPage()"/>
       </div>
     }
   }

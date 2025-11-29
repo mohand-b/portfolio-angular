@@ -1,35 +1,53 @@
-<div class="pb-4 border-b border-neutral-200">
+<div class="pb-6 border-b border-neutral-200">
   <div class="flex items-start justify-between gap-3 mb-3">
-    <span class="text-sm font-medium {{ isMyQuestion(question()) ? 'text-neutral-800' : 'text-neutral-600' }}">
-      @if (question().isAnonymous && !isMyQuestion(question())) {
-        Anonyme
-      } @else if (isMyQuestion(question())) {
-        Vous
-      } @else {
-        {{ question().visitor?.username || 'Visiteur' }}
-      }
-    </span>
+    <div class="flex items-start gap-3">
+      <div class="w-10 h-10 rounded-full overflow-hidden bg-neutral-100 flex items-center justify-center shrink-0">
+        @if (question().isAnonymous) {
+          <div [innerHTML]="incognitoSvg() | svgSafe" class="w-full h-full p-2"></div>
+        } @else if (question().visitor?.avatarSvg) {
+          <div [innerHTML]="question().visitor?.avatarSvg! | svgSafe" class="w-full h-full"></div>
+        } @else {
+          <span class="text-sm font-medium text-neutral-600">
+            {{ question().visitor?.username!.charAt(0)!.toUpperCase() || 'V' }}
+          </span>
+        }
+      </div>
 
-    <span class="text-xs px-2 py-1 rounded-full border {{ getStatusColor(question().status) }}">
-      {{ getStatusLabel(question().status) }}
-    </span>
+      <div class="flex flex-col">
+        <span class="text-sm font-medium" [class.text-neutral-800]="isMyQuestion()" [class.text-neutral-600]="!isMyQuestion()">
+          {{ displayName() }}
+        </span>
+        <span class="text-xs text-neutral-400">{{ question().createdAt | timeAgo }}</span>
+      </div>
+    </div>
+
+    @if (isMyQuestion()) {
+      <div class="flex flex-wrap gap-2 justify-end">
+        @if (question().status === QuestionStatusEnum.REJECTED) {
+          <span class="text-xs px-2 py-1 rounded-full border text-red-600 bg-red-50 border-red-200">Refusée</span>
+          <span class="text-xs px-2 py-1 rounded-full border text-neutral-600 bg-neutral-50 border-neutral-200">Non publiée</span>
+        } @else {
+          <span class="text-xs px-2 py-1 rounded-full border {{ getStatusColor(question().status) }}">
+            {{ getStatusLabel(question().status) }}
+          </span>
+        }
+      </div>
+    }
   </div>
 
-  <p class="text-sm text-neutral-700 mb-3">{{ question().content }}</p>
+  <p class="text-sm text-neutral-700 leading-relaxed">{{ question().content }}</p>
 
   @if (question().status === QuestionStatusEnum.ANSWERED && question().answer) {
-    <div class="bg-primary/5 border-l-4 border-primary pl-4 py-3 mt-3">
+    <div class="bg-primary/5 border-l-4 border-primary pl-4 py-3 mt-4 rounded-r">
       <p class="text-sm font-medium text-primary mb-1">Réponse :</p>
-      <p class="text-sm text-neutral-700">{{ question().answer }}</p>
+      <p class="text-sm text-neutral-700 leading-relaxed">{{ question().answer }}</p>
     </div>
   }
 
-  @if (question().status === QuestionStatusEnum.REJECTED && question().rejectionReason && isMyQuestion(question())) {
-    <div class="bg-red-50 border-l-4 border-red-400 pl-4 py-3 mt-3">
+  @if (question().status === QuestionStatusEnum.REJECTED && question().rejectionReason && isMyQuestion()) {
+    <div class="bg-red-50 border-l-4 border-red-400 pl-4 py-3 mt-4 rounded-r">
       <p class="text-sm font-medium text-red-700 mb-1">Motif du refus :</p>
-      <p class="text-sm text-red-600">{{ question().rejectionReason }}</p>
+      <p class="text-sm text-red-600 leading-relaxed">{{ question().rejectionReason }}</p>
     </div>
   }
-
-  <p class="text-xs text-neutral-400 mt-2">{{ question().createdAt | date: 'dd/MM/yyyy' }}</p>
 </div>

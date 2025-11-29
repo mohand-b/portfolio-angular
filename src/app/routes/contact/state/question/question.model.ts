@@ -13,7 +13,7 @@ export interface QuestionResponseDto {
   answer?: string | null;
   rejectionReason?: string | null;
   createdAt: Date;
-  visitor?: Pick<VisitorDto, 'username' | 'avatarSvg'>
+  visitor?: Pick<VisitorDto, 'id' | 'username' | 'avatarSvg'>
 }
 
 export interface PaginatedQuestionsResponseDto {

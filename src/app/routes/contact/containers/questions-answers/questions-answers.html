@@ -5,9 +5,7 @@
     @if (!isAuthenticated()) {
       <div class="p-6 rounded-lg bg-blue-50 border border-blue-200 text-center">
         <mat-icon class="!text-4xl !w-10 !h-10 text-blue-600 mb-3">login</mat-icon>
-        <p class="text-sm text-blue-800 mb-4">
-          Vous devez être identifié pour poser une question
-        </p>
+        <p class="text-sm text-blue-800 mb-4">Vous devez être identifié pour poser une question</p>
         <button type="button" matButton="filled" (click)="openAuthModal()">
           <span class="flex items-center gap-2">
             <mat-icon>person</mat-icon>
@@ -18,16 +16,12 @@
     } @else if (!isVerified()) {
       <div class="p-6 rounded-lg bg-amber-50 border border-amber-200 text-center">
         <mat-icon class="!text-4xl !w-10 !h-10 text-amber-600 mb-3">mark_email_unread</mat-icon>
-        <p class="text-sm text-amber-800">
-          Vous devez vérifier votre email avant de pouvoir poser une question. Consultez votre boîte mail.
-        </p>
+        <p class="text-sm text-amber-800">Vous devez vérifier votre email avant de pouvoir poser une question. Consultez votre boîte mail.</p>
       </div>
     } @else if (hasPendingQuestion()) {
       <div class="p-6 rounded-lg bg-amber-50 border border-amber-200 text-center">
         <mat-icon class="!text-4xl !w-10 !h-10 text-amber-600 mb-3">schedule</mat-icon>
-        <p class="text-sm text-amber-800">
-          Une question à la fois. Veuillez attendre une réponse avant d'en poser une nouvelle.
-        </p>
+        <p class="text-sm text-amber-800">Une question à la fois. Veuillez attendre une réponse avant d'en poser une nouvelle.</p>
       </div>
     } @else {
       <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-4">
@@ -38,13 +32,18 @@
           </mat-form-field>
         </div>
 
-        <div class="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 border border-neutral-200">
-          <mat-slide-toggle formControlName="isAnonymous"></mat-slide-toggle>
-          <div class="flex flex-col">
-            <span class="text-sm font-medium text-neutral-800">Question anonyme</span>
-            <span class="text-xs text-neutral-600">
-              {{ form.get('isAnonymous')?.value ? 'Votre nom ne sera pas visible' : 'Votre nom sera affiché avec la question' }}
-            </span>
+        <div class="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 border border-neutral-200 justify-between">
+          <div class="flex items-center gap-3">
+            <mat-slide-toggle formControlName="isAnonymous"></mat-slide-toggle>
+            <div class="flex flex-col">
+              <span class="text-sm font-medium text-neutral-800">Question anonyme</span>
+              <span class="text-xs text-neutral-600">
+                {{ form.get('isAnonymous')?.value ? 'Votre prénom ne sera pas visible' : 'Votre prénom sera affiché avec la question' }}
+              </span>
+            </div>
+          </div>
+          <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-opacity" [class.opacity-0]="!form.get('isAnonymous')?.value" [class.opacity-100]="form.get('isAnonymous')?.value">
+            <div [innerHTML]="incognitoSvg() | svgSafe" class="w-full h-full p-2"></div>
           </div>
         </div>
 
@@ -64,5 +63,13 @@
     }
   </div>
 
-  <app-question-list [questions]="questions()" [isLoading]="isLoadingQuestions()"/>
+  <app-question-list
+    [questions]="questions()"
+    [isLoading]="isLoadingQuestions()"
+    [currentPage]="currentPage()"
+    [totalPages]="totalPages()"
+    (pageChange)="onPageChange($event)"
+    (previousPage)="onPreviousPage()"
+    (nextPage)="onNextPage()"
+  />
 </div>

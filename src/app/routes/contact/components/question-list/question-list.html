@@ -6,8 +6,23 @@
   } @else if (questions().length === 0) {
     <p class="text-center py-8 text-neutral-500">Aucune question pour le moment</p>
   } @else {
-    @for (question of questions(); track question.id) {
-      <app-question-item [question]="question"/>
+    <div class="flex flex-col gap-4">
+      @for (question of questions(); track question.id) {
+        <app-question-item [question]="question"/>
+      }
+    </div>
+
+    @if (totalPages() > 1) {
+      <div class="flex justify-center mt-6">
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          [isLoading]="isLoading()"
+          (pageChange)="pageChange.emit($event)"
+          (previousPage)="previousPage.emit()"
+          (nextPage)="nextPage.emit()"
+        />
+      </div>
     }
   }
 </div>
