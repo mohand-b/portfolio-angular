@@ -1,65 +1,14 @@
-<div class="flex flex-col">
-  <section class="hero-section min-h-[17.5rem] flex items-center justify-center p-8 relative overflow-hidden">
-    <div class="absolute inset-0 pointer-events-none">
-      @for (skill of fallingSkills(); track $index) {
-        <div
-          class="absolute font-mono text-xs whitespace-nowrap"
-          [style.left.%]="getSkillLeft($index)"
-          [style.opacity]="skill.opacity"
-          [style.color]="skill.color"
-          [style.--start-y]="skill.startY + 'vh'"
-          [style.--end-y]="skill.endY + 'vh'"
-          [style.animation]="'skill-fall ' + skill.duration + 's linear infinite'"
-          [style.animation-delay.s]="skill.delay"
-          (animationiteration)="onAnimationIteration($index)"
-        >
-          {{ skill.name }}
-        </div>
-      }
-    </div>
-
-    <div class="relative z-10 max-w-3xl flex flex-col items-center gap-6 text-center">
-      <h1 class="text-4xl font-bold text-white tracking-tight">Développeur web</h1>
-
-      <p class="text-base text-white/85 max-w-2xl leading-relaxed">
-        Passionné par le développement web et les technologies modernes,
-        je crée des applications performantes et intuitives qui répondent
-        aux besoins des utilisateurs.
-      </p>
-
-      <div class="flex flex-col sm:flex-row gap-4 mt-2 w-full sm:w-auto">
-        <button (click)="navigateToCareer()" matButton="filled" class="hero-button-primary w-full sm:w-auto">
-          <mat-icon>timeline</mat-icon>
-          Découvrir mon parcours
-        </button>
-        <button (click)="navigateToProjects()" matButton="filled" class="hero-button-primary w-full sm:w-auto">
-          <mat-icon>folder</mat-icon>
-          Voir mes projets
-        </button>
-        <button (click)="navigateToContact()" matButton="outlined" class="hero-button-secondary w-full sm:w-auto">
-          <mat-icon>email</mat-icon>
-          Me contacter
-        </button>
-      </div>
-    </div>
+<div class="flex flex-col gap-12">
+  <app-home-hero [skills]="skills()"/>
+  <app-home-about/>
+  <app-home-skills/>
+  <app-home-projects-stats/>
+  <section class="relative w-full h-64 overflow-hidden bg-neutral-200">
+    <img
+      src="/assets/images/me.png"
+      alt=""
+      class=" w-full h-full object-cover">
   </section>
-
-  <app-status-indicators/>
-
-  <section class="py-16 px-8">
-    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-      <div class="text-center">
-        <div class="text-5xl font-bold text-primary mb-2 font-serif">{{ yearsOfExperience }}+</div>
-        <div class="text-xs text-neutral-500 font-medium uppercase tracking-wider">Années d'expérience</div>
-      </div>
-      <div class="text-center">
-        <div class="text-5xl font-bold text-primary mb-2 font-serif">{{ projectsCount }}+</div>
-        <div class="text-xs text-neutral-500 font-medium uppercase tracking-wider">Projets réalisés</div>
-      </div>
-      <div class="text-center">
-        <div class="text-5xl font-bold text-primary mb-2 font-serif">{{ technologiesCount }}+</div>
-        <div class="text-xs text-neutral-500 font-medium uppercase tracking-wider">Technologies maîtrisées</div>
-      </div>
-    </div>
-  </section>
+  <app-home-personal/>
+  <app-home-contact-banner/>
 </div>

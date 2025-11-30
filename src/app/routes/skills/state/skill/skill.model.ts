@@ -57,7 +57,7 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
     key: SkillCategory.DATABASE,
     label: 'Base de données',
     shortLabel: 'BDD',
-    subtitle: 'Conception et gestion des données d’application',
+    subtitle: "Conception et gestion des données d'application",
     color: '#7C3AED',
     icon: 'storage',
   },
@@ -102,3 +102,17 @@ export const SKILL_CATEGORY_META: Record<SkillCategory, SkillCategoryMeta> = {
     icon: 'view_kanban',
   },
 } as const;
+
+export interface CategoryStat {
+  category: string;
+  usageRate: number;
+}
+
+export interface CategoryStatsResponse {
+  categoryStats: CategoryStat[];
+}
+
+export interface CategoryStatDisplay extends CategoryStat {
+  label: string;
+  color: string;
+}

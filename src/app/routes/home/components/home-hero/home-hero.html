@@ -1,0 +1,29 @@
+<section class="hero-section h-64 flex items-center justify-center px-8 relative overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none">
+    @for (skill of fallingSkills(); track $index) {
+      <div
+        class="absolute font-mono text-xs whitespace-nowrap"
+        [style.left.%]="getSkillLeft($index)"
+        [style.opacity]="skill.opacity"
+        [style.color]="skill.color"
+        [style.--start-y]="skill.startY + 'vh'"
+        [style.--end-y]="skill.endY + 'vh'"
+        [style.animation]="'skill-fall ' + skill.duration + 's linear infinite'"
+        [style.animation-delay.s]="skill.delay"
+        (animationiteration)="onAnimationIteration($index)"
+      >
+        {{ skill.name }}
+      </div>
+    }
+  </div>
+
+  <div class="relative z-10 max-w-3xl flex flex-col items-center gap-6 text-center">
+    <h1 class="text-4xl font-bold text-white tracking-tight">Développeur web</h1>
+
+    <p class="text-base text-white/85 max-w-2xl leading-relaxed">
+      Passionné par le développement web et les technologies modernes,
+      je crée des applications performantes et intuitives qui répondent
+      aux besoins des utilisateurs.
+    </p>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+<section class="max-w-4xl mx-auto px-8">
+  <div class="space-y-8">
+    <h2 class="text-xl font-semibold text-neutral-800">Compétences les plus utilisées</h2>
+
+    <div class="flex flex-col lg:flex-row gap-12 items-start">
+      <div class="space-y-5 flex-1 lg:min-w-[400px] w-full">
+        @for (stat of topCategoryStats(); track stat.category) {
+          <div class="flex flex-col gap-2">
+            <div class="flex justify-between items-center">
+              <span class="text-sm font-medium">{{ stat.label }}</span>
+              <span class="text-sm font-semibold" [style.color]="stat.color">{{ stat.usageRate }}%</span>
+            </div>
+            <div class="w-full bg-neutral-200 rounded-full h-2 overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-500" [style.width.%]="stat.usageRate"
+                   [style.background-color]="stat.color"></div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="grid grid-cols-3 gap-4 lg:w-96 w-full">
+        @for (skill of featuredSkillsWithColor(); track skill.name) {
+          <div class="flex flex-col items-center justify-center gap-2 p-3 rounded-lg"
+               [style.background]="skill.background">
+            <div class="w-full flex items-center justify-center">
+              <img [src]="skill.logo" [alt]="skill.name" class="w-12 h-12 object-contain"/>
+            </div>
+            <span class="text-xs font-medium text-neutral-700 text-center">{{ skill.name }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <button (click)="navigateToSkills()" matButton="filled" class="primary">
+        <mat-icon>code</mat-icon>
+        Découvrir toutes mes compétences
+      </button>
+    </div>
+  </div>
+</section>

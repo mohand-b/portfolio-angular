@@ -1,0 +1,48 @@
+<section class="max-w-4xl mx-auto px-8">
+  @if (isDataLoaded()) {
+    <div class="space-y-8">
+      <h2 class="text-xl font-semibold text-neutral-800">Concernant mes projets</h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="h-64 overflow-visible">
+          <canvas
+            baseChart
+            [type]="polarAreaChartType"
+            [data]="polarAreaChartData()"
+            [options]="polarAreaChartOptions">
+          </canvas>
+        </div>
+
+        <div class="h-64">
+          <canvas
+            baseChart
+            [type]="barChartType"
+            [data]="barChartData()"
+            [options]="barChartOptions">
+          </canvas>
+        </div>
+
+        <div class="h-64">
+          <canvas
+            baseChart
+            [type]="pieChartType"
+            [data]="pieChartData()"
+            [options]="pieChartOptions">
+          </canvas>
+        </div>
+      </div>
+
+      <p class="text-neutral-700 leading-relaxed text-sm text-center">
+        La majorité des projets sur lesquels j'ai travaillé ont été réalisés en entreprise, souvent dans des contextes
+        privés ou internes. Je ne peux pas tous les présenter, mais j'ai choisi de mettre en avant les plus marquants.
+      </p>
+
+      <div class="flex justify-center">
+        <button (click)="navigateToProjects()" matButton="filled" class="primary">
+          <mat-icon>folder</mat-icon>
+          Voir tous mes projets
+        </button>
+      </div>
+    </div>
+  }
+</section>
