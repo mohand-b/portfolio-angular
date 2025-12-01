@@ -26,7 +26,7 @@ export class MainMenu {
 
   readonly mobileMenuOpen = signal(false);
   readonly menuItems: MenuEntry[] = publicRoutes
-    .filter(route => route.title && !route.path?.includes(':'))
+    .filter(route => route.title && !route.path?.includes(':') && !route.data?.['hideFromMenu'])
     .map(route => ({title: route.title, path: route.path})) as MenuEntry[];
 
   readonly isAuth = this.coreFacade.isVisitorAuthenticated;

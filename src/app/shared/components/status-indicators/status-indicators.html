@@ -1,4 +1,4 @@
-<div class="flex flex-wrap gap-4 p-4">
+<div class="flex flex-wrap gap-4">
   @for (indicator of indicators(); track indicator.label) {
     <div class="flex items-center gap-2 text-xs text-neutral-800" [matTooltip]="indicator.tooltip || ''">
       @if (typeof indicator.value === 'boolean') {

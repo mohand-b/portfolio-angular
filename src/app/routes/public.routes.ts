@@ -36,6 +36,24 @@ export const publicRoutes: Route[] = [
     loadComponent: () => import('./verify-email/containers/verify-email/verify-email').then(m => m.VerifyEmail)
   },
   {
+    path: 'legal-notice',
+    loadComponent: () => import('./legal-notice/containers/legal-notice/legal-notice').then(m => m.LegalNotice),
+    title: 'Mentions légales',
+    data: { hideFromMenu: true }
+  },
+  {
+    path: 'privacy-policy',
+    loadComponent: () => import('./privacy-policy/containers/privacy-policy/privacy-policy').then(m => m.PrivacyPolicy),
+    title: 'Politique de confidentialité',
+    data: { hideFromMenu: true }
+  },
+  {
+    path: 'terms-of-service',
+    loadComponent: () => import('./terms-of-service/containers/terms-of-service/terms-of-service').then(m => m.TermsOfService),
+    title: 'Conditions Générales d\'Utilisation',
+    data: { hideFromMenu: true }
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
