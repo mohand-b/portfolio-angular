@@ -22,10 +22,16 @@ export class VisitorService {
     return this.http.delete<{ message: string }>(`${this.visitorBaseUrl}/${id}`);
   }
 
-
   verifyEmail(token: string): Observable<{ message: string }> {
     return this.http.get<{ message: string }>(`${this.visitorBaseUrl}/verify`, {
       params: {token}
     });
+  }
+
+  unlockAchievement(code: string): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{
+      success: boolean;
+      message: string
+    }>(`${this.visitorBaseUrl}/achievements/unlock/${code}`, {withCredentials: true});
   }
 }

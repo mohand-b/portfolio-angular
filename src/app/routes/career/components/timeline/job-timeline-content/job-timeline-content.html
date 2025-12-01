@@ -2,7 +2,7 @@
   <img [src]="job().image" [alt]="job().title" class="w-12 h-12 rounded-xs object-cover"/>
   <div class="flex-1">
     <h3 class="text-base font-medium text-neutral-800">{{ job().title }}</h3>
-    <div class="flex items-center gap-1.5 text-neutral-600 text-[0.8125rem]">
+    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-neutral-600 text-[0.8125rem]">
       <mat-icon class="!text-base !w-4 !h-4 !leading-none text-neutral-400">business</mat-icon>
       <span class="text-primary">{{ job().company }}</span>
       <span>à {{ job().location }}</span>

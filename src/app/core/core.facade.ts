@@ -54,16 +54,6 @@ export class CoreFacade {
     return this.adminService.revokeToken();
   }
 
-  logoutAdmin(): Observable<{ message: string }> {
-    return this.adminService.logout().pipe(
-      tap(() => this.adminStore.setSessionStatus('unauthenticated')),
-      catchError((err) => {
-        this.adminStore.setError(err.message);
-        return throwError(() => err);
-      })
-    );
-  }
-
   checkAdminSession(): Observable<{ isValid: boolean }> {
     this.adminStore.setSessionStatus('checking');
     return this.adminService.checkSession().pipe(
@@ -103,11 +93,7 @@ export class CoreFacade {
     );
   }
 
-  incrementVisitorAchievements(count: number): void {
-    this.visitorStore.incrementAchievements(count);
-  }
-
-  verifyEmail(token: string): Observable<{message: string}> {
+  verifyEmail(token: string): Observable<{ message: string }> {
     return this.visitorService.verifyEmail(token).pipe(
       tap(() => this.visitorStore.setVerified()),
       catchError((err) => {
@@ -115,5 +101,10 @@ export class CoreFacade {
       })
     );
   }
+
+  unlockAchievement(code: string): Observable<{ success: boolean; message: string }> {
+    return this.visitorService.unlockAchievement(code);
+  }
+
 
 }
