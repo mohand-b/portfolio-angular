@@ -16,9 +16,14 @@ import {toFormData} from '../../../../../shared/extensions/object.extension';
 import {ToastService} from '../../../../../shared/services/toast.service';
 import {StepConfig, Stepper} from '../../../../../shared/components/stepper/stepper';
 import {JobMinimalDto} from '../../../../career/state/job/job.model';
-import {ProjectDto} from '../../../../projects/state/project/project.model';
+import {PROJECT_TYPE_OPTIONS, ProjectDto} from '../../../../projects/state/project/project.model';
 import {SkillService} from '../../../../skills/state/skill/skill.service';
-import {SKILL_CATEGORY_META, SkillCategory, SkillCategoryMeta, SkillDto} from '../../../../skills/state/skill/skill.model';
+import {
+  SKILL_CATEGORY_META,
+  SkillCategory,
+  SkillCategoryMeta,
+  SkillDto
+} from '../../../../skills/state/skill/skill.model';
 import {ConsoleFacade} from '../../../console.facade';
 
 @Component({
@@ -49,7 +54,7 @@ export class ProjectForm {
 
   readonly step = signal(0);
   readonly missions: WritableSignal<string[]> = signal([]);
-  readonly images = signal<Array<{file: File; preview: string}>>([]);
+  readonly images = signal<Array<{ file: File; preview: string }>>([]);
   readonly existingImages = signal<string[]>([]);
   readonly selectedSkills: WritableSignal<SkillDto[]> = signal([]);
 
@@ -90,8 +95,8 @@ export class ProjectForm {
     }),
     step2: this.fb.group({
       projectTypes: this.fb.control<string[]>([], [Validators.required, Validators.minLength(1)]),
-      scope: this.fb.control<string | null>(null, [Validators.required]),
-      market: this.fb.control<string | null>(null, [Validators.required]),
+      scope: this.fb.control<string | null>(null),
+      market: this.fb.control<string | null>(null),
     }),
     step3: this.fb.group({}),
     step4: this.fb.group({}),
@@ -104,14 +109,7 @@ export class ProjectForm {
     {icon: 'photo_library', text: 'Images'},
   ];
 
-  readonly projectTypeOptions = [
-    'MVP / POC',
-    'SaaS',
-    'SPA',
-    'Back-office / Admin UI',
-    'Mobile-like',
-    'Data-driven',
-  ] as const;
+  readonly projectTypeOptions = PROJECT_TYPE_OPTIONS;
 
   get s1(): FormGroup {
     return this.form.get('step1') as FormGroup;
@@ -189,10 +187,20 @@ export class ProjectForm {
       collaboration: step1.collaboration?.trim() || undefined,
       missions: this.missions(),
       projectTypes: step2.projectTypes!,
-      scope: step2.scope!,
-      market: step2.market!,
       skillIds: this.selectedSkills().map(skill => skill.id),
     };
+
+    if (step2.scope) {
+      payload.scope = step2.scope;
+    } else if (this.isEditing()) {
+      payload.scope = '';
+    }
+
+    if (step2.market) {
+      payload.market = step2.market;
+    } else if (this.isEditing()) {
+      payload.market = '';
+    }
 
     if (this.isEditing()) {
       payload.isLinkedToJob = step1.isCompanyProject;
@@ -302,11 +310,13 @@ export class ProjectForm {
   }
 
   setScope(value: string): void {
-    this.s2.get('scope')?.setValue(value);
+    const currentValue = this.s2.get('scope')?.value;
+    this.s2.get('scope')?.setValue(currentValue === value ? null : value);
   }
 
   setMarket(value: string): void {
-    this.s2.get('market')?.setValue(value);
+    const currentValue = this.s2.get('market')?.value;
+    this.s2.get('market')?.setValue(currentValue === value ? null : value);
   }
 
   displaySkillName(skill: SkillDto | null): string {

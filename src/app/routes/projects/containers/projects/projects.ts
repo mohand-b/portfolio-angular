@@ -15,7 +15,7 @@ import {Pagination} from '../../../../shared/components/pagination/pagination';
 import {SKILL_CATEGORY_META, SkillCategory, SkillCategoryMeta, SkillDto} from '../../../skills/state/skill/skill.model';
 import {SkillService} from '../../../skills/state/skill/skill.service';
 import {ProjectItem} from '../../../console/manage-projects/components/project-item/project-item';
-import {ProjectFilters, ProjectLightDto} from '../../state/project/project.model';
+import {ProjectFilters, ProjectLightDto, PROJECT_TYPE_OPTIONS} from '../../state/project/project.model';
 
 @Component({
   selector: 'app-projects',
@@ -42,7 +42,7 @@ export class Projects {
   readonly page = signal(1);
   readonly selectedTypes = signal<string[]>([]);
   readonly selectedSkills = signal<SkillDto[]>([]);
-  readonly allProjectTypes = ['MVP / POC', 'SaaS', 'SPA', 'Back-office / Admin UI', 'Mobile-like', 'Data-driven'];
+  readonly allProjectTypes = [...PROJECT_TYPE_OPTIONS];
 
   readonly skillSearchControl = new FormControl('');
 

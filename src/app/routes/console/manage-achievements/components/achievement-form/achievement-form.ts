@@ -18,21 +18,11 @@ import {ConsoleFacade} from '../../../console.facade';
 import {Achievement} from '../../../../../core/state/achievement/achievement.model';
 import {ToastService} from '../../../../../shared/services/toast.service';
 
-const ICON_NAMES = [
-  'home', 'search', 'explore', 'language', 'menu', 'visibility',
-  'star', 'emoji_events', 'workspace_premium', 'military_tech', 'celebration', 'favorite', 'whatshot',
-  'person', 'person_add', 'group', 'chat', 'email', 'forum', 'send', 'sms', 'mark_chat_unread', 'mark_email_read', 'chat_bubble', 'chat_bubble_outline',
-  'work', 'code', 'terminal', 'lightbulb', 'build', 'rocket_launch', 'bug_report',
-  'timeline', 'trending_up', 'insights', 'bar_chart', 'leaderboard', 'auto_graph', 'hourglass_top',
-  'travel_explore', 'map', 'pin_drop', 'public', 'flight_takeoff', 'route', 'flag',
-  'add', 'check', 'done', 'thumb_up', 'thumb_up_off_alt', 'share', 'ios_share', 'launch', 'download', 'upload', 'bookmark', 'notifications', 'notifications_active',
-  'palette', 'brush', 'photo', 'image', 'color_lens', 'style', 'photo_camera',
-  'alternate_email', 'link', 'favorite_border', 'campaign', 'group_work', 'volunteer_activism', 'send_time_extension', 'forward_to_inbox',
-  'lock', 'verified', 'security', 'key', 'fingerprint',
-  'cloud', 'cloud_done', 'cloud_upload', 'cloud_download', 'web', 'dns', 'storage',
-  'sports_esports', 'psychology', 'bolt', 'auto_awesome', 'emoji_objects', 'flare',
-  'info', 'help', 'book', 'article', 'description', 'library_books', 'school', 'badge', 'bedtime'
-];
+const ICON_NAMES = ['contact_support', 'auto_stories', 'auto_awesome', 'bedtime', 'bolt', 'book', 'bug_report',
+  'celebration', 'chat', 'check', 'code', 'directions_walk', 'emoji_events', 'explore', 'favorite', 'flag', 'group',
+  'lightbulb', 'psychology', 'local_fire_department', 'lock', 'military_tech', 'rocket_launch', 'schedule', 'share',
+  'smartphone', 'star', 'person_raised_hand', 'terminal', 'thumb_up', 'trending_up', 'verified', 'visibility',
+  'workspace_premium'];
 
 const DEFAULT_COLOR = '#6b7280';
 

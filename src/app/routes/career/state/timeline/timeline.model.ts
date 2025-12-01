@@ -44,8 +44,8 @@ export interface JobTimelineItem extends TimelineItemBase {
 export interface ProjectTimelineItem extends TimelineItemBase {
   type: TimelineItemType.Project;
   projectTypes: string[];
-  scope: string;
-  market: string;
+  scope?: string;
+  market?: string;
   skills: SkillDto[];
 }
 

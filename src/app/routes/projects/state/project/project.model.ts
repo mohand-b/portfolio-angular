@@ -3,7 +3,20 @@ import {TimelineItemDto, TimelineItemType} from '../../../career/state/timeline/
 import {SkillDto} from '../../../skills/state/skill/skill.model';
 
 export type ProjectScope = 'Interne' | 'Externe';
-export type ProjectMarket = 'B2B' | 'B2C';
+export type ProjectMarket = 'B2B' | 'B2C' | 'C2C' | 'Communautaire';
+
+export const PROJECT_TYPE_OPTIONS = [
+  'SaaS',
+  'Dashboard',
+  'Web App',
+  'Mobile-like',
+  'Back-office',
+  'Site vitrine',
+  'Réseau social',
+  'Tool',
+] as const;
+
+export type ProjectType = typeof PROJECT_TYPE_OPTIONS[number];
 
 export interface ProjectDto extends TimelineItemDto {
   type: TimelineItemType.Project;
@@ -12,8 +25,8 @@ export interface ProjectDto extends TimelineItemDto {
   tools: string[];
   skills: SkillDto[];
   projectTypes: string[];
-  scope: ProjectScope;
-  market: ProjectMarket;
+  scope?: ProjectScope;
+  market?: ProjectMarket;
   challenges?: string;
   impact?: string;
   job?: JobDto;
@@ -22,7 +35,7 @@ export interface ProjectDto extends TimelineItemDto {
 }
 
 export interface ProjectLightDto extends Pick<TimelineItemDto, 'id' | 'title' | 'description'>,
-  Pick<ProjectDto, 'projectTypes' | 'scope' | 'market'> {
+  Partial<Pick<ProjectDto, 'projectTypes' | 'scope' | 'market'>> {
   job?: Pick<JobDto, 'id' | 'title' | 'company'> | null;
 }
 
