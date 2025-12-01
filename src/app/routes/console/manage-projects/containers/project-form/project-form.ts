@@ -204,13 +204,17 @@ export class ProjectForm {
 
     if (this.isEditing()) {
       payload.isLinkedToJob = step1.isCompanyProject;
-      if (this.existingImages().length > 0) {
-        payload.images = this.existingImages();
-      }
     }
 
     const formData = toFormData(payload);
-    this.images().forEach(img => formData.append('images', img.file));
+
+    this.existingImages().forEach(url => {
+      formData.append('images', url);
+    });
+
+    this.images().forEach(img => {
+      formData.append('images', img.file);
+    });
 
     const operation$ = this.isEditing()
       ? this.consoleFacade.updateProject(this.project()!.id, formData)

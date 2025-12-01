@@ -47,21 +47,9 @@ export interface ProjectMinimalResponseDto {
 export interface CreateProjectDto extends Omit<ProjectDto, 'id'> {
 }
 
-export interface UpdateProjectDto {
-  title?: string;
-  description?: string;
-  collaboration?: string;
-  missions?: string[];
-  projectTypes?: string[];
-  scope?: ProjectScope;
-  market?: ProjectMarket;
-  challenges?: string;
-  impact?: string;
-  skillIds?: string[];
-  jobId?: string | null;
+export interface UpdateProjectDto extends Partial<ProjectDto> {
   startDate?: Date;
   endDate?: Date;
-  githubLink?: string;
 }
 
 export interface PaginatedProjectsResponseDto {
