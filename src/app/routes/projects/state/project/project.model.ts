@@ -37,6 +37,7 @@ export interface ProjectDto extends TimelineItemDto {
 export interface ProjectLightDto extends Pick<TimelineItemDto, 'id' | 'title' | 'description'>,
   Partial<Pick<ProjectDto, 'projectTypes' | 'scope' | 'market'>> {
   job?: Pick<JobDto, 'id' | 'title' | 'company'> | null;
+  coverImage?: string;
 }
 
 export interface ProjectMinimalResponseDto {
