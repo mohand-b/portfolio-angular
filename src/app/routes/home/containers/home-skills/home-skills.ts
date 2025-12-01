@@ -75,6 +75,6 @@ export class HomeSkills {
   });
 
   navigateToSkills(): void {
-    this.router.navigate(['/skills']);
+    this.router.navigate(['/competences']);
   }
 }

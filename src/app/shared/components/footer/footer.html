@@ -3,19 +3,21 @@
     <div class="flex flex-col gap-6">
       <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
         <div class="text-sm text-neutral-600 text-center lg:text-left">
-          <p>© {{ currentYear }} Mohand Boudjema - Version {{ version }}</p>
+          <p>© {{ currentYear }} Portfolio Mohand Boudjema - v{{ version }}</p>
         </div>
 
         <app-status-indicators/>
       </div>
 
       <div class="flex flex-wrap justify-center lg:justify-start gap-2 text-xs">
-        <a routerLink="/legal-notice" class="text-neutral-600 hover:text-primary transition-colors">Mentions légales</a>
+        <a routerLink="/mentions-legales" class="text-neutral-600 hover:text-primary transition-colors">Mentions
+          légales</a>
         <span class="text-neutral-400">•</span>
-        <a routerLink="/privacy-policy" class="text-neutral-600 hover:text-primary transition-colors">Politique de
+        <a routerLink="/politique-de-confidentialite" class="text-neutral-600 hover:text-primary transition-colors">Politique
+          de
           confidentialité</a>
         <span class="text-neutral-400">•</span>
-        <a routerLink="/terms-of-service" class="text-neutral-600 hover:text-primary transition-colors">CGU</a>
+        <a routerLink="/cgu" class="text-neutral-600 hover:text-primary transition-colors">CGU</a>
       </div>
     </div>
   </div>

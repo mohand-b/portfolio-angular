@@ -43,7 +43,7 @@ export class VerifyEmail implements OnInit {
     const token = this.route.snapshot.queryParamMap.get('token');
     if (token) {
       this.state.set('loading');
-      this.verifyEmail(token);
+      this.verifyEmail('accueil');
     }
   }
 
@@ -51,7 +51,7 @@ export class VerifyEmail implements OnInit {
     this.coreFacade.verifyEmail(token).subscribe({
       next: () => {
         this.state.set('success');
-        setTimeout(() => this.router.navigate(['/home']), 3000);
+        setTimeout(() => this.router.navigate(['/accueil']), 3000);
       },
       error: (error) => {
         this.state.set('error');

@@ -274,6 +274,6 @@ export class HomeProjectsStats {
   };
 
   navigateToProjects(): void {
-    this.router.navigate(['/projects']);
+    this.router.navigate(['/projets']);
   }
 }

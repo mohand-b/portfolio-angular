@@ -34,7 +34,7 @@ export class Skills {
   }
 
   protected navigateToProjects(skill: SkillDto): void {
-    this.router.navigate(['/projects'], {
+    this.router.navigate(['/projets'], {
       queryParams: {skillId: skill.id}
     });
   }

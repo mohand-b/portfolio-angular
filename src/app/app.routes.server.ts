@@ -6,23 +6,23 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server
   },
   {
-    path: 'home',
+    path: 'accueil',
     renderMode: RenderMode.Server
   },
   {
-    path: 'career',
+    path: 'parcours',
     renderMode: RenderMode.Server
   },
   {
-    path: 'skills',
+    path: 'competences',
     renderMode: RenderMode.Server
   },
   {
-    path: 'projects',
+    path: 'projets',
     renderMode: RenderMode.Server
   },
   {
-    path: 'projects/:id',
+    path: 'projets/:id',
     renderMode: RenderMode.Server
   },
   {
@@ -30,11 +30,11 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server
   },
   {
-    path: 'verify-email',
+    path: 'verification-email',
     renderMode: RenderMode.Server
   },
   {
     path: '**',
-    renderMode: RenderMode.Client
+    renderMode: RenderMode.Server
   }
 ];

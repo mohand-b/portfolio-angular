@@ -38,12 +38,12 @@ export class ProjectDetail {
     effect(() => {
       const error = this.projectResource.error();
       if (error) {
-        this.router.navigate(['/projects']);
+        this.router.navigate(['/projets']);
       }
     });
   }
 
   goBack() {
-    this.router.navigate(['/projects']);
+    this.router.navigate(['/projets']);
   }
 }
