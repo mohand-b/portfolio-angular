@@ -103,6 +103,11 @@ h1, h2 {
 }
 
 [data-theme='dark'] {
+  .info-box-primary {
+    background-color: rgb(78 95 125 / 0.15) !important;
+    border-color: rgb(78 95 125 / 0.5) !important;
+  }
+
   .info-box-red-text {
     color: rgb(252 165 165) !important;
   }

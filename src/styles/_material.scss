@@ -142,6 +142,11 @@ html {
   --ff-icon-disabled: var(--text-tertiary);
 }
 
+[data-theme='dark'] {
+  --ff-border: #1a1a1a;
+  --ff-border-focus: #1a1a1a;
+}
+
 .mat-mdc-form-field.mat-form-field-appearance-outline {
   margin: 0 !important;
   padding: 0 !important;
