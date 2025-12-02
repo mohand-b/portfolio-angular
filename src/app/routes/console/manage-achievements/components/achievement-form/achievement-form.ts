@@ -22,7 +22,7 @@ const ICON_NAMES = ['contact_support', 'auto_stories', 'auto_awesome', 'bedtime'
   'celebration', 'chat', 'check', 'code', 'directions_walk', 'emoji_events', 'explore', 'favorite', 'flag', 'group',
   'lightbulb', 'psychology', 'local_fire_department', 'lock', 'military_tech', 'rocket_launch', 'schedule', 'share',
   'smartphone', 'star', 'person_raised_hand', 'terminal', 'thumb_up', 'trending_up', 'verified', 'visibility',
-  'workspace_premium'];
+  'workspace_premium', 'flare'];
 
 const DEFAULT_COLOR = '#6b7280';
 

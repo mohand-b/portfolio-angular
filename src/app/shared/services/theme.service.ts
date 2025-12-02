@@ -1,12 +1,18 @@
-import {Injectable, signal, effect, PLATFORM_ID, inject} from '@angular/core';
+import {effect, inject, Injectable, PLATFORM_ID, signal} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
+import {CoreFacade} from '../../core/core.facade';
+
+const ACHIEVEMENT_ID = "DARKM";
 
 @Injectable({providedIn: 'root'})
 export class ThemeService {
+  private readonly coreFacade = inject(CoreFacade);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
 
   readonly isDark = signal(false);
+  private readonly alreadyUnlocked = signal(false);
+  private readonly isVisitorAuthenticated = this.coreFacade.isVisitorAuthenticated;
 
   constructor() {
     if (this.isBrowser) {
@@ -24,5 +30,9 @@ export class ThemeService {
 
   toggle(): void {
     this.isDark.update(v => !v);
+    if (this.isVisitorAuthenticated() && !this.alreadyUnlocked() && this.isDark())
+      this.coreFacade.unlockAchievement(ACHIEVEMENT_ID).subscribe({
+        next: () => this.alreadyUnlocked.set(true)
+      });
   }
 }
