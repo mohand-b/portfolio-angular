@@ -2,17 +2,17 @@
 
 <div class="flex flex-wrap gap-1.5 mb-3">
   @for (type of project().projectTypes; track type) {
-    <span class="px-2 py-1 text-xs font-medium rounded-md bg-purple-100 text-purple-700">
+    <span class="px-2 py-1 text-xs font-medium rounded-md chip-purple">
       {{ type }}
     </span>
   }
   @if (project().market) {
-    <span class="px-2 py-1 text-xs font-medium rounded-md bg-blue-100 text-blue-700">
+    <span class="px-2 py-1 text-xs font-medium rounded-md chip-blue">
       {{ project().market }}
     </span>
   }
   @if (project().scope) {
-    <span class="px-2 py-1 text-xs font-medium rounded-md bg-green-100 text-green-700">
+    <span class="px-2 py-1 text-xs font-medium rounded-md chip-green">
       {{ project().scope }}
     </span>
   }

@@ -16,21 +16,17 @@ export const AdminStore = signalStore(
   }),
   withComputed((store) => ({
     canAccessAdmin: computed(() => store.sessionStatus() === 'authenticated'),
-    isLoading: computed(() =>
-      store.sessionStatus() === 'checking' || store.sessionStatus() === 'unknown'
-    ),
+    isLoading: computed(() => store.sessionStatus() === 'checking' || store.sessionStatus() === 'unknown')
   })),
   withMethods((store) => ({
     setSessionStatus(status: SessionStatus, error: string | null = null) {
       patchState(store, {
         sessionStatus: status,
-        lastSessionError: error,
-      })
+        lastSessionError: error
+      });
     },
     setError(error: string) {
-      patchState(store, {
-        lastSessionError: error,
-      })
-    },
-  })),
+      patchState(store, {lastSessionError: error});
+    }
+  }))
 );

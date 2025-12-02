@@ -1,14 +1,15 @@
 import {SkillDto} from '../../../skills/state/skill/skill.model';
+import {CertificationDto} from '../education/education.model';
 
 export interface TimelineItemDto {
   id: string;
   type: TimelineItemType;
   title: string;
-  startDate?: Date;
-  endDate?: Date;
-  description?: string;
+  startDate?: Date | null;
+  endDate?: Date | null;
+  description?: string | null;
   createdAt: Date;
-  image?: string;
+  image?: string | null;
 }
 
 export enum TimelineItemType {
@@ -22,16 +23,10 @@ export interface TimelineItemBase {
   id: string;
   type: TimelineItemType;
   title: string;
-  startDate: string | null;
-  endDate: string | null;
-  description: string | null;
-  image: string | null;
-}
-
-export interface CertificationDto {
-  id: string;
-  title: string;
-  certificationType: string;
+  startDate?: Date | null;
+  endDate?: Date | null;
+  description?: string | null;
+  image?: string | null;
 }
 
 export interface JobTimelineItem extends TimelineItemBase {

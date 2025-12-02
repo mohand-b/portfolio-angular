@@ -1,7 +1,7 @@
 @if (isLoading()) {
   <app-loader/>
 } @else if (canAccessAdmin()) {
-  <div class="h-[100vh] flex">
+  <div class="h-screen flex">
     <app-console-menu class="h-full console-menu"/>
     <div class="flex-1 overflow-y-auto pt-[4.5rem] md:pt-0">
       <router-outlet/>

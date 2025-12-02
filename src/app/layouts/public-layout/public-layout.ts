@@ -6,8 +6,7 @@ import {Footer} from '../../shared/components/footer/footer';
 @Component({
   selector: 'app-public-layout',
   imports: [MainMenu, RouterOutlet, Footer],
-  templateUrl: './public-layout.html',
-  styleUrl: './public-layout.scss'
+  templateUrl: './public-layout.html'
 })
 export class PublicLayout {
 

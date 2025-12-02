@@ -5,8 +5,7 @@ import {QuestionsAnswers} from '../questions-answers/questions-answers';
 @Component({
   selector: 'app-contact',
   imports: [ContactForm, QuestionsAnswers],
-  templateUrl: './contact.html',
-  styleUrl: './contact.scss'
+  templateUrl: './contact.html'
 })
 export class Contact {
 }

@@ -9,21 +9,16 @@ import {MatInputModule} from '@angular/material/input';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {debounceTime, distinctUntilChanged, of, switchMap} from 'rxjs';
 import {toSignal} from '@angular/core/rxjs-interop';
+import {debounceTime, distinctUntilChanged, of, switchMap} from 'rxjs';
 import {environment} from '../../../../../../../environments/environments';
 import {toFormData} from '../../../../../shared/extensions/object.extension';
 import {ToastService} from '../../../../../shared/services/toast.service';
-import {StepConfig, Stepper} from '../../../../../shared/components/stepper/stepper';
+import {Stepper, StepConfig} from '../../../../../shared/components/stepper/stepper';
 import {JobMinimalDto} from '../../../../career/state/job/job.model';
 import {PROJECT_TYPE_OPTIONS, ProjectDto} from '../../../../projects/state/project/project.model';
 import {SkillService} from '../../../../skills/state/skill/skill.service';
-import {
-  SKILL_CATEGORY_META,
-  SkillCategory,
-  SkillCategoryMeta,
-  SkillDto
-} from '../../../../skills/state/skill/skill.model';
+import {SKILL_CATEGORY_META, SkillCategory, SkillCategoryMeta, SkillDto} from '../../../../skills/state/skill/skill.model';
 import {ConsoleFacade} from '../../../console.facade';
 
 @Component({
@@ -53,11 +48,10 @@ export class ProjectForm {
   readonly saved = output<void>();
 
   readonly step = signal(0);
-  readonly missions: WritableSignal<string[]> = signal([]);
-  readonly images = signal<Array<{ file: File; preview: string }>>([]);
+  readonly missions = signal<string[]>([]);
+  readonly images = signal<Array<{file: File; preview: string}>>([]);
   readonly existingImages = signal<string[]>([]);
-  readonly selectedSkills: WritableSignal<SkillDto[]> = signal([]);
-
+  readonly selectedSkills = signal<SkillDto[]>([]);
   readonly isEditing = computed(() => !!this.project());
 
   private readonly jobsResource = httpResource<JobMinimalDto[]>(() => ({
@@ -106,9 +100,8 @@ export class ProjectForm {
     {icon: 'description', text: 'Infos'},
     {icon: 'build', text: 'Détails'},
     {icon: 'format_list_bulleted', text: 'Missions'},
-    {icon: 'photo_library', text: 'Images'},
+    {icon: 'photo_library', text: 'Images'}
   ];
-
   readonly projectTypeOptions = PROJECT_TYPE_OPTIONS;
 
   get s1(): FormGroup {
@@ -128,15 +121,13 @@ export class ProjectForm {
           description: proj.description || '',
           collaboration: proj.collaboration || '',
           isCompanyProject: !!proj.job,
-          jobId: proj.job?.id || null,
+          jobId: proj.job?.id || null
         });
-
         this.s2.patchValue({
           projectTypes: proj.projectTypes,
           scope: proj.scope,
-          market: proj.market,
+          market: proj.market
         });
-
         this.missions.set(proj.missions || []);
         this.selectedSkills.set(proj.skills || []);
         this.images.set([]);
@@ -145,10 +136,8 @@ export class ProjectForm {
         this.resetForm();
       }
     });
-
     effect(() => {
-      const isCompany = this.s1.get('isCompanyProject')?.value;
-      if (!isCompany) {
+      if (!this.s1.get('isCompanyProject')?.value) {
         this.s1.get('jobId')?.setValue(null);
       }
     });
@@ -270,34 +259,28 @@ export class ProjectForm {
     const input = e.target as HTMLInputElement;
     const files = Array.from(input.files || []);
     if (!files.length) return;
-
-    const MAX_IMAGES = 4;
-    const MAX_SIZE = 5 * 1024 * 1024;
-    const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
-    const availableSlots = MAX_IMAGES - this.totalImages;
-
+    const availableSlots = 4 - this.totalImages;
     if (availableSlots <= 0) {
-      alert(`Maximum ${MAX_IMAGES} images autorisées`);
+      alert('Maximum 4 images autorisées');
       return;
     }
-
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+    const maxSize = 5 * 1024 * 1024;
     files.slice(0, availableSlots).forEach(file => {
-      if (!ALLOWED_TYPES.includes(file.type)) {
+      if (!allowedTypes.includes(file.type)) {
         alert(`Type non autorisé: ${file.name}. Formats acceptés: PNG, JPEG, WEBP`);
         return;
       }
-      if (file.size > MAX_SIZE) {
+      if (file.size > maxSize) {
         alert(`Fichier trop volumineux: ${file.name}. Max 5MB`);
         return;
       }
-
       const reader = new FileReader();
       reader.onload = () => {
         this.images.update(imgs => [...imgs, {file, preview: reader.result as string}]);
       };
       reader.readAsDataURL(file);
     });
-
     input.value = '';
   }
 
@@ -324,7 +307,7 @@ export class ProjectForm {
   }
 
   displaySkillName(skill: SkillDto | null): string {
-    return skill ? skill.name : '';
+    return skill?.name || '';
   }
 
   getCategoryMeta(category: SkillCategory): SkillCategoryMeta {

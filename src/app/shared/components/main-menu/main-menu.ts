@@ -59,4 +59,8 @@ export class MainMenu {
       disableClose: true
     });
   }
+
+  getProgressBgColor(): string {
+    return getComputedStyle(document.documentElement).getPropertyValue('--progress-bg').trim();
+  }
 }

@@ -1,7 +1,7 @@
 <div class="flex justify-between items-start gap-3 mb-2">
   <span
     class="inline-block py-0.5 px-2.5 rounded text-[0.7rem] font-medium text-white whitespace-nowrap shrink-0 opacity-90"
-    [style.background-color]="typeMeta().color"
+    [class]="getTypeClass()"
   >
     {{ typeMeta().label }}
   </span>

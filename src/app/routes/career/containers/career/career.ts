@@ -6,8 +6,7 @@ import {Timeline} from '../../components/timeline/timeline';
 @Component({
   selector: 'app-career',
   imports: [Timeline, TimelineFilters],
-  templateUrl: './career.html',
-  styleUrl: './career.scss'
+  templateUrl: './career.html'
 })
 export class Career {
   protected readonly careerFacade = inject(CareerFacade);

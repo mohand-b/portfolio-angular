@@ -23,8 +23,7 @@ import {ToastService} from '../../../../../shared/services/toast.service';
     MatIconModule,
     MatDatepickerModule,
   ],
-  templateUrl: './project-timeline-link.html',
-  styleUrl: './project-timeline-link.scss',
+  templateUrl: './project-timeline-link.html'
 })
 export class ProjectTimelineLink {
   private readonly fb = inject(FormBuilder);

@@ -9,12 +9,10 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   const adminService = inject(AdminService);
   const adminStore = inject(AdminStore);
   const router = inject(Router);
-
   return next(req.clone({withCredentials: true})).pipe(
     catchError((error: HttpErrorResponse) => {
       const isAdminRequest = req.url.includes('/admin/');
       const isLoginOrRefresh = req.url.includes('/admin/login') || req.url.includes('/admin/refresh-token');
-
       if (error.status === 401 && isAdminRequest && !isLoginOrRefresh) {
         return adminService.revokeToken().pipe(
           switchMap(() => next(req.clone({withCredentials: true}))),

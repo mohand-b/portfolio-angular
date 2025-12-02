@@ -1,12 +1,6 @@
 import {inject, Injectable, Signal} from '@angular/core';
 import {Observable, tap} from 'rxjs';
-import {
-  Achievement,
-  AchievementCreate,
-  AchievementStats,
-  AchievementUnlockLog,
-  UpdateAchievementDto
-} from '../../core/state/achievement/achievement.model';
+import {Achievement, AchievementCreate, AchievementStats, AchievementUnlockLog, UpdateAchievementDto} from '../../core/state/achievement/achievement.model';
 import {AchievementService} from '../../core/state/achievement/achievement.service';
 import {AchievementStore} from '../../core/state/achievement/achievement.store';
 import {AchievementLogsService} from './manage-achievements/state/achievement-logs/achievement-logs.service';
@@ -21,47 +15,28 @@ import {CertificationDto, CreateCertificationDto} from '../career/state/certific
 import {CertificationService} from '../career/state/certification/certification.service';
 import {MilestoneDto} from '../career/state/milestone/milestone.model';
 import {MilestoneService} from '../career/state/milestone/milestone.service';
-import {
-  ProjectDto,
-  ProjectFilters,
-  ProjectLightDto,
-  ProjectMinimalResponseDto,
-  UpdateProjectDto
-} from '../projects/state/project/project.model';
+import {ProjectDto, ProjectFilters, ProjectLightDto, ProjectMinimalResponseDto, UpdateProjectDto} from '../projects/state/project/project.model';
 import {ProjectService} from '../projects/state/project/project.service';
 import {ProjectStore} from '../projects/state/project/project.store';
 import {TimelineStore} from '../career/state/timeline/timeline.store';
-import {
-  EducationTimelineItem,
-  JobTimelineItem,
-  MilestoneTimelineItem,
-  ProjectTimelineItem,
-  TimelineItemData,
-  TimelineItemType
-} from '../career/state/timeline/timeline.model';
+import {EducationTimelineItem, JobTimelineItem, MilestoneTimelineItem, ProjectTimelineItem, TimelineItemData, TimelineItemType} from '../career/state/timeline/timeline.model';
 import {AnswerQuestionDto, QuestionResponseDto, RejectQuestionDto} from '../contact/state/question/question.model';
 import {QuestionService} from '../contact/state/question/question.service';
 
 @Injectable({providedIn: 'root'})
 export class ConsoleFacade {
-
   private readonly achievementStore = inject(AchievementStore);
   private readonly achievementService = inject(AchievementService);
   private readonly achievementLogsService = inject(AchievementLogsService);
-
   private readonly skillStore = inject(SkillStore);
   private readonly skillService = inject(SkillService);
-
   private readonly jobService = inject(JobService);
   private readonly educationService = inject(EducationService);
   private readonly certificationService = inject(CertificationService);
   private readonly milestoneService = inject(MilestoneService);
-
   private readonly projectStore = inject(ProjectStore);
   private readonly projectService = inject(ProjectService);
-
   private readonly timelineStore = inject(TimelineStore);
-
   private readonly questionService = inject(QuestionService);
 
   readonly achievements: Signal<Achievement[]> = this.achievementStore.achievements;
@@ -240,7 +215,7 @@ export class ConsoleFacade {
     );
   }
 
-  loadProjects(options?: { page?: number; limit?: number; filters?: ProjectFilters }): void {
+  loadProjects(options?: {page?: number; limit?: number; filters?: ProjectFilters}): void {
     this.projectStore.loadProjects(options || {});
   }
 
@@ -285,8 +260,8 @@ export class ConsoleFacade {
       id: job.id,
       type: TimelineItemType.Job,
       title: job.title,
-      startDate: job.startDate ? job.startDate.toString() : null,
-      endDate: job.endDate ? job.endDate.toString() : null,
+      startDate: job.startDate ?? null,
+      endDate: job.endDate ?? null,
       description: job.description || null,
       image: job.image || null,
       company: job.company,
@@ -300,18 +275,14 @@ export class ConsoleFacade {
       id: education.id,
       type: TimelineItemType.Education,
       title: education.title,
-      startDate: education.startDate ? education.startDate.toString() : null,
-      endDate: education.endDate ? education.endDate.toString() : null,
+      startDate: education.startDate ?? null,
+      endDate: education.endDate ?? null,
       description: education.description || null,
       image: education.image || null,
       institution: education.institution,
       location: education.location,
       fieldOfStudy: education.fieldOfStudy || null,
-      certifications: education.certifications?.map(cert => ({
-        id: cert.id,
-        title: cert.title,
-        certificationType: cert.certificationType.toString()
-      })) || []
+      certifications: education.certifications || []
     };
   }
 
@@ -320,8 +291,8 @@ export class ConsoleFacade {
       id: project.id,
       type: TimelineItemType.Project,
       title: project.title,
-      startDate: project.startDate ? project.startDate.toString() : null,
-      endDate: project.endDate ? project.endDate.toString() : null,
+      startDate: project.startDate ?? null,
+      endDate: project.endDate ?? null,
       description: project.description || null,
       image: project.image || null,
       projectTypes: project.projectTypes || [],
@@ -335,8 +306,8 @@ export class ConsoleFacade {
     return {
       ...milestone,
       type: TimelineItemType.Milestone,
-      startDate: milestone.startDate?.toString() ?? null,
-      endDate: milestone.endDate?.toString() ?? null,
+      startDate: milestone.startDate ?? null,
+      endDate: milestone.endDate ?? null,
       description: milestone.description ?? null,
       image: milestone.image ?? null
     };

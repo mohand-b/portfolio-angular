@@ -8,6 +8,4 @@ import {ManageQuestions} from '../manage-questions/manage-questions';
   templateUrl: './manage-messages.html',
   styleUrl: './manage-messages.scss'
 })
-export class ManageMessages {
-
-}
+export class ManageMessages {}

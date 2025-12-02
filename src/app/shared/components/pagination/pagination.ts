@@ -4,8 +4,7 @@ import {MatIconModule} from '@angular/material/icon';
 @Component({
   selector: 'app-pagination',
   imports: [MatIconModule],
-  templateUrl: './pagination.html',
-  styleUrl: './pagination.scss'
+  templateUrl: './pagination.html'
 })
 export class Pagination {
   private readonly ELLIPSIS = -1;

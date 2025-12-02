@@ -7,8 +7,7 @@ import {NgClass} from '@angular/common';
 @Component({
   selector: 'app-menu-item',
   imports: [RouterLink, RouterLinkActive, MatIconModule, NgClass],
-  templateUrl: './menu-item.html',
-  styleUrl: './menu-item.scss'
+  templateUrl: './menu-item.html'
 })
 export class MenuItem {
   readonly menuEntry = input.required<MenuEntry>();

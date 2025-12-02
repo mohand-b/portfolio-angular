@@ -20,8 +20,7 @@ import {MilestoneDto} from '../../../../career/state/milestone/milestone.model';
     MatIconModule,
     MatDatepickerModule,
   ],
-  templateUrl: './milestone-form.html',
-  styleUrl: './milestone-form.scss',
+  templateUrl: './milestone-form.html'
 })
 export class MilestoneForm {
   private readonly fb = inject(FormBuilder);
@@ -47,15 +46,13 @@ export class MilestoneForm {
     effect(() => {
       const milestone = this.milestone();
       if (!milestone) return;
-
       this.milestoneForm.patchValue({
         title: milestone.title,
         startDate: milestone.startDate ? new Date(milestone.startDate) : null,
         endDate: milestone.endDate ? new Date(milestone.endDate) : null,
         description: milestone.description || '',
-        image: null,
+        image: null
       });
-
       this.imagePreview.set(milestone.image || null);
     });
   }
@@ -77,22 +74,18 @@ export class MilestoneForm {
       this.milestoneForm.markAllAsTouched();
       return;
     }
-
     const formValue = this.milestoneForm.getRawValue();
     const formData = toFormData({
       title: formValue.title!.trim(),
       startDate: formValue.startDate?.toISOString(),
       endDate: formValue.endDate?.toISOString(),
       description: formValue.description?.trim() || undefined,
-      image: formValue.image as File | null,
+      image: formValue.image as File | null
     });
-
     this.isSubmitting.set(true);
-
     const operation$ = this.isEditing()
       ? this.consoleFacade.updateMilestone(this.milestone()!.id, formData)
       : this.consoleFacade.addMilestone(formData);
-
     operation$.subscribe({
       next: () => {
         const message = this.isEditing() ? 'Moment modifié avec succès' : 'Moment créé avec succès';
@@ -110,7 +103,7 @@ export class MilestoneForm {
         this.toastService.error(message);
         this.milestoneForm.markAllAsTouched();
         this.isSubmitting.set(false);
-      },
+      }
     });
   }
 

@@ -11,8 +11,7 @@ import {environment} from '../../../../../../environments/environments';
 @Component({
   selector: 'app-project-detail',
   imports: [MatButtonModule, MatIconModule, MatChipsModule],
-  templateUrl: './project-detail.html',
-  styleUrl: './project-detail.scss'
+  templateUrl: './project-detail.html'
 })
 export class ProjectDetail {
   private readonly route = inject(ActivatedRoute);

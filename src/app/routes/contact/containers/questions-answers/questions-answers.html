@@ -3,9 +3,9 @@
 
   <div class="mb-8 pb-8 border-b border-neutral-200">
     @if (!isAuthenticated()) {
-      <div class="p-6 rounded-lg bg-blue-50 border border-blue-200 text-center">
-        <mat-icon class="!text-4xl !w-10 !h-10 text-blue-600 mb-3">login</mat-icon>
-        <p class="text-sm text-blue-800 mb-4">Vous devez être identifié pour poser une question</p>
+      <div class="p-6 rounded-lg info-message-bg border info-message-border text-center">
+        <mat-icon class="!text-4xl !w-10 !h-10 info-message-icon mb-3">login</mat-icon>
+        <p class="text-sm info-message-text mb-4">Vous devez être identifié pour poser une question</p>
         <button type="button" matButton="filled" (click)="openAuthModal()">
           <span class="flex items-center gap-2">
             <mat-icon>person</mat-icon>
@@ -14,14 +14,14 @@
         </button>
       </div>
     } @else if (!isVerified()) {
-      <div class="p-6 rounded-lg bg-amber-50 border border-amber-200 text-center">
-        <mat-icon class="!text-4xl !w-10 !h-10 text-amber-600 mb-3">mark_email_unread</mat-icon>
-        <p class="text-sm text-amber-800">Vous devez vérifier votre email avant de pouvoir poser une question. Consultez votre boîte mail.</p>
+      <div class="p-6 rounded-lg warning-message-bg border warning-message-border text-center">
+        <mat-icon class="!text-4xl !w-10 !h-10 warning-message-icon mb-3">mark_email_unread</mat-icon>
+        <p class="text-sm warning-message-text">Vous devez vérifier votre email avant de pouvoir poser une question. Consultez votre boîte mail.</p>
       </div>
     } @else if (hasPendingQuestion()) {
-      <div class="p-6 rounded-lg bg-amber-50 border border-amber-200 text-center">
-        <mat-icon class="!text-4xl !w-10 !h-10 text-amber-600 mb-3">schedule</mat-icon>
-        <p class="text-sm text-amber-800">Une question à la fois. Veuillez attendre une réponse avant d'en poser une nouvelle.</p>
+      <div class="p-6 rounded-lg warning-message-bg border warning-message-border text-center">
+        <mat-icon class="!text-4xl !w-10 !h-10 warning-message-icon mb-3">schedule</mat-icon>
+        <p class="text-sm warning-message-text">Une question à la fois. Veuillez attendre une réponse avant d'en poser une nouvelle.</p>
       </div>
     } @else {
       <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-4">

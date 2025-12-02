@@ -51,8 +51,7 @@ const PAGE_SIZE_OPTIONS = [5, 10, 20] as const;
     KpiCard,
     ConfirmationModal
   ],
-  templateUrl: './manage-visitors.html',
-  styleUrl: './manage-visitors.scss'
+  templateUrl: './manage-visitors.html'
 })
 export class ManageVisitors {
   private readonly visitorService = inject(VisitorService);

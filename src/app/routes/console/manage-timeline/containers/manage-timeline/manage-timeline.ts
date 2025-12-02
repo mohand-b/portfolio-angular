@@ -1,6 +1,7 @@
 import {Component, inject, signal} from '@angular/core';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {toSignal} from '@angular/core/rxjs-interop';
+import {map, Observable} from 'rxjs';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
@@ -144,39 +145,38 @@ export class ManageTimeline {
   onDeleteConfirmed(): void {
     const itemToDelete = this.itemToDelete();
     if (!itemToDelete) return;
-
     const {id, type} = itemToDelete;
-    let operation$;
-    let successMessage: string;
-    let errorMessage: string;
-
-    switch (type) {
-      case TimelineItemType.Education:
-        operation$ = this.consoleFacade.deleteEducation(id);
-        successMessage = 'Formation supprimée avec succès';
-        errorMessage = 'Erreur lors de la suppression de la formation';
-        break;
-      case TimelineItemType.Job:
-        operation$ = this.consoleFacade.deleteJob(id);
-        successMessage = 'Expérience supprimée avec succès';
-        errorMessage = 'Erreur lors de la suppression de l\'expérience';
-        break;
-      case TimelineItemType.Milestone:
-        operation$ = this.consoleFacade.deleteMilestone(id);
-        successMessage = 'Moment supprimé avec succès';
-        errorMessage = 'Erreur lors de la suppression du moment';
-        break;
-      default:
-        return;
-    }
-
-    operation$.subscribe({
+    const operations: Record<TimelineItemType, {operation$: Observable<void>, successMessage: string, errorMessage: string}> = {
+      [TimelineItemType.Education]: {
+        operation$: this.consoleFacade.deleteEducation(id),
+        successMessage: 'Formation supprimée avec succès',
+        errorMessage: 'Erreur lors de la suppression de la formation'
+      },
+      [TimelineItemType.Job]: {
+        operation$: this.consoleFacade.deleteJob(id),
+        successMessage: 'Expérience supprimée avec succès',
+        errorMessage: 'Erreur lors de la suppression de l\'expérience'
+      },
+      [TimelineItemType.Milestone]: {
+        operation$: this.consoleFacade.deleteMilestone(id),
+        successMessage: 'Moment supprimé avec succès',
+        errorMessage: 'Erreur lors de la suppression du moment'
+      },
+      [TimelineItemType.Project]: {
+        operation$: this.consoleFacade.detachProjectFromTimeline(id).pipe(map(() => {})),
+        successMessage: 'Projet détaché avec succès',
+        errorMessage: 'Erreur lors du détachement du projet'
+      }
+    };
+    const selected = operations[type];
+    if (!selected) return;
+    selected.operation$.subscribe({
       next: () => {
-        this.toastService.success(successMessage);
+        this.toastService.success(selected.successMessage);
         this.closeDeleteModal();
       },
       error: () => {
-        this.toastService.error(errorMessage);
+        this.toastService.error(selected.errorMessage);
         this.closeDeleteModal();
       }
     });

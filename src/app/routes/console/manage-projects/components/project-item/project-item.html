@@ -1,73 +1,37 @@
-<article
-  class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-300 transition-colors h-full flex flex-col">
+<article class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-300 transition-colors h-full flex flex-col">
   @if (project().coverImage) {
     <div class="w-full h-48 overflow-hidden p-2 border-b border-gray-200">
-      <img
-        [src]="project().coverImage"
-        [alt]="project().title"
-        class="w-full h-full object-cover"
-      />
+      <img [src]="project().coverImage" [alt]="project().title" class="w-full h-full object-cover"/>
     </div>
   }
-
   <div class="p-5 flex flex-col flex-1">
     <header class="flex items-start justify-between mb-3 gap-3">
-      <h3 class="text-base font-semibold text-gray-900 flex-1 line-clamp-2">
-        {{ project().title }}
-      </h3>
-
+      <h3 class="text-base font-semibold text-gray-900 flex-1 line-clamp-2">{{ project().title }}</h3>
       @if (showActions()) {
         <nav class="flex items-center gap-2 text-slate-400 shrink-0">
-          <button
-            type="button"
-            class="hover:text-slate-600 transition-colors cursor-pointer"
-            (click)="edit.emit()"
-            matTooltip="Éditer"
-            aria-label="Éditer le projet"
-          >
+          <button type="button" class="hover:text-slate-600 transition-colors cursor-pointer" (click)="edit.emit()" matTooltip="Éditer" aria-label="Éditer le projet">
             <mat-icon class="!text-lg">edit</mat-icon>
           </button>
-          <button
-            type="button"
-            class="hover:text-rose-600 transition-colors cursor-pointer"
-            (click)="remove.emit()"
-            matTooltip="Supprimer"
-            aria-label="Supprimer le projet"
-          >
+          <button type="button" class="hover:text-rose-600 transition-colors cursor-pointer" (click)="remove.emit()" matTooltip="Supprimer" aria-label="Supprimer le projet">
             <mat-icon class="!text-lg">delete</mat-icon>
           </button>
         </nav>
       }
     </header>
-
     <div class="flex flex-wrap gap-2 mb-3">
       @for (type of project().projectTypes; track type) {
-        <span class="px-2 py-1 text-xs font-medium rounded-md bg-purple-100 text-purple-700">
-        {{ type }}
-      </span>
+        <span class="px-2 py-1 text-xs font-medium rounded-md chip-purple">{{ type }}</span>
       }
       @if (project().market) {
-        <span class="px-2 py-1 text-xs font-medium rounded-md bg-blue-100 text-blue-700">
-        {{ project().market }}
-      </span>
+        <span class="px-2 py-1 text-xs font-medium rounded-md chip-blue">{{ project().market }}</span>
       }
       @if (project().scope) {
-        <span class="px-2 py-1 text-xs font-medium rounded-md bg-green-100 text-green-700">
-        {{ project().scope }}
-      </span>
+        <span class="px-2 py-1 text-xs font-medium rounded-md chip-green">{{ project().scope }}</span>
       }
     </div>
-
-    <div class="flex flex-col flex-1">
-      <p class="text-sm text-gray-600 mb-3 line-clamp-3">
-        {{ project().description }}
-      </p>
-    </div>
-
+    <p class="text-sm text-gray-600 mb-3 line-clamp-3 flex-1">{{ project().description }}</p>
     <div class="flex items-center gap-1.5 mb-4">
-      <mat-icon class="!text-base !w-4 !h-4 !leading-none !text-primary flex-shrink-0">
-        {{ companyIcon() }}
-      </mat-icon>
+      <mat-icon class="!text-base !w-4 !h-4 !leading-none !text-primary flex-shrink-0">{{ companyIcon() }}</mat-icon>
       @if (project().job) {
         <p class="text-sm text-gray-600 leading-none">
           Réalisé chez <span class="text-primary">{{ project().job!.company }}</span>
@@ -76,12 +40,8 @@
         <p class="text-sm text-gray-600 leading-none">Projet personnel</p>
       }
     </div>
-
     <footer class="flex justify-end">
-      <a
-        [routerLink]="['/projets', project().id]"
-        class="inline-flex items-center gap-1 text-sm font-medium text-primary cursor-pointer"
-      >
+      <a [routerLink]="['/projets', project().id]" class="inline-flex items-center gap-1 text-sm font-medium text-primary cursor-pointer">
         <span>Voir détails</span>
         <mat-icon class="!w-4 !h-4 !text-base !leading-none">arrow_forward</mat-icon>
       </a>

@@ -7,8 +7,7 @@ import {Loader} from '../../shared/components/loader/loader';
 @Component({
   selector: 'app-console-layout',
   imports: [RouterOutlet, ConsoleMenu, Loader],
-  templateUrl: './console-layout.html',
-  styleUrl: './console-layout.scss'
+  templateUrl: './console-layout.html'
 })
 export class ConsoleLayout {
 

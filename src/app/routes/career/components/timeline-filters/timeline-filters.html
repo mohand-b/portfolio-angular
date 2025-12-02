@@ -5,9 +5,10 @@
       [class.opacity-40]="!isSelected()(type)"
       [class.hover:opacity-70]="!isSelected()(type)"
       [class.shadow-sm]="isSelected()(type)"
-      [style.background-color]="isSelected()(type) ? typeMeta[type].color : 'transparent'"
-      [style.border-color]="typeMeta[type].color"
+      [class]="isSelected()(type) ? getTypeClass(type) : ''"
+      [style.background-color]="isSelected()(type) ? '' : 'transparent'"
       [style.color]="isSelected()(type) ? 'white' : typeMeta[type].color"
+      [style.border-color]="typeMeta[type].color"
       (click)="toggleType(type)"
     >
       <mat-icon class="!text-base !w-4 !h-4 !leading-none">{{ typeMeta[type].icon }}</mat-icon>

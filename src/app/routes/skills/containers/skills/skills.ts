@@ -10,8 +10,7 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-skills',
   imports: [MatIcon],
-  templateUrl: './skills.html',
-  styleUrl: './skills.scss'
+  templateUrl: './skills.html'
 })
 export class Skills {
   private readonly coreFacade = inject(CoreFacade);

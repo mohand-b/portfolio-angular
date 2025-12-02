@@ -1,4 +1,5 @@
 @use './material';
+@use './theme-variables';
 
 @import "../../node_modules/tailwindcss";
 
@@ -18,10 +19,241 @@ html, body {
 body {
   margin: 0;
   font-family: Manrope, system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2 {
   font-family: Lora, Georgia, serif;
+}
+
+/* Theme-adaptive chip and badge backgrounds using transparency */
+.chip-purple {
+  background-color: rgb(168 85 247 / 0.15) !important;
+  color: rgb(168 85 247) !important;
+}
+
+.chip-blue {
+  background-color: rgb(59 130 246 / 0.15) !important;
+  color: rgb(59 130 246) !important;
+}
+
+.chip-green {
+  background-color: rgb(34 197 94 / 0.15) !important;
+  color: rgb(34 197 94) !important;
+}
+
+.chip-red {
+  background-color: rgb(239 68 68 / 0.15) !important;
+  color: rgb(239 68 68) !important;
+}
+
+.chip-neutral {
+  background-color: rgb(115 115 115 / 0.15) !important;
+  color: rgb(163 163 163) !important;
+}
+
+.badge-yellow {
+  background-color: rgb(234 179 8 / 0.15) !important;
+  color: rgb(234 179 8) !important;
+  border-color: rgb(234 179 8 / 0.3) !important;
+}
+
+.badge-green {
+  background-color: rgb(34 197 94 / 0.15) !important;
+  color: rgb(34 197 94) !important;
+  border-color: rgb(34 197 94 / 0.3) !important;
+}
+
+.badge-blue {
+  background-color: rgb(59 130 246 / 0.15) !important;
+  color: rgb(59 130 246) !important;
+  border-color: rgb(59 130 246 / 0.3) !important;
+}
+
+.badge-red {
+  background-color: rgb(239 68 68 / 0.15) !important;
+  color: rgb(239 68 68) !important;
+  border-color: rgb(239 68 68 / 0.3) !important;
+}
+
+.badge-neutral {
+  background-color: rgb(163 163 163 / 0.15) !important;
+  color: rgb(163 163 163) !important;
+  border-color: rgb(163 163 163 / 0.3) !important;
+}
+
+.info-box-primary {
+  background-color: var(--mat-sys-primary-container) !important;
+  border-color: var(--mat-sys-primary) !important;
+}
+
+.info-box-red {
+  background-color: rgb(239 68 68 / 0.1) !important;
+  border-color: rgb(239 68 68 / 0.5) !important;
+}
+
+.info-box-primary-text {
+  color: var(--mat-sys-primary) !important;
+}
+
+.info-box-red-text {
+  color: rgb(239 68 68) !important;
+}
+
+[data-theme='dark'] {
+  .info-box-red-text {
+    color: rgb(252 165 165) !important;
+  }
+}
+
+.alert-error-bg {
+  background-color: rgb(239 68 68 / 0.1) !important;
+}
+
+.alert-error-border {
+  border-color: rgb(239 68 68 / 0.3) !important;
+}
+
+.alert-error-text {
+  color: rgb(239 68 68) !important;
+}
+
+.alert-error-icon {
+  color: rgb(239 68 68) !important;
+}
+
+.alert-warning-bg {
+  background-color: rgb(245 158 11 / 0.1) !important;
+}
+
+.alert-warning-border {
+  border-color: rgb(245 158 11 / 0.3) !important;
+}
+
+.alert-warning-text {
+  color: rgb(245 158 11) !important;
+}
+
+.alert-warning-icon {
+  color: rgb(245 158 11) !important;
+}
+
+.alert-info-bg {
+  background-color: rgb(59 130 246 / 0.1) !important;
+}
+
+.alert-info-border {
+  border-color: rgb(59 130 246 / 0.3) !important;
+}
+
+.alert-info-text {
+  color: rgb(59 130 246) !important;
+}
+
+.alert-info-icon {
+  color: rgb(59 130 246) !important;
+}
+
+.info-message-bg {
+  background-color: rgb(59 130 246 / 0.1) !important;
+}
+
+.info-message-border {
+  border-color: rgb(59 130 246 / 0.3) !important;
+}
+
+.info-message-text {
+  color: rgb(59 130 246) !important;
+}
+
+.info-message-icon {
+  color: rgb(59 130 246) !important;
+}
+
+.warning-message-bg {
+  background-color: rgb(245 158 11 / 0.1) !important;
+}
+
+.warning-message-border {
+  border-color: rgb(245 158 11 / 0.3) !important;
+}
+
+.warning-message-text {
+  color: rgb(245 158 11) !important;
+}
+
+.warning-message-icon {
+  color: rgb(245 158 11) !important;
+}
+
+[data-theme='dark'] {
+  .chip-purple { color: rgb(196 181 253) !important; }
+  .chip-blue { color: rgb(147 197 253) !important; }
+  .chip-green { color: rgb(134 239 172) !important; }
+  .chip-red { color: rgb(252 165 165) !important; }
+  .chip-neutral { color: rgb(212 212 212) !important; }
+
+  .badge-yellow { color: rgb(253 224 71) !important; }
+  .badge-green { color: rgb(134 239 172) !important; }
+  .badge-blue { color: rgb(147 197 253) !important; }
+  .badge-red { color: rgb(252 165 165) !important; }
+  .badge-neutral { color: rgb(212 212 212) !important; }
+
+  .alert-error-text { color: rgb(252 165 165) !important; }
+  .alert-error-icon { color: rgb(252 165 165) !important; }
+
+  .alert-warning-text { color: rgb(253 224 71) !important; }
+  .alert-warning-icon { color: rgb(253 224 71) !important; }
+
+  .alert-info-text { color: rgb(147 197 253) !important; }
+  .alert-info-icon { color: rgb(147 197 253) !important; }
+
+  .info-message-text { color: rgb(147 197 253) !important; }
+  .info-message-icon { color: rgb(147 197 253) !important; }
+
+  .warning-message-text { color: rgb(253 224 71) !important; }
+  .warning-message-icon { color: rgb(253 224 71) !important; }
+}
+
+.timeline-icon-shadow {
+  box-shadow: 0 0 0 2px var(--timeline-icon-shadow);
+}
+
+/* Timeline type backgrounds with transparency for better dark mode visibility */
+.timeline-bg-job {
+  background-color: #4A77B5;
+}
+
+.timeline-bg-education {
+  background-color: #399570;
+}
+
+.timeline-bg-project {
+  background-color: #A47ABC;
+}
+
+.timeline-bg-milestone {
+  background-color: #C9A44A;
+}
+
+[data-theme='dark'] {
+  .timeline-bg-job {
+    background-color: rgba(74, 119, 181, 0.85) !important;
+  }
+
+  .timeline-bg-education {
+    background-color: rgba(57, 149, 112, 0.85) !important;
+  }
+
+  .timeline-bg-project {
+    background-color: rgba(164, 122, 188, 0.85) !important;
+  }
+
+  .timeline-bg-milestone {
+    background-color: rgba(201, 164, 74, 0.85) !important;
+  }
 }
 
 @keyframes skill-fall {

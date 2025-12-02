@@ -6,8 +6,7 @@ import {MatIconModule} from '@angular/material/icon';
 @Component({
   selector: 'app-home-personal',
   imports: [MatButtonModule, MatIconModule],
-  templateUrl: './home-personal.html',
-  styleUrl: './home-personal.scss'
+  templateUrl: './home-personal.html'
 })
 export class HomePersonal {
   private readonly router = inject(Router);

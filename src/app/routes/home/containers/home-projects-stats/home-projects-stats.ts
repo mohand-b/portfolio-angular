@@ -73,8 +73,7 @@ interface ProjectStatsResponse {
 @Component({
   selector: 'app-home-projects-stats',
   imports: [BaseChartDirective, MatButtonModule, MatIconModule],
-  templateUrl: './home-projects-stats.html',
-  styleUrl: './home-projects-stats.scss'
+  templateUrl: './home-projects-stats.html'
 })
 export class HomeProjectsStats {
   private readonly router = inject(Router);

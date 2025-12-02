@@ -1,54 +1,33 @@
 <div class="flex flex-col h-full">
-  <header
-    class="sticky top-0 z-10 flex items-center justify-between min-h-20 px-5 border-b border-neutral-200 bg-white">
+  <header class="sticky top-0 z-10 flex items-center justify-between min-h-20 px-5 border-b border-neutral-200 bg-white">
     <h1 class="text-2xl font-semibold text-neutral-800">Projets</h1>
-
-    <button
-      type="button"
-      matButton="filled"
-      (click)="openPanel()"
-      aria-label="Ajouter un projet"
-    >
+    <button type="button" matButton="filled" (click)="openPanel()" aria-label="Ajouter un projet">
       <mat-icon>add</mat-icon>
       Ajouter un projet
     </button>
   </header>
-
   <main class="flex flex-col flex-1 gap-6 bg-neutral-100 p-5 overflow-auto">
     @if (facade.projects().length > 0) {
-      <section
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-opacity"
-        [class.opacity-50]="facade.projectsIsLoading()"
-        role="list"
-      >
+      <section class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 transition-opacity" [class.opacity-50]="facade.projectsIsLoading()" role="list">
         @for (project of facade.projects(); track project.id) {
-          <app-project-item
-            [project]="project"
-            (edit)="onEdit(project)"
-            (remove)="onRemove(project)"
-          />
+          <app-project-item [project]="project" (edit)="onEdit(project)" (remove)="onRemove(project)"/>
         }
       </section>
-
       <footer class="flex items-center justify-between mt-6 px-6 h-14 bg-white rounded-lg border border-slate-200">
         <p class="text-sm text-slate-600">
           Affichage
-          <span class="font-medium text-slate-900">
-            {{ facade.projectsStartIndex() }} - {{ facade.projectsEndIndex() }}
-          </span>
+          <span class="font-medium text-slate-900">{{ facade.projectsStartIndex() }} - {{ facade.projectsEndIndex() }}</span>
           sur
           <span class="font-medium text-slate-900">{{ facade.projectsTotal() }}</span>
           projet{{ facade.projectsTotal() > 1 ? 's' : '' }}
         </p>
-
         <app-pagination
           [currentPage]="facade.projectsPage()"
           [totalPages]="facade.projectsTotalPages()"
           [isLoading]="facade.projectsIsLoading()"
           (pageChange)="facade.setProjectsPage($event)"
           (previousPage)="facade.previousProjectsPage()"
-          (nextPage)="facade.nextProjectsPage()"
-        />
+          (nextPage)="facade.nextProjectsPage()"/>
       </footer>
     } @else {
       <div class="flex items-center justify-center flex-1">
@@ -69,6 +48,5 @@
     [message]="deletionMessage()"
     [isDelete]="true"
     (confirmed)="confirmDelete()"
-    (cancelled)="cancelDelete()"
-  />
+    (cancelled)="cancelDelete()"/>
 }

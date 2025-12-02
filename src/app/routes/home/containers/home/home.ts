@@ -13,17 +13,13 @@ const TIME_TO_STAY_ON_PAGE_MS = 45000;
 @Component({
   selector: 'app-home',
   imports: [HomeHero, HomeAbout, HomeSkills, HomeProjectsStats, HomePersonal, HomeContactBanner],
-  templateUrl: './home.html',
-  styleUrl: './home.scss'
+  templateUrl: './home.html'
 })
 export class Home {
   private readonly coreFacade = inject(CoreFacade);
   private readonly destroyRef = inject(DestroyRef);
-
   readonly skills = this.coreFacade.skills;
-
   private readonly isVisitorAuthenticated = this.coreFacade.isVisitorAuthenticated;
-
   private readonly hasStayedLongEnough = signal(false);
   private readonly hasScrolledToBottom = signal(false);
   private readonly hasTracked = signal(false);
@@ -33,11 +29,8 @@ export class Home {
       const timer = setTimeout(() => {
         this.hasStayedLongEnough.set(true);
       }, TIME_TO_STAY_ON_PAGE_MS);
-
       this.destroyRef.onDestroy(() => clearTimeout(timer));
-
       const footer = document.querySelector('app-footer');
-
       if (footer) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
@@ -45,20 +38,13 @@ export class Home {
               this.hasScrolledToBottom.set(true);
             }
           });
-        }, {
-          threshold: [0, 0.5, 1]
-        });
-
+        }, {threshold: [0, 0.5, 1]});
         observer.observe(footer);
         this.destroyRef.onDestroy(() => observer.disconnect());
       }
     });
-
     effect(() => {
-      if (!this.hasTracked() &&
-        this.isVisitorAuthenticated() &&
-        this.hasStayedLongEnough() &&
-        this.hasScrolledToBottom()) {
+      if (!this.hasTracked() && this.isVisitorAuthenticated() && this.hasStayedLongEnough() && this.hasScrolledToBottom()) {
         this.hasTracked.set(true);
         this.coreFacade.unlockAchievement(ACHIEVEMENT_ID).subscribe();
       }

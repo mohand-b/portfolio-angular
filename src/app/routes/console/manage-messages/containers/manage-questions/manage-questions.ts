@@ -16,8 +16,7 @@ import {PaginatedQuestionsResponseDto, QuestionResponseDto, QuestionStatsRespons
     QuestionAdminItem,
     Pagination
   ],
-  templateUrl: './manage-questions.html',
-  styleUrl: './manage-questions.scss'
+  templateUrl: './manage-questions.html'
 })
 export class ManageQuestions {
   private readonly consoleFacade = inject(ConsoleFacade);

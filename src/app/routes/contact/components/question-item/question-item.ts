@@ -9,8 +9,7 @@ import {QuestionResponseDto, QuestionStatusEnum} from '../../state/question/ques
 @Component({
   selector: 'app-question-item',
   imports: [TimeAgoPipe, SvgSafePipe],
-  templateUrl: './question-item.html',
-  styleUrl: './question-item.scss'
+  templateUrl: './question-item.html'
 })
 export class QuestionItem {
   private readonly http = inject(HttpClient);
@@ -23,9 +22,9 @@ export class QuestionItem {
     [QuestionStatusEnum.REJECTED]: 'Refusée'
   };
   protected readonly statusColors: Record<QuestionStatusEnum, string> = {
-    [QuestionStatusEnum.PENDING]: 'text-orange-600 bg-orange-50 border-orange-200',
-    [QuestionStatusEnum.ANSWERED]: 'text-green-600 bg-green-50 border-green-200',
-    [QuestionStatusEnum.REJECTED]: 'text-red-600 bg-red-50 border-red-200'
+    [QuestionStatusEnum.PENDING]: 'badge-yellow',
+    [QuestionStatusEnum.ANSWERED]: 'badge-green',
+    [QuestionStatusEnum.REJECTED]: 'badge-red'
   };
 
   readonly question = input.required<QuestionResponseDto>();

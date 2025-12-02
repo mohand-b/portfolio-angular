@@ -13,33 +13,32 @@ interface AlertConfig {
 
 const ALERT_CONFIGS: Record<AlertType, AlertConfig> = {
   error: {
-    bgColor: 'bg-red-50',
-    borderColor: 'border-red-200',
-    textColor: 'text-red-800',
+    bgColor: 'alert-error-bg',
+    borderColor: 'alert-error-border',
+    textColor: 'alert-error-text',
     icon: 'error',
-    iconColor: 'text-red-600'
+    iconColor: 'alert-error-icon'
   },
   warning: {
-    bgColor: 'bg-amber-50',
-    borderColor: 'border-amber-200',
-    textColor: 'text-amber-800',
+    bgColor: 'alert-warning-bg',
+    borderColor: 'alert-warning-border',
+    textColor: 'alert-warning-text',
     icon: 'warning',
-    iconColor: 'text-amber-600'
+    iconColor: 'alert-warning-icon'
   },
   info: {
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-200',
-    textColor: 'text-blue-800',
+    bgColor: 'alert-info-bg',
+    borderColor: 'alert-info-border',
+    textColor: 'alert-info-text',
     icon: 'info',
-    iconColor: 'text-blue-600'
+    iconColor: 'alert-info-icon'
   }
 };
 
 @Component({
   selector: 'app-alert-message',
   imports: [MatIconModule],
-  templateUrl: './alert-message.html',
-  styleUrl: './alert-message.scss'
+  templateUrl: './alert-message.html'
 })
 export class AlertMessage {
   readonly type = input.required<AlertType>();

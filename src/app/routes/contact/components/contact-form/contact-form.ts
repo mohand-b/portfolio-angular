@@ -64,10 +64,8 @@ export class ContactForm {
 
   onSubmit(): void {
     if (this.form.invalid || this.isSubmitting()) return;
-
     this.isSubmitting.set(true);
     this.submitError.set(null);
-
     const formValue = this.form.getRawValue();
     const dto: ContactMessageDto = {
       firstName: formValue.firstName!,
@@ -76,7 +74,6 @@ export class ContactForm {
       subject: formValue.subject!,
       message: formValue.message!
     };
-
     this.contactFacade.sendMessage(dto).subscribe({
       next: () => {
         this.isSubmitting.set(false);

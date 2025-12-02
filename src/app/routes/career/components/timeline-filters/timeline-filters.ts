@@ -6,8 +6,7 @@ import {CareerFacade} from '../../career.facade';
 @Component({
   selector: 'app-timeline-filters',
   imports: [MatIcon],
-  templateUrl: './timeline-filters.html',
-  styleUrl: './timeline-filters.scss'
+  templateUrl: './timeline-filters.html'
 })
 export class TimelineFilters {
   private readonly careerFacade = inject(CareerFacade);
@@ -28,5 +27,19 @@ export class TimelineFilters {
         : [...current, type];
 
     this.careerFacade.setSelectedTypes(newSelected);
+  }
+
+  protected getTimelineBorderColor(): string {
+    return getComputedStyle(document.documentElement).getPropertyValue('--timeline-icon-border').trim();
+  }
+
+  protected getTypeClass(type: TimelineItemType): string {
+    const typeMap: Record<TimelineItemType, string> = {
+      [TimelineItemType.Job]: 'timeline-bg-job',
+      [TimelineItemType.Education]: 'timeline-bg-education',
+      [TimelineItemType.Project]: 'timeline-bg-project',
+      [TimelineItemType.Milestone]: 'timeline-bg-milestone'
+    };
+    return typeMap[type];
   }
 }

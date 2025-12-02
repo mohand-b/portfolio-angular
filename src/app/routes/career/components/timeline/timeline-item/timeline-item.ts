@@ -27,8 +27,7 @@ import {MilestoneTimelineContent} from '../milestone-timeline-content/milestone-
     ProjectTimelineContent,
     MilestoneTimelineContent
   ],
-  templateUrl: './timeline-item.html',
-  styleUrl: './timeline-item.scss'
+  templateUrl: './timeline-item.html'
 })
 export class TimelineItem {
   readonly item = input.required<TimelineItemData>();
@@ -70,4 +69,18 @@ export class TimelineItem {
   protected asEducation = (): EducationTimelineItem => this.item() as EducationTimelineItem;
   protected asProject = (): ProjectTimelineItem => this.item() as ProjectTimelineItem;
   protected asMilestone = (): MilestoneTimelineItem => this.item() as MilestoneTimelineItem;
+
+  protected getTimelineBorderColor(): string {
+    return getComputedStyle(document.documentElement).getPropertyValue('--timeline-icon-border').trim();
+  }
+
+  protected getTypeClass(): string {
+    const typeMap: Record<TimelineItemType, string> = {
+      [TimelineItemType.Job]: 'timeline-bg-job',
+      [TimelineItemType.Education]: 'timeline-bg-education',
+      [TimelineItemType.Project]: 'timeline-bg-project',
+      [TimelineItemType.Milestone]: 'timeline-bg-milestone'
+    };
+    return typeMap[this.item().type];
+  }
 }

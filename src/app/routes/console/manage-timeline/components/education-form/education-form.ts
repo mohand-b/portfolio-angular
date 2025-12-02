@@ -21,8 +21,7 @@ import {TIMELINE_ITEM_TYPE_META, TimelineItemType} from '../../../../career/stat
 const DEFAULT_CERTIFICATION = {
   title: '',
   certificationType: CertificationType.Academic
-} as const;
-
+};
 const STEPS: StepConfig[] = [
   {icon: 'info', text: 'Informations'},
   {icon: 'business', text: 'Établissement'},
@@ -62,8 +61,6 @@ export class EducationForm {
   readonly certificationTypes = Object.values(CertificationType);
   readonly certificationTypeMeta = CERTIFICATION_TYPE_META;
   protected readonly educationColor = TIMELINE_ITEM_TYPE_META[TimelineItemType.Education].color;
-
-
   readonly educationForm = this.fb.group({
     step1: this.fb.group({
       title: ['', Validators.required],
@@ -95,20 +92,17 @@ export class EducationForm {
     effect(() => {
       const edu = this.education();
       if (!edu) return;
-
       this.s1.patchValue({
         title: edu.title,
         fieldOfStudy: edu.fieldOfStudy || '',
         startDate: edu.startDate ? new Date(edu.startDate) : null,
-        endDate: edu.endDate ? new Date(edu.endDate) : null,
+        endDate: edu.endDate ? new Date(edu.endDate) : null
       });
-
       this.s2.patchValue({
         institution: edu.institution,
         location: edu.location,
-        image: null,
+        image: null
       });
-
       this.imagePreview.set(edu.image || null);
       this.certifications.set(
         edu.certifications?.map(cert => ({

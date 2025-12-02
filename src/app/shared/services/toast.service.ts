@@ -22,13 +22,10 @@ export class ToastService {
 
   private processQueue(): void {
     if (this.isProcessing || this.queue.length === 0) return;
-
     this.isProcessing = true;
     const showToast = this.queue.shift();
-
     if (showToast) {
       showToast();
-
       setTimeout(() => {
         this.isProcessing = false;
         this.processQueue();
@@ -39,12 +36,10 @@ export class ToastService {
   private addToQueue(toast: Toast, duration: number): void {
     this.queue.push(() => {
       this.toasts.update(toasts => [...toasts, toast]);
-
       if (duration > 0) {
         setTimeout(() => this.remove(toast.id), duration);
       }
     });
-
     this.processQueue();
   }
 
@@ -84,10 +79,7 @@ export class ToastService {
   }
 
   remove(id: number): void {
-    this.toasts.update(toasts =>
-      toasts.map(t => t.id === id ? {...t, removing: true} : t)
-    );
-
+    this.toasts.update(toasts => toasts.map(t => t.id === id ? {...t, removing: true} : t));
     setTimeout(() => {
       this.toasts.update(toasts => toasts.filter(t => t.id !== id));
     }, 300);

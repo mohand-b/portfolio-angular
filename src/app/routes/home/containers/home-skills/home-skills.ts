@@ -20,8 +20,7 @@ interface FeaturedSkill {
 @Component({
   selector: 'app-home-skills',
   imports: [MatButtonModule, MatIconModule],
-  templateUrl: './home-skills.html',
-  styleUrl: './home-skills.scss'
+  templateUrl: './home-skills.html'
 })
 export class HomeSkills {
   private readonly router = inject(Router);

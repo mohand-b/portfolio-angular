@@ -6,8 +6,7 @@ import {Pagination} from '../../../../shared/components/pagination/pagination';
 @Component({
   selector: 'app-question-list',
   imports: [QuestionItem, Pagination],
-  templateUrl: './question-list.html',
-  styleUrl: './question-list.scss'
+  templateUrl: './question-list.html'
 })
 export class QuestionList {
   readonly questions = input.required<QuestionResponseDto[]>();

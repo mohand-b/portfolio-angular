@@ -21,8 +21,7 @@ import {QuestionResponseDto, QuestionStatusEnum} from '../../../../contact/state
     TimeAgoPipe,
     SvgSafePipe
   ],
-  templateUrl: './question-admin-item.html',
-  styleUrl: './question-admin-item.scss'
+  templateUrl: './question-admin-item.html'
 })
 export class QuestionAdminItem {
   private readonly http = inject(HttpClient);

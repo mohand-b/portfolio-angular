@@ -1,19 +1,12 @@
 <div class="flex flex-col h-full">
-  <div
-    class="sticky top-0 z-10 flex items-center justify-between min-h-[5rem] px-[1.25rem] border-b border-neutral-200 bg-white"
-  >
+  <div class="sticky top-0 z-10 flex items-center justify-between min-h-[5rem] px-5 border-b border-neutral-200 bg-white">
     <h1 class="text-2xl font-semibold text-neutral-800">Compétences</h1>
-
     <button (click)="openPanel()" matButton="filled">
       <mat-icon>add</mat-icon>
       Ajouter une compétence
     </button>
   </div>
-
-  <div
-    class="flex flex-col flex-1 gap-[1.5rem] bg-neutral-100 p-[1.25rem]"
-    style="--tw-shadow-color: rgba(0,0,0,0.05);"
-  >
+  <div class="flex flex-col flex-1 gap-6 bg-neutral-100 p-5" style="--tw-shadow-color: rgba(0,0,0,0.05);">
     @for (cat of categories; track cat) {
       @if (getSkillsByCategory(cat).length > 0) {
         <app-skill-category-section
@@ -28,8 +21,7 @@
           [collapsible]="true"
           [visibleRows]="1"
           [rowHeightRem]="2.75"
-          [rowGapRem]="1"
-        >
+          [rowGapRem]="1">
           @for (skill of getSkillsByCategory(cat); track skill.id) {
             <app-skill-item
               cdkDrag
@@ -37,13 +29,11 @@
               [cdkDragData]="skill"
               (setLevel)="onSkillLevelChange(skill, $event)"
               (cdkDragStarted)="isDragging.set(true)"
-              (cdkDragEnded)="isDragging.set(false)"
-            />
+              (cdkDragEnded)="isDragging.set(false)"/>
           }
         </app-skill-category-section>
       }
     }
-
   </div>
 </div>
 
@@ -54,15 +44,10 @@
   [class.global-trash-zone--active]="isDragging()"
   [id]="dropTrashId"
   cdkDropList
-  class="global-trash-zone"
->
+  class="global-trash-zone">
   <mat-icon style="color: #e53935;">delete</mat-icon>
 </div>
 
-
-<app-side-panel
-  (closed)="onCloseRequested()"
-  [isOpen]="panelOpen()"
->
+<app-side-panel (closed)="onCloseRequested()" [isOpen]="panelOpen()">
   <app-skill-create (created)="onCloseRequested()"/>
 </app-side-panel>

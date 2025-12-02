@@ -22,8 +22,7 @@ import {ProjectForm} from '../project-form/project-form';
     ProjectItem,
     ConfirmationModal,
   ],
-  templateUrl: './manage-projects.html',
-  styleUrl: './manage-projects.scss'
+  templateUrl: './manage-projects.html'
 })
 export class ManageProjects {
   private static readonly PAGE_SIZE = 6;
@@ -39,9 +38,7 @@ export class ManageProjects {
 
   readonly deletionMessage = computed(() => {
     const project = this.projectToDelete();
-    return project
-      ? `Êtes-vous sûr de vouloir supprimer le projet "${project.title}" ? Cette action est irréversible.`
-      : '';
+    return project ? `Êtes-vous sûr de vouloir supprimer le projet "${project.title}" ? Cette action est irréversible.` : '';
   });
 
   constructor() {
@@ -76,9 +73,7 @@ export class ManageProjects {
   confirmDelete(): void {
     const project = this.projectToDelete();
     if (!project) return;
-
     this.resetModal();
-
     this.facade.deleteProject(project.id).subscribe({
       next: () => this.toastService.success('Projet supprimé avec succès'),
       error: () => this.toastService.error('Erreur lors de la suppression du projet')

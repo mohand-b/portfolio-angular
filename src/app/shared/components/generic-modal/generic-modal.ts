@@ -12,8 +12,7 @@ export interface GenericModalData {
 @Component({
   selector: 'app-generic-modal',
   imports: [MatDialogModule, MatIconModule, MatButtonModule],
-  templateUrl: './generic-modal.html',
-  styleUrl: './generic-modal.scss'
+  templateUrl: './generic-modal.html'
 })
 export class GenericModal {
 

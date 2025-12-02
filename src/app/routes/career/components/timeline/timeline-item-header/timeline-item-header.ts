@@ -1,7 +1,7 @@
 import {Component, computed, input} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
-import {differenceInMonths, differenceInYears, parseISO} from 'date-fns';
+import {differenceInMonths, differenceInYears} from 'date-fns';
 import {TIMELINE_ITEM_TYPE_META, TimelineItemType} from '../../../state/timeline/timeline.model';
 
 @Component({
@@ -11,16 +11,16 @@ import {TIMELINE_ITEM_TYPE_META, TimelineItemType} from '../../../state/timeline
 })
 export class TimelineItemHeader {
   readonly type = input.required<TimelineItemType>();
-  readonly startDate = input.required<string | null>();
-  readonly endDate = input.required<string | null>();
+  readonly startDate = input.required<Date | null | undefined>();
+  readonly endDate = input.required<Date | null | undefined>();
 
   protected readonly typeMeta = computed(() => TIMELINE_ITEM_TYPE_META[this.type()]);
   protected readonly duration = computed(() => {
     const start = this.startDate();
     if (!start) return '';
 
-    const startDate = parseISO(start);
-    const endDate = this.endDate() ? parseISO(this.endDate()!) : new Date();
+    const startDate = start;
+    const endDate = this.endDate() || new Date();
     const years = differenceInYears(endDate, startDate);
     const months = differenceInMonths(endDate, startDate) % 12;
 
@@ -31,4 +31,14 @@ export class TimelineItemHeader {
       months && `${months} mois`
     ].filter(Boolean).join(' ');
   });
+
+  protected getTypeClass(): string {
+    const typeMap: Record<TimelineItemType, string> = {
+      [TimelineItemType.Job]: 'timeline-bg-job',
+      [TimelineItemType.Education]: 'timeline-bg-education',
+      [TimelineItemType.Project]: 'timeline-bg-project',
+      [TimelineItemType.Milestone]: 'timeline-bg-milestone'
+    };
+    return typeMap[this.type()];
+  }
 }

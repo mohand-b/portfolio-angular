@@ -6,3 +6,9 @@ export interface MilestoneDto {
   description: string | null;
   image: string | null;
 }
+
+export interface CreateMilestoneDto extends Omit<MilestoneDto, 'id'> {
+}
+
+export interface UpdateMilestoneDto extends Partial<Omit<MilestoneDto, 'id'>> {
+}

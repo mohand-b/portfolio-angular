@@ -15,5 +15,8 @@ export interface JobMinimalDto {
   logo: string | null;
 }
 
-export interface CreateJobDto extends Omit<JobDto, 'id'> {
+export interface CreateJobDto extends Omit<JobDto, 'id' | 'createdAt' | 'projects'> {
+}
+
+export interface UpdateJobDto extends Partial<Omit<JobDto, 'id' | 'type' | 'createdAt' | 'projects'>> {
 }

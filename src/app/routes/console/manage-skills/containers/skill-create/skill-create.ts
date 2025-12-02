@@ -18,8 +18,7 @@ import {ConsoleFacade} from '../../../console.facade';
     ReactiveFormsModule,
     MatIconModule
   ],
-  templateUrl: './skill-create.html',
-  styleUrl: './skill-create.scss'
+  templateUrl: './skill-create.html'
 })
 export class SkillCreate {
 

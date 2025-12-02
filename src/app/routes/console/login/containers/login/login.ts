@@ -12,10 +12,9 @@ import {Router} from '@angular/router';
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule,
+    MatInputModule
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.scss'
+  templateUrl: './login.html'
 })
 export class Login {
   private readonly router = inject(Router);
@@ -24,7 +23,7 @@ export class Login {
 
   readonly form: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required],
+    password: ['', Validators.required]
   });
 
   @HostListener('document:keydown', ['$event'])
@@ -40,14 +39,12 @@ export class Login {
       this.form.markAllAsTouched();
       return;
     }
-
     this.form.disable();
     const {email, password} = this.form.value;
-
     this.coreFacade.loginAdmin({email, password}).subscribe({
       next: () => this.router.navigate(['/console']),
       error: () => this.form.enable(),
-      complete: () => this.form.enable(),
+      complete: () => this.form.enable()
     });
   }
 }

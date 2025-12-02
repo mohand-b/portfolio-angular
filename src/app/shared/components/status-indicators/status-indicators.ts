@@ -27,8 +27,7 @@ interface StatusIndicator {
   imports: [
     MatTooltipModule
   ],
-  templateUrl: './status-indicators.html',
-  styleUrl: './status-indicators.scss'
+  templateUrl: './status-indicators.html'
 })
 export class StatusIndicators {
 

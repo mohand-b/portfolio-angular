@@ -17,8 +17,7 @@ import {hexWithAlpha} from '../../../../../shared/utils/color.utils';
 @Component({
   selector: 'app-skill-category-section',
   imports: [MatIconModule, NgStyle],
-  templateUrl: './skill-category-section.html',
-  styleUrl: './skill-category-section.scss'
+  templateUrl: './skill-category-section.html'
 })
 export class SkillCategorySection {
   readonly category = input.required<SkillCategory>();

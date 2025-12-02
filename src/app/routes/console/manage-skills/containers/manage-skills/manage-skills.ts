@@ -30,12 +30,10 @@ import {SidePanel} from '../../../../../shared/components/side-panel/side-panel'
 export class ManageSkills {
   private readonly modalService = inject(ModalService);
   private readonly consoleFacade = inject(ConsoleFacade);
-
   readonly categories: SkillCategory[] = Object.values(SkillCategory);
   readonly dropTrashId = 'trash';
   readonly dropListIds: string[] = [...this.categories, this.dropTrashId];
   readonly emptySkillList: SkillDto[] = [];
-
   readonly skills: Signal<SkillDto[]> = this.consoleFacade.skills;
   readonly isDragging = signal(false);
   readonly panelOpen = signal(false);
@@ -54,9 +52,7 @@ export class ManageSkills {
 
   drop(event: CdkDragDrop<SkillDto[]>, newCategory: SkillCategory): void {
     if (event.previousContainer === event.container) return;
-
     const skill = event.item.data as SkillDto;
-
     this.modalService.open(GenericModal, {
       data: {
         title: 'Confirmer le déplacement',
@@ -92,7 +88,6 @@ export class ManageSkills {
 
   onDropToTrash(event: CdkDragDrop<SkillDto[]>): void {
     const skill = event.item.data as SkillDto;
-
     this.modalService.open(GenericModal, {
       data: {
         title: 'Supprimer la compétence',

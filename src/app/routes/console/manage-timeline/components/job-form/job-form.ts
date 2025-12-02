@@ -74,19 +74,16 @@ export class JobForm {
     effect(() => {
       const job = this.job();
       if (!job) return;
-
       this.s1.patchValue({
         title: job.title,
         startDate: job.startDate ? new Date(job.startDate) : null,
-        endDate: job.endDate ? new Date(job.endDate) : null,
+        endDate: job.endDate ? new Date(job.endDate) : null
       });
-
       this.s2.patchValue({
         company: job.company,
         location: job.location || '',
-        image: null,
+        image: null
       });
-
       this.imagePreview.set(job.image || null);
       this.missions.set(job.missions || []);
       this.missionControl.reset('');
@@ -141,7 +138,6 @@ export class JobForm {
       this.step.set(this.s1.invalid ? 0 : 1);
       return;
     }
-
     const {step1, step2} = this.jobForm.getRawValue();
     const formData = toFormData({
       title: step1.title!.trim(),
@@ -150,15 +146,12 @@ export class JobForm {
       company: step2.company!.trim(),
       location: step2.location!.trim(),
       missions: this.missions(),
-      image: step2.image as File | null,
+      image: step2.image as File | null
     });
-
     this.isSubmitting.set(true);
-
     const operation$ = this.isEditing()
       ? this.consoleFacade.updateJob(this.job()!.id, formData)
       : this.consoleFacade.addJob(formData);
-
     operation$.subscribe({
       next: () => {
         const message = this.isEditing() ? 'Expérience modifiée avec succès' : 'Expérience créée avec succès';
@@ -178,7 +171,7 @@ export class JobForm {
         this.toastService.error(message);
         this.markAllStepsAsTouched();
         this.isSubmitting.set(false);
-      },
+      }
     });
   }
 

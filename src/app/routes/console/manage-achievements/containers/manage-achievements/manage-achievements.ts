@@ -24,8 +24,7 @@ import {ToastService} from '../../../../../shared/services/toast.service';
     Pagination,
     ConfirmationModal
   ],
-  templateUrl: './manage-achievements.html',
-  styleUrl: './manage-achievements.scss'
+  templateUrl: './manage-achievements.html'
 })
 export class ManageAchievements {
   readonly facade = inject(ConsoleFacade);
@@ -42,9 +41,7 @@ export class ManageAchievements {
 
   readonly deletionMessage = computed(() => {
     const achievement = this.achievementToDelete();
-    return achievement
-      ? `Êtes-vous sûr de vouloir supprimer le succès "${achievement.label}" ?`
-      : '';
+    return achievement ? `Êtes-vous sûr de vouloir supprimer le succès "${achievement.label}" ?` : '';
   });
 
   openPanel(): void {
@@ -70,9 +67,7 @@ export class ManageAchievements {
   confirmDelete(): void {
     const achievement = this.achievementToDelete();
     if (!achievement) return;
-
     this.resetModal();
-
     this.facade.deleteAchievementByCode(achievement.code).subscribe({
       next: () => this.toastService.success('Succès supprimé avec succès'),
       error: () => this.toastService.error('Erreur lors de la suppression du succès')

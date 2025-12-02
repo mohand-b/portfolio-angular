@@ -24,8 +24,8 @@
     @if (isMyQuestion()) {
       <div class="flex flex-wrap gap-2 justify-end">
         @if (question().status === QuestionStatusEnum.REJECTED) {
-          <span class="text-xs px-2 py-1 rounded-full border text-red-600 bg-red-50 border-red-200">Refusée</span>
-          <span class="text-xs px-2 py-1 rounded-full border text-neutral-600 bg-neutral-50 border-neutral-200">Non publiée</span>
+          <span class="text-xs px-2 py-1 rounded-full border badge-red">Refusée</span>
+          <span class="text-xs px-2 py-1 rounded-full border badge-neutral">Non publiée</span>
         } @else {
           <span class="text-xs px-2 py-1 rounded-full border {{ getStatusColor(question().status) }}">
             {{ getStatusLabel(question().status) }}
@@ -38,16 +38,16 @@
   <p class="text-sm text-neutral-700 leading-relaxed">{{ question().content }}</p>
 
   @if (question().status === QuestionStatusEnum.ANSWERED && question().answer) {
-    <div class="bg-primary/5 border-l-4 border-primary pl-4 py-3 mt-4 rounded-r">
-      <p class="text-sm font-medium text-primary mb-1">Réponse :</p>
+    <div class="info-box-primary border-l-4 pl-4 py-3 mt-4 rounded-r">
+      <p class="text-sm font-medium info-box-primary-text mb-1">Réponse :</p>
       <p class="text-sm text-neutral-700 leading-relaxed">{{ question().answer }}</p>
     </div>
   }
 
   @if (question().status === QuestionStatusEnum.REJECTED && question().rejectionReason && isMyQuestion()) {
-    <div class="bg-red-50 border-l-4 border-red-400 pl-4 py-3 mt-4 rounded-r">
-      <p class="text-sm font-medium text-red-700 mb-1">Motif du refus :</p>
-      <p class="text-sm text-red-600 leading-relaxed">{{ question().rejectionReason }}</p>
+    <div class="info-box-red border-l-4 pl-4 py-3 mt-4 rounded-r">
+      <p class="text-sm font-medium mb-1 info-box-red-text">Motif du refus :</p>
+      <p class="text-sm leading-relaxed info-box-red-text">{{ question().rejectionReason }}</p>
     </div>
   }
 </div>
