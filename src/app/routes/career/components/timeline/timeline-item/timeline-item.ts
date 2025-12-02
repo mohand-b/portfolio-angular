@@ -1,4 +1,5 @@
-import {Component, computed, input, output} from '@angular/core';
+import {Component, computed, inject, input, output, PLATFORM_ID} from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {
   EducationTimelineItem,
@@ -30,6 +31,7 @@ import {MilestoneTimelineContent} from '../milestone-timeline-content/milestone-
   templateUrl: './timeline-item.html'
 })
 export class TimelineItem {
+  private readonly platformId = inject(PLATFORM_ID);
   readonly item = input.required<TimelineItemData>();
   readonly isLeft = input.required<boolean>();
   readonly readonly = input<boolean>(false);
@@ -71,7 +73,10 @@ export class TimelineItem {
   protected asMilestone = (): MilestoneTimelineItem => this.item() as MilestoneTimelineItem;
 
   protected getTimelineBorderColor(): string {
-    return getComputedStyle(document.documentElement).getPropertyValue('--timeline-icon-border').trim();
+    if (isPlatformBrowser(this.platformId)) {
+      return getComputedStyle(document.documentElement).getPropertyValue('--timeline-icon-border').trim();
+    }
+    return '#404040';
   }
 
   protected getTypeClass(): string {

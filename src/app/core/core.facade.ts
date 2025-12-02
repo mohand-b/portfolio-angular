@@ -3,12 +3,7 @@ import {catchError, Observable, tap, throwError} from 'rxjs';
 import {AdminAuthDto, AdminAuthResponseDto} from './state/admin/admin.model';
 import {AdminService} from './state/admin/admin.service';
 import {AdminStore} from './state/admin/admin.store';
-import {
-  calculateAchievementPercentage,
-  Visitor,
-  VisitorAuthDto,
-  VisitorAuthResponseDto
-} from './state/visitor/visitor.model';
+import {Visitor, VisitorAuthDto, VisitorAuthResponseDto} from './state/visitor/visitor.model';
 import {VisitorService} from './state/visitor/visitor.service';
 import {VisitorStore} from './state/visitor/visitor.store';
 import {SkillStore} from '../routes/skills/state/skill/skill.store';
@@ -68,17 +63,7 @@ export class CoreFacade {
   authenticateVisitor(authDto: VisitorAuthDto): Observable<VisitorAuthResponseDto> {
     return this.visitorService.authenticate(authDto).pipe(
       tap((response) => {
-        const visitor = response as any;
-
-        if (visitor._achievements?.length > 0 && visitor.achievements) {
-          visitor.achievements.unlocked += visitor._achievements.length;
-          visitor.achievements.percentCompletion = calculateAchievementPercentage(
-            visitor.achievements.unlocked,
-            visitor.achievements.total
-          );
-        }
-
-        this.visitorStore.setVisitor(visitor);
+        this.visitorStore.setVisitor(response);
       })
     );
   }
