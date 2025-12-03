@@ -2,14 +2,11 @@
   class="flex flex-col h-full p-5 bg-white border border-slate-200 rounded-xl">
   <div class="flex items-center justify-between mb-3">
     <div class="flex items-center gap-2">
-      <div
-        class="flex items-center justify-center w-12 h-12 rounded-lg"
-        [style.background-color]="iconBgColor()"
-      >
-        <mat-icon class="!text-2xl !w-6 !h-6 !leading-none" [style.color]="achievement().color">
-          {{ achievement().icon }}
-        </mat-icon>
-      </div>
+      <app-achievement-icon
+        [icon]="achievement().icon"
+        [color]="achievement().color"
+        size="md"
+      />
       <span class="px-2 text-sm font-medium font-mono text-slate-700">
         {{ achievement().code | uppercase }}
       </span>

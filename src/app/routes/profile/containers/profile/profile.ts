@@ -11,10 +11,11 @@ import {httpResource} from '@angular/common/http';
 import {environment} from '../../../../../../environments/environments';
 import {VisitorAchievementsResponseDto} from '../../../../core/state/achievement/achievement.model';
 import {AvatarEditModal} from '../../components/avatar-edit-modal/avatar-edit-modal';
+import {AchievementIconComponent} from '../../../../shared/components/achievement-icon/achievement-icon';
 
 @Component({
   selector: 'app-profile',
-  imports: [MatIconModule, MatButtonModule, DatePipe, SvgSafePipe, AlertMessage],
+  imports: [MatIconModule, MatButtonModule, DatePipe, SvgSafePipe, AlertMessage, AchievementIconComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.scss'
 })
@@ -96,21 +97,6 @@ export class Profile {
       data: {currentEmail: visitor.email},
       autoFocus: false
     });
-  }
-
-  darkenColor(color: string): string {
-    const hex = color.replace('#', '');
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-
-    const darken = (c: number) => Math.max(0, Math.floor(c * 0.8));
-
-    const darkR = darken(r).toString(16).padStart(2, '0');
-    const darkG = darken(g).toString(16).padStart(2, '0');
-    const darkB = darken(b).toString(16).padStart(2, '0');
-
-    return `#${darkR}${darkG}${darkB}`;
   }
 
   getProgressBarColor(percentage: number): string {

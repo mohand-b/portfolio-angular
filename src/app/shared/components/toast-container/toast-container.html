@@ -12,14 +12,11 @@
               <div class="text-xs text-neutral-600">{{ toast.achievement.description }}</div>
             }
           </div>
-          <div
-            class="flex items-center justify-center w-12 h-12 rounded-lg"
-            [style.background-color]="hexWithAlpha(toast.achievement.color, 0.1)"
-          >
-            <mat-icon class="!text-2xl !leading-none"
-                      [style.color]="toast.achievement.color">{{ toast.achievement.icon }}
-            </mat-icon>
-          </div>
+          <app-achievement-icon
+            [icon]="toast.achievement.icon"
+            [color]="toast.achievement.color"
+            size="md"
+          />
           <button
             (click)="remove(toast.id)"
             class="flex items-center justify-center cursor-pointer text-neutral-600 opacity-60 hover:opacity-100"

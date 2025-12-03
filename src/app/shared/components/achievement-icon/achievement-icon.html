@@ -1,0 +1,12 @@
+<div
+  class="flex items-center justify-center rounded-xl"
+  [class]="sizeClasses()"
+  [style.background]="background()"
+>
+  <mat-icon
+    [class]="iconSizeClasses()"
+    class="!leading-none !text-white flex items-center justify-center"
+  >
+    {{ icon() }}
+  </mat-icon>
+</div>

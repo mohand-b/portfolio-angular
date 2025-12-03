@@ -100,14 +100,11 @@
             <div
               class="flex flex-col justify-between p-4 bg-white rounded-lg border border-neutral-200 hover:shadow-md transition-shadow">
               <div class="flex flex-col items-center">
-                <div
-                  class="w-16 h-16 rounded-xl flex items-center justify-center mb-3"
-                  [style.background]="'linear-gradient(135deg, ' + (achievement.color || '#6b7280') + ', ' + darkenColor(achievement.color || '#6b7280') + ')'"
-                >
-                  <mat-icon class="!text-3xl !w-8 !h-8 !leading-8 !text-white flex items-center justify-center">
-                    {{ achievement.icon || 'emoji_events' }}
-                  </mat-icon>
-                </div>
+                <app-achievement-icon
+                  [icon]="achievement.icon || 'emoji_events'"
+                  [color]="achievement.color || '#6b7280'"
+                  size="lg"
+                />
                 <h3 class="font-semibold text-neutral-900 text-sm text-center">{{ achievement.label }}</h3>
               </div>
               <p class="text-xs text-neutral-500 text-center mt-2">
