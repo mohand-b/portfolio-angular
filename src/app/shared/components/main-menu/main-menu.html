@@ -121,12 +121,14 @@
         </div>
       </a>
     }
-    <button (click)="toggleMobileMenu()" mat-icon-button class="flex-shrink-0 ml-auto">
+    <button (click)="toggleMobileMenu()" mat-icon-button
+            class="flex-shrink-0 ml-auto !flex !items-center !justify-center">
       <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
     </button>
   </div>
 
   @if (mobileMenuOpen()) {
+    <div (click)="closeMobileMenu()" class="fixed inset-0 z-40"></div>
     <div
       class="mobile-menu-dropdown absolute top-full left-0 right-0 bg-white border-b border-neutral-200 shadow-lg md:hidden z-50">
       <div class="flex flex-col py-2 px-4 gap-1">
@@ -145,4 +147,5 @@
       </div>
     </div>
   }
+
 </nav>

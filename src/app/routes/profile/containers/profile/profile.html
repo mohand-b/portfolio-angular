@@ -38,7 +38,8 @@
               type="email"
               [value]="email()"
               [readonly]="true"
-              class="flex-1 px-4 py-2 border border-neutral-300 rounded-lg text-neutral-900 bg-neutral-50"
+              (click)="openEmailEditModal()"
+              class="flex-1 px-4 py-2 border border-neutral-300 rounded-lg text-neutral-900 bg-neutral-50 cursor-pointer"
             />
             <button (click)="openEmailEditModal()" matButton="filled" type="button">
               <span class="flex items-center gap-2">
@@ -54,12 +55,12 @@
                 <app-alert-message
                   type="warning"
                   [message]="'Vérification de l\'email en attente. Votre compte sera supprimé dans : ' + formatTimeDetailed(verificationTimeRemaining()!)"
-                ></app-alert-message>
+                />
               } @else {
                 <app-alert-message
                   type="warning"
                   message="Le délai de vérification a expiré. Votre compte a été supprimé. Veuillez vous reconnecter pour créer un nouveau compte."
-                ></app-alert-message>
+                />
               }
             </div>
           }

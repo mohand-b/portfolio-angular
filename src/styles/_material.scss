@@ -420,3 +420,9 @@ textarea[disabled].mat-mdc-input-element {
   border: none !important;
   border-width: 0 !important;
 }
+
+[data-theme='dark'] {
+  .cdk-overlay-dark-backdrop {
+    background: rgba(255, 255, 255, .4);
+  }
+}
