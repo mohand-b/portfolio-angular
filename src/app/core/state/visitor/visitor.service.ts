@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../../environments/environments';
 import {Observable} from 'rxjs';
 import {Visitor, VisitorAuthDto, VisitorAuthResponseDto} from './visitor.model';
-import {VisitorAchievementsResponseDto} from '../achievement/achievement.model';
 
 @Injectable({providedIn: 'root'})
 export class VisitorService {
@@ -36,11 +35,11 @@ export class VisitorService {
     }>(`${this.visitorBaseUrl}/achievements/unlock/${code}`, {withCredentials: true});
   }
 
-  getAchievementsForVisitor(): Observable<VisitorAchievementsResponseDto> {
-    return this.http.get<VisitorAchievementsResponseDto>(`${this.visitorBaseUrl}/achievements`);
-  }
-
   updateEmail(email: string): Observable<{ message: string }> {
     return this.http.patch<{ message: string }>(`${this.visitorBaseUrl}/email`, {email});
+  }
+
+  updateAvatar(avatarSvg: string): Observable<{ message: string }> {
+    return this.http.patch<{ message: string }>(`${this.visitorBaseUrl}/avatar`, {avatarSvg});
   }
 }

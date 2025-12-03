@@ -10,6 +10,7 @@ import {EmailEditModal} from '../../components/email-edit-modal/email-edit-modal
 import {httpResource} from '@angular/common/http';
 import {environment} from '../../../../../../environments/environments';
 import {VisitorAchievementsResponseDto} from '../../../../core/state/achievement/achievement.model';
+import {AvatarEditModal} from '../../components/avatar-edit-modal/avatar-edit-modal';
 
 @Component({
   selector: 'app-profile',
@@ -122,5 +123,11 @@ export class Profile {
       {max: 100, class: 'bg-green-500'}
     ];
     return thresholds.find(t => percentage <= t.max)?.class || 'bg-green-500';
+  }
+
+  openAvatarEditModal() {
+    this.dialog.open(AvatarEditModal, {
+      autoFocus: false,
+    });
   }
 }

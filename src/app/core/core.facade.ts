@@ -102,4 +102,18 @@ export class CoreFacade {
       tap(() => this.visitorStore.updateEmail(email))
     );
   }
+
+  updateVisitorAvatar(avatarSvg: string): Observable<{ message: string }> {
+    return this.visitorService.updateAvatar(avatarSvg).pipe(
+      tap(() => {
+        const currentVisitor = this.visitorStore.visitor();
+        if (currentVisitor) {
+          this.visitorStore.setVisitor({
+            ...currentVisitor,
+            avatarSvg
+          });
+        }
+      })
+    );
+  }
 }

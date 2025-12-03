@@ -29,6 +29,8 @@
     "@angular/platform-server": "^20.0.0",
     "@angular/router": "^20.0.0",
     "@angular/ssr": "^20.0.0",
+    "@dicebear/collection": "^9.2.4",
+    "@dicebear/core": "^9.2.4",
     "@ngrx/signals": "^20.1.0",
     "@tailwindcss/postcss": "^4.1.8",
     "chart.js": "^4.5.1",

@@ -121,6 +121,6 @@ export const VisitorStore = signalStore(
           verificationExpiresAt
         }
       });
-    }
+    },
   }))
 );

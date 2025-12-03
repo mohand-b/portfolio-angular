@@ -1,0 +1,59 @@
+<div class="flex flex-col">
+  <div class="flex items-center justify-between px-6 py-3 border-b border-gray-200">
+    <h2 class="text-lg font-medium text-gray-900">Modifier l'avatar</h2>
+    <button (click)="cancel()" type="button" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+      <mat-icon class="!w-6 !h-6 !text-[1.5rem]">close</mat-icon>
+    </button>
+  </div>
+
+  <div class="flex flex-col gap-4 px-6 py-4">
+    <p class="text-sm text-gray-600">Sélectionnez un avatar parmi les propositions ci-dessous :</p>
+
+    <div class="grid grid-cols-5 gap-3" [@avatarList]="generationTrigger()">
+      @for (avatar of avatars(); track avatar) {
+        <button
+          type="button"
+          (click)="selectAvatar(avatar)"
+          [disabled]="isGenerating()"
+          [class.ring-4]="selectedAvatar() === avatar"
+          [class.ring-blue-500]="selectedAvatar() === avatar"
+          class="w-20 h-20 rounded-full overflow-hidden hover:ring-2 hover:ring-gray-300 transition-all disabled:cursor-not-allowed"
+          [innerHTML]="avatar | svgSafe"
+        ></button>
+      }
+    </div>
+
+    <button
+      (click)="generateAvatars()"
+      type="button"
+      [disabled]="isGenerating()"
+      class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+    >
+      <mat-icon [class.animate-spin]="isGenerating()">refresh</mat-icon>
+      <span>{{ isGenerating() ? 'Génération...' : 'Générer de nouveaux avatars' }}</span>
+    </button>
+
+    @if (errorMessage(); as error) {
+      <app-alert-message type="error" [message]="error"/>
+    }
+  </div>
+
+  <div class="flex items-center justify-end gap-3 px-6 py-3 border-t border-gray-200">
+    <button
+      (click)="cancel()"
+      type="button"
+      class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+    >
+      Annuler
+    </button>
+    <button
+      (click)="confirm()"
+      type="submit"
+      [disabled]="!canConfirm()"
+      class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <mat-icon>{{ isLoading() ? 'hourglass_empty' : 'check' }}</mat-icon>
+      <span>{{ isLoading() ? 'Sauvegarde...' : 'Confirmer' }}</span>
+    </button>
+  </div>
+</div>
