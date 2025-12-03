@@ -13,14 +13,20 @@
 
   <div class="hidden md:flex items-center gap-4">
     @if (isAuth()) {
-      <div class="shrink-0 flex items-center gap-2">
+      <a routerLink="/profil"
+         class="shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
         <span class="text-sm font-medium text-neutral-800">
           {{ greeting() }}, {{ firstName() }}
         </span>
         @if (isVerified()) {
-          <mat-icon class="!text-green-600 !text-base !leading-none !w-4 !h-4 flex-shrink-0" matTooltip="Email vérifié">verified</mat-icon>
+          <mat-icon class="!text-green-600 !text-base !leading-none !w-4 !h-4 flex-shrink-0" matTooltip="Email vérifié">
+            verified
+          </mat-icon>
         } @else {
-          <mat-icon class="!text-amber-600 !text-base !leading-none !w-4 !h-4 flex-shrink-0" [matTooltip]="verificationMessage() || 'Email non vérifié - Vérifiez votre boîte mail'">error_outline</mat-icon>
+          <mat-icon class="!text-amber-600 !text-base !leading-none !w-4 !h-4 flex-shrink-0"
+                    [matTooltip]="verificationMessage() || 'Email non vérifié - Vérifiez votre boîte mail'">
+            error_outline
+          </mat-icon>
         }
         @if (achievements(); as ach) {
           <div class="flex items-center gap-3">
@@ -53,7 +59,7 @@
             <span class="text-sm font-semibold text-amber-600">{{ ach.percentCompletion }}%</span>
           </div>
         }
-      </div>
+      </a>
     } @else {
       <button (click)="openAuthModal()" matButton="outlined" class="shrink-0 !border-primary !text-primary">
         S'identifier
@@ -63,49 +69,57 @@
 
   <div class="flex md:hidden items-center w-full">
     @if (isAuth()) {
-      <div class="flex items-center gap-2 flex-shrink-0">
-        @if (achievements(); as ach) {
-          <div class="flex items-center gap-2">
-            <div class="relative flex items-center justify-center w-[36px] h-[36px]">
-              <svg class="absolute" width="36" height="36" viewBox="0 0 36 36">
-                <circle
-                  cx="18"
-                  cy="18"
-                  r="14"
-                  fill="none"
-                  [attr.stroke]="getProgressBgColor()"
-                  stroke-width="8"
-                  stroke-linecap="round"
-                />
-                <circle
-                  cx="18"
-                  cy="18"
-                  r="14"
-                  fill="none"
-                  stroke="#f59f0a"
-                  stroke-width="8"
-                  stroke-linecap="round"
-                  [attr.stroke-dasharray]="14 * 2 * 3.14159"
-                  [attr.stroke-dashoffset]="14 * 2 * 3.14159 * (1 - ach.percentCompletion / 100)"
-                  style="transform: rotate(-90deg); transform-origin: center;"
-                />
-              </svg>
-              <mat-icon class="!leading-none !text-amber-600 !text-base !w-4 !h-4">emoji_events</mat-icon>
+      <a routerLink="/profil"
+         class="flex items-center gap-2 flex-1 min-w-0 cursor-pointer hover:opacity-80 transition-opacity">
+        <div class="flex items-center gap-2 flex-shrink-0">
+          @if (achievements(); as ach) {
+            <div class="flex items-center gap-2">
+              <div class="relative flex items-center justify-center w-[36px] h-[36px]">
+                <svg class="absolute" width="36" height="36" viewBox="0 0 36 36">
+                  <circle
+                    cx="18"
+                    cy="18"
+                    r="14"
+                    fill="none"
+                    [attr.stroke]="getProgressBgColor()"
+                    stroke-width="8"
+                    stroke-linecap="round"
+                  />
+                  <circle
+                    cx="18"
+                    cy="18"
+                    r="14"
+                    fill="none"
+                    stroke="#f59f0a"
+                    stroke-width="8"
+                    stroke-linecap="round"
+                    [attr.stroke-dasharray]="14 * 2 * 3.14159"
+                    [attr.stroke-dashoffset]="14 * 2 * 3.14159 * (1 - ach.percentCompletion / 100)"
+                    style="transform: rotate(-90deg); transform-origin: center;"
+                  />
+                </svg>
+                <mat-icon class="!leading-none !text-amber-600 !text-base !w-4 !h-4">emoji_events</mat-icon>
+              </div>
+              <span class="text-sm font-semibold text-amber-600">{{ ach.percentCompletion }}%</span>
             </div>
-            <span class="text-sm font-semibold text-amber-600">{{ ach.percentCompletion }}%</span>
-          </div>
-        }
-      </div>
-      <div class="flex items-center gap-2 flex-1 min-w-0 mx-3">
-        <span class="text-sm font-medium text-neutral-800 truncate">
-          {{ greeting() }}, {{ firstName() }}
-        </span>
-        @if (isVerified()) {
-          <mat-icon class="!text-green-600 !text-base !w-4 !h-4 !leading-none flex-shrink-0" matTooltip="Email vérifié">verified</mat-icon>
-        } @else {
-          <mat-icon class="!text-amber-600 !text-base !w-4 !h-4 !leading-none flex-shrink-0" [matTooltip]="verificationMessage() || 'Email non vérifié - Vérifiez votre boîte mail'">error_outline</mat-icon>
-        }
-      </div>
+          }
+        </div>
+        <div class="flex items-center gap-2 flex-1 min-w-0 mx-3">
+          <span class="text-sm font-medium text-neutral-800 truncate">
+            {{ greeting() }}, {{ firstName() }}
+          </span>
+          @if (isVerified()) {
+            <mat-icon class="!text-green-600 !text-base !w-4 !h-4 !leading-none flex-shrink-0"
+                      matTooltip="Email vérifié">verified
+            </mat-icon>
+          } @else {
+            <mat-icon class="!text-amber-600 !text-base !w-4 !h-4 !leading-none flex-shrink-0"
+                      [matTooltip]="verificationMessage() || 'Email non vérifié - Vérifiez votre boîte mail'">
+              error_outline
+            </mat-icon>
+          }
+        </div>
+      </a>
     }
     <button (click)="toggleMobileMenu()" mat-icon-button class="flex-shrink-0 ml-auto">
       <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>

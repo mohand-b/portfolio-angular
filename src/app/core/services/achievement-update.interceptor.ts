@@ -19,9 +19,12 @@ export function achievementUpdateInterceptor(req: HttpRequest<unknown>, next: Ht
       if (!achievements || !Array.isArray(achievements) || achievements.length === 0) return;
 
       const isVisitorAuthResponse = req.url.includes('/visitor/authenticate');
-      const shouldIncrementStore = !isVisitorAuthResponse && visitorStore.isAuthenticated();
+      const shouldUpdateStore = !isVisitorAuthResponse && visitorStore.isAuthenticated();
 
-      if (shouldIncrementStore) {
+      if (shouldUpdateStore) {
+        achievements.forEach((achievement: AchievementDto) => {
+          visitorStore.addUnlockedAchievement(achievement);
+        });
         visitorStore.incrementAchievements(achievements.length);
       }
 

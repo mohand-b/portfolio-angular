@@ -2,6 +2,7 @@ import {Component, computed, inject, signal} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {RouterLink} from '@angular/router';
 import {CoreFacade} from '../../../core/core.facade';
 import {publicRoutes} from '../../../routes/public.routes';
 import {ModalService} from '../../services/modal.service';
@@ -16,7 +17,7 @@ export interface MenuEntry {
 
 @Component({
   selector: 'app-main-menu',
-  imports: [MenuItem, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [MenuItem, MatButtonModule, MatIconModule, MatTooltipModule, RouterLink],
   templateUrl: './main-menu.html',
   styleUrl: './main-menu.scss'
 })

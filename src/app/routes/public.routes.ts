@@ -1,4 +1,5 @@
 import {Route} from '@angular/router';
+import {visitorAuthGuard} from '../core/guards/visitor-auth.guard';
 
 export const publicRoutes: Route[] = [
   {
@@ -30,6 +31,13 @@ export const publicRoutes: Route[] = [
     path: 'contact',
     loadComponent: () => import('./contact/containers/contact/contact').then(m => m.Contact),
     title: 'Contact'
+  },
+  {
+    path: 'profil',
+    loadComponent: () => import('./profile/containers/profile/profile').then(m => m.Profile),
+    title: 'Profil',
+    canActivate: [visitorAuthGuard],
+    data: {hideFromMenu: true}
   },
   {
     path: 'verification-email',

@@ -8,6 +8,7 @@ import {VisitorService} from './state/visitor/visitor.service';
 import {VisitorStore} from './state/visitor/visitor.store';
 import {SkillStore} from '../routes/skills/state/skill/skill.store';
 import {SkillDto} from '../routes/skills/state/skill/skill.model';
+import {VisitorAchievementsResponseDto} from './state/achievement/achievement.model';
 
 type AchievementsInfo = { unlocked: number; total: number; percentCompletion: number };
 
@@ -27,6 +28,7 @@ export class CoreFacade {
   readonly visitor: Signal<Visitor | null> = this.visitorStore.visitor;
   readonly visitorFullName: Signal<string | null> = this.visitorStore.fullName;
   readonly visitorAchievements: Signal<AchievementsInfo | null> = this.visitorStore.achievements;
+  readonly visitorAchievementsUnlock: Signal<VisitorAchievementsResponseDto | null> = this.visitorStore.achievementsUnlockSorted;
   readonly visitorVerificationMessage: Signal<string | null> = this.visitorStore.verificationMessage;
   readonly skills: Signal<SkillDto[]> = this.skillStore.skills;
 
@@ -91,5 +93,13 @@ export class CoreFacade {
     return this.visitorService.unlockAchievement(code);
   }
 
+  setVisitorAchievementsUnlock(achievements: VisitorAchievementsResponseDto | null) {
+    this.visitorStore.setAchievementsUnlock(achievements);
+  }
 
+  updateVisitorEmail(email: string): Observable<{ message: string }> {
+    return this.visitorService.updateEmail(email).pipe(
+      tap(() => this.visitorStore.updateEmail(email))
+    );
+  }
 }

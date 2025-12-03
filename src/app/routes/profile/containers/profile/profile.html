@@ -1,0 +1,123 @@
+<div class="min-h-screen py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    @if (visitor(); as visitor) {
+      <div class="flex justify-center mb-6">
+        @if (visitor.avatarSvg) {
+          <div class="w-32 h-32 rounded-full overflow-hidden shadow-sm" [innerHTML]="visitor.avatarSvg | svgSafe"></div>
+        } @else {
+          <div
+            class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+            {{ visitor.firstName.charAt(0).toUpperCase() }}
+          </div>
+        }
+      </div>
+
+      <div class="flex items-center justify-center gap-2 mb-8">
+        <h1 class="text-3xl font-bold text-neutral-900">{{ visitor.firstName }}</h1>
+        @if (visitor.isVerified) {
+          <mat-icon class="!text-green-600 !text-2xl !w-6 !h-6 !leading-none flex-shrink-0">verified</mat-icon>
+        }
+      </div>
+
+      <div class="bg-white rounded-lg border border-neutral-200 p-8 mb-6">
+        <div>
+          <label class="block text-sm font-medium text-neutral-700 mb-2">Email</label>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <input
+              type="email"
+              [value]="email()"
+              [readonly]="true"
+              class="flex-1 px-4 py-2 border border-neutral-300 rounded-lg text-neutral-900 bg-neutral-50"
+            />
+            <button (click)="openEmailEditModal()" matButton="filled" type="button">
+              <span class="flex items-center gap-2">
+                <mat-icon>edit</mat-icon>
+                <span>Modifier</span>
+              </span>
+            </button>
+          </div>
+
+          @if (!visitor.isVerified && verificationTimeRemaining() !== null) {
+            <div class="mt-3">
+              @if (verificationTimeRemaining()! > 0) {
+                <app-alert-message
+                  type="warning"
+                  [message]="'Vérification de l\'email en attente. Votre compte sera supprimé dans : ' + formatTimeDetailed(verificationTimeRemaining()!)"
+                ></app-alert-message>
+              } @else {
+                <app-alert-message
+                  type="warning"
+                  message="Le délai de vérification a expiré. Votre compte a été supprimé. Veuillez vous reconnecter pour créer un nouveau compte."
+                ></app-alert-message>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (achievements(); as data) {
+        <div class="flex flex-col gap-0.5 mb-8">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm text-slate-700 font-medium">{{ data.unlocked.length }} / {{ data.unlocked.length + data.locked.length }}</span>
+            <div class="relative w-8 h-8 flex items-center justify-center">
+              <img
+                src="/assets/trophy.png"
+                alt="Trophy"
+                class="w-8 h-8 transition-opacity"
+                [class.opacity-30]="progressPercentage() !== 100"
+              />
+              @if (progressPercentage() !== 100) {
+                <mat-icon class="!absolute !text-slate-500 !text-base !w-4 !h-4">lock</mat-icon>
+              }
+            </div>
+          </div>
+
+          <div class="h-2 bg-neutral-200 rounded-full overflow-hidden shadow-inner">
+            <div
+              class="h-full rounded-full transition-all"
+              [class]="getProgressBarColor(progressPercentage())"
+              [style.width.%]="progressPercentage()"
+            ></div>
+          </div>
+        </div>
+      }
+
+      @if (achievements(); as data) {
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          @for (achievement of data.unlocked; track achievement.id) {
+            <div class="flex flex-col justify-between p-4 bg-white rounded-lg border border-neutral-200 hover:shadow-md transition-shadow">
+              <div class="flex flex-col items-center">
+                <div
+                  class="w-16 h-16 rounded-xl flex items-center justify-center mb-3"
+                  [style.background]="'linear-gradient(135deg, ' + (achievement.color || '#6b7280') + ', ' + darkenColor(achievement.color || '#6b7280') + ')'"
+                >
+                  <mat-icon class="!text-3xl !w-8 !h-8 !leading-8 !text-white flex items-center justify-center">
+                    {{ achievement.icon || 'emoji_events' }}
+                  </mat-icon>
+                </div>
+                <h3 class="font-semibold text-neutral-900 text-sm text-center">{{ achievement.label }}</h3>
+              </div>
+              <p class="text-xs text-neutral-500 text-center mt-2">
+                {{ achievement.unlockedAt | date: 'short' }}
+              </p>
+            </div>
+          }
+
+          @for (achievement of data.locked; track achievement.label) {
+            <div class="flex flex-col justify-between p-4 bg-neutral-50 rounded-lg border border-neutral-200 opacity-50">
+              <div class="flex flex-col items-center">
+                <div class="w-16 h-16 rounded-xl flex items-center justify-center mb-3 bg-neutral-200">
+                  <mat-icon class="!text-3xl !w-8 !h-8 !leading-8 text-neutral-500 flex items-center justify-center">
+                    lock
+                  </mat-icon>
+                </div>
+                <h3 class="font-semibold text-neutral-700 text-sm text-center">{{ achievement.label }}</h3>
+              </div>
+              <p class="text-xs text-neutral-500 text-center mt-2">Verrouillé</p>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

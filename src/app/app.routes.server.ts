@@ -30,6 +30,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server
   },
   {
+    path: 'profil',
+    renderMode: RenderMode.Server
+  },
+  {
     path: 'verification-email',
     renderMode: RenderMode.Server
   },

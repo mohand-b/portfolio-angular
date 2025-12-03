@@ -59,3 +59,25 @@ export interface AchievementDto {
   icon: string;
   color: string;
 }
+
+export interface LockedAchievementDto {
+  label: string;
+  icon?: string;
+  color?: string;
+}
+
+export interface UnlockedAchievementDto {
+  id: string;
+  code: string;
+  label: string;
+  description?: string;
+  icon?: string;
+  color?: string;
+  createdAt: Date;
+  unlockedAt: Date;
+}
+
+export interface VisitorAchievementsResponseDto {
+  unlocked: UnlockedAchievementDto[];
+  locked: LockedAchievementDto[];
+}
