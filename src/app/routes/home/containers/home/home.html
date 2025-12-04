@@ -3,9 +3,18 @@
   <app-home-about/>
   <app-home-skills/>
   <app-home-projects-stats/>
-  <section class="relative w-full h-64 overflow-hidden bg-neutral-200">
-    <img src="/assets/images/me.png" alt="" class="w-full h-full object-cover">
+  <section #photoSection class="relative w-full h-64 md:h-80 overflow-hidden bg-neutral-200">
+    <div
+      class="absolute w-full h-[120%] -top-[10%]"
+      [style.transform]="'translateY(' + parallaxOffset() + 'px)'">
+      <img
+        src="/assets/images/me.png"
+        alt=""
+        class="w-full h-full object-cover object-center scale-125">
+    </div>
   </section>
+
+
   <app-home-personal/>
   <app-home-contact-banner/>
 </div>
