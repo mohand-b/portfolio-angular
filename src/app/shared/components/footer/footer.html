@@ -5,16 +5,21 @@
         <div class="text-sm text-neutral-600 text-center lg:text-left">
           <p>© {{ currentYear }} Portfolio Mohand Boudjema - v{{ version }}</p>
         </div>
-        <button mat-icon-button (click)="themeService.toggle()" class="theme-toggle !flex !items-center !justify-center" aria-label="Toggle theme">
-          <mat-icon class="!flex !items-center !justify-center">{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        <button mat-icon-button disableRipple (click)="themeService.toggle()"
+                class="theme-toggle !flex !items-center !justify-center" aria-label="Toggle theme">
+          <mat-icon
+            class="!flex !items-center !justify-center">{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}
+          </mat-icon>
         </button>
       </div>
       <app-status-indicators/>
     </div>
     <div class="flex flex-wrap justify-center lg:justify-start gap-2 text-xs">
-      <a routerLink="/mentions-legales" class="text-neutral-600 hover:text-primary transition-colors">Mentions légales</a>
+      <a routerLink="/mentions-legales" class="text-neutral-600 hover:text-primary transition-colors">Mentions
+        légales</a>
       <span class="text-neutral-400">•</span>
-      <a routerLink="/politique-de-confidentialite" class="text-neutral-600 hover:text-primary transition-colors">Politique de confidentialité</a>
+      <a routerLink="/politique-de-confidentialite" class="text-neutral-600 hover:text-primary transition-colors">Politique
+        de confidentialité</a>
       <span class="text-neutral-400">•</span>
       <a routerLink="/cgu" class="text-neutral-600 hover:text-primary transition-colors">CGU</a>
     </div>
