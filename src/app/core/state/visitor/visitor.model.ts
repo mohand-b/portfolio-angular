@@ -1,32 +1,15 @@
-export interface Visitor {
+export interface VisitorDto {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
+  username?: string;
   isVerified: boolean;
   verificationToken?: string;
   verificationExpiresAt?: Date;
   avatarSvg: string;
   createdAt: Date;
   lastVisitAt: Date;
-  achievements?: {
-    unlocked: number;
-    total: number;
-    percentCompletion: number;
-  };
-  message?: string;
-}
-
-export interface VisitorDto {
-  id: string;
-  firstName: string;
-  lastName: string;
-  username?: string;
-  email: string;
-  isVerified: boolean;
-  createdAt: string;
-  lastVisitAt: string;
-  avatarSvg: string | null;
   achievements?: {
     unlocked: number;
     total: number;
@@ -49,7 +32,7 @@ export interface VisitorAuthDto {
   lastName: string;
 }
 
-export interface VisitorAuthResponseDto extends Visitor {
+export interface VisitorAuthResponseDto extends VisitorDto {
   accessToken: string;
   message?: string;
 }

@@ -1,10 +1,10 @@
 import {computed} from '@angular/core';
 import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
-import {calculateAchievementPercentage, Visitor} from './visitor.model';
+import {calculateAchievementPercentage, VisitorDto} from './visitor.model';
 import {AchievementDto, UnlockedAchievementDto, VisitorAchievementsResponseDto} from '../achievement/achievement.model';
 
 interface VisitorState {
-  visitor: Visitor | null;
+  visitor: VisitorDto | null;
   achievementsUnlock: VisitorAchievementsResponseDto | null;
 }
 
@@ -35,7 +35,7 @@ export const VisitorStore = signalStore(
     }),
   })),
   withMethods((store) => ({
-    setVisitor(visitor: Visitor | null) {
+    setVisitor(visitor: VisitorDto | null) {
       patchState(store, {visitor});
     },
     setAchievementsUnlock(achievementsUnlock: VisitorAchievementsResponseDto | null) {

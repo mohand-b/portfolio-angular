@@ -29,11 +29,14 @@ export class Profile {
 
   readonly email = computed(() => this.visitor()?.email || '');
 
-  private readonly achievementsResource = httpResource<VisitorAchievementsResponseDto>(() => ({
-    url: `${environment.baseUrl}/visitor/achievements`,
-    method: 'GET',
-    withCredentials: true
-  }));
+  private readonly achievementsResource = httpResource<VisitorAchievementsResponseDto>(() => {
+    const visitor = this.visitor();
+    return visitor ? {
+      url: `${environment.baseUrl}/visitor/achievements`,
+      method: 'GET',
+      withCredentials: true
+    } : undefined;
+  });
 
   readonly progressPercentage = computed(() => {
     const data = this.achievements();

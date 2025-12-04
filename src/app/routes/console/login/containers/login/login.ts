@@ -22,8 +22,8 @@ export class Login {
   private readonly fb = inject(FormBuilder);
 
   readonly form: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
+    email: ['m.boudjema@outlook.fr', [Validators.required, Validators.email]],
+    password: ['toto', Validators.required]
   });
 
   @HostListener('document:keydown', ['$event'])

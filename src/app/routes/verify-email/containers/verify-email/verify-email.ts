@@ -51,7 +51,6 @@ export class VerifyEmail implements OnInit {
     this.coreFacade.verifyEmail(token).subscribe({
       next: () => {
         this.state.set('success');
-        setTimeout(() => this.router.navigate(['/accueil']), 3000);
       },
       error: (error) => {
         this.state.set('error');

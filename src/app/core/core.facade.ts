@@ -3,7 +3,7 @@ import {catchError, Observable, tap, throwError} from 'rxjs';
 import {AdminAuthDto, AdminAuthResponseDto} from './state/admin/admin.model';
 import {AdminService} from './state/admin/admin.service';
 import {AdminStore} from './state/admin/admin.store';
-import {Visitor, VisitorAuthDto, VisitorAuthResponseDto} from './state/visitor/visitor.model';
+import {VisitorAuthDto, VisitorAuthResponseDto, VisitorDto} from './state/visitor/visitor.model';
 import {VisitorService} from './state/visitor/visitor.service';
 import {VisitorStore} from './state/visitor/visitor.store';
 import {SkillStore} from '../routes/skills/state/skill/skill.store';
@@ -25,7 +25,7 @@ export class CoreFacade {
   readonly isLoading: Signal<boolean> = this.adminStore.isLoading;
   readonly isVisitorAuthenticated: Signal<boolean> = this.visitorStore.isAuthenticated;
   readonly isVisitorVerified: Signal<boolean> = this.visitorStore.isVerified;
-  readonly visitor: Signal<Visitor | null> = this.visitorStore.visitor;
+  readonly visitor: Signal<VisitorDto | null> = this.visitorStore.visitor;
   readonly visitorFullName: Signal<string | null> = this.visitorStore.fullName;
   readonly visitorAchievements: Signal<AchievementsInfo | null> = this.visitorStore.achievements;
   readonly visitorAchievementsUnlock: Signal<VisitorAchievementsResponseDto | null> = this.visitorStore.achievementsUnlockSorted;
@@ -70,7 +70,7 @@ export class CoreFacade {
     );
   }
 
-  checkVisitorSession(): Observable<Visitor> {
+  checkVisitorSession(): Observable<VisitorDto> {
     return this.visitorService.getMe().pipe(
       tap((visitor) => this.visitorStore.setVisitor(visitor)),
       catchError((err) => {
@@ -115,5 +115,9 @@ export class CoreFacade {
         }
       })
     );
+  }
+
+  setVisitor(visitor: VisitorDto): void {
+    this.visitorStore.setVisitor(visitor);
   }
 }
