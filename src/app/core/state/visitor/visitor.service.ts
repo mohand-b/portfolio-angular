@@ -22,8 +22,8 @@ export class VisitorService {
     return this.http.delete<{ message: string }>(`${this.visitorBaseUrl}/${id}`);
   }
 
-  verifyEmail(token: string): Observable<{ message: string }> {
-    return this.http.get<{ message: string }>(`${this.visitorBaseUrl}/verify`, {
+  verifyEmail(token: string): Observable<VisitorDto> {
+    return this.http.get<VisitorDto>(`${this.visitorBaseUrl}/verify`, {
       params: {token},
       withCredentials: true
     });

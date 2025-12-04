@@ -80,9 +80,9 @@ export class CoreFacade {
     );
   }
 
-  verifyEmail(token: string): Observable<{ message: string }> {
+  verifyEmail(token: string): Observable<VisitorDto> {
     return this.visitorService.verifyEmail(token).pipe(
-      tap(() => this.visitorStore.setVerified()),
+      tap((visitor) => this.visitorStore.setVisitor(visitor)),
       catchError((err) => {
         return throwError(() => err);
       })

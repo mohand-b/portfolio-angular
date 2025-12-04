@@ -1,59 +1,59 @@
 <div class="min-h-screen flex justify-center pt-24 p-8 bg-neutral-50">
   <div class="max-w-md w-full bg-white rounded-lg shadow-sm border border-neutral-200 p-8 h-fit">
-    @if (isLoading()) {
-      <div class="flex flex-col items-center text-center gap-4">
-        <mat-spinner diameter="48" strokeWidth="3"></mat-spinner>
-        <h2 class="text-2xl font-bold text-neutral-800">Vérification en cours...</h2>
-        <p class="text-sm text-neutral-600">Nous vérifions votre adresse email.</p>
-      </div>
-    }
-
-    @if (isSuccess()) {
-      <div class="flex flex-col items-center text-center gap-6">
-        <div class="icon-animate">
-          <mat-icon class="success-icon-large text-green-600">check_circle</mat-icon>
+    @switch (state()) {
+      @case ('loading') {
+        <div class="flex flex-col items-center text-center gap-4">
+          <mat-spinner diameter="48" strokeWidth="3"></mat-spinner>
+          <h2 class="text-2xl font-bold text-neutral-800">Vérification en cours...</h2>
+          <p class="text-sm text-neutral-600">Nous vérifions votre adresse email.</p>
         </div>
-        <div class="space-y-2">
-          <h2 class="text-2xl font-bold text-neutral-800">Email vérifié avec succès !</h2>
-          <p class="text-sm text-neutral-600">Votre compte a été activé. Vous allez être redirigé vers l'accueil...</p>
-        </div>
-        <button mat-flat-button color="primary" (click)="goHome()" class="!mt-4">
-          Retour à l'accueil
-        </button>
-      </div>
-    }
-
-    @if (isError()) {
-      <div class="flex flex-col items-center text-center gap-4">
-        <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
-          <mat-icon class="!text-4xl !w-10 !h-10 text-red-600">error</mat-icon>
-        </div>
-        <h2 class="text-2xl font-bold text-neutral-800">Échec de la vérification</h2>
-        <div class="w-full bg-red-50 border border-red-200 rounded-md p-3">
-          <p class="text-sm text-red-800">{{ errorMessage() }}</p>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-3 w-full mt-2">
-          <button mat-flat-button color="primary" (click)="retry()" class="flex-1">
-            Réessayer
+      }
+      @case ('success') {
+        <div class="flex flex-col items-center text-center gap-6">
+          <div class="icon-animate">
+            <mat-icon class="success-icon-large text-green-600">check_circle</mat-icon>
+          </div>
+          <div class="space-y-2">
+            <h2 class="text-2xl font-bold text-neutral-800">Email vérifié avec succès !</h2>
+            <p class="text-sm text-neutral-600">Votre compte a été activé. Vous allez être redirigé vers votre
+              profil...</p>
+          </div>
+          <button mat-flat-button color="primary" (click)="navigate('/profil')" class="!mt-4">
+            Aller au profil
           </button>
-          <button mat-flat-button (click)="goHome()" class="flex-1">
+        </div>
+      }
+      @case ('error') {
+        <div class="flex flex-col items-center text-center gap-4">
+          <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
+            <mat-icon class="!text-4xl !w-10 !h-10 text-red-600">error</mat-icon>
+          </div>
+          <h2 class="text-2xl font-bold text-neutral-800">Échec de la vérification</h2>
+          <div class="w-full bg-red-50 border border-red-200 rounded-md p-3">
+            <p class="text-sm text-red-800">{{ errorMessage() }}</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3 w-full mt-2">
+            <button mat-flat-button color="primary" (click)="retry()" class="flex-1">
+              Réessayer
+            </button>
+            <button mat-flat-button (click)="navigate('/accueil')" class="flex-1">
+              Retour à l'accueil
+            </button>
+          </div>
+        </div>
+      }
+      @case ('no-token') {
+        <div class="flex flex-col items-center text-center gap-4">
+          <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center">
+            <mat-icon class="!text-4xl !w-10 !h-10 text-amber-600">warning</mat-icon>
+          </div>
+          <h2 class="text-2xl font-bold text-neutral-800">Lien invalide</h2>
+          <p class="text-sm text-neutral-600">Le lien de vérification est invalide ou incomplet.</p>
+          <button mat-flat-button color="primary" (click)="navigate('/accueil')" class="!mt-2">
             Retour à l'accueil
           </button>
         </div>
-      </div>
-    }
-
-    @if (isNoToken()) {
-      <div class="flex flex-col items-center text-center gap-4">
-        <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center">
-          <mat-icon class="!text-4xl !w-10 !h-10 text-amber-600">warning</mat-icon>
-        </div>
-        <h2 class="text-2xl font-bold text-neutral-800">Lien invalide</h2>
-        <p class="text-sm text-neutral-600">Le lien de vérification est invalide ou incomplet.</p>
-        <button mat-flat-button color="primary" (click)="goHome()" class="!mt-2">
-          Retour à l'accueil
-        </button>
-      </div>
+      }
     }
   </div>
 </div>
