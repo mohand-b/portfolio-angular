@@ -12,6 +12,6 @@ export class HomePersonal {
   private readonly router = inject(Router);
 
   navigateToCareer(): void {
-    this.router.navigate(['/career']);
+    this.router.navigate(['/parcours']);
   }
 }

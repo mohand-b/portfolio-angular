@@ -73,37 +73,37 @@ export class StatusIndicators {
         label: 'Angular',
         value: `v${this.angularVersion}`,
         status: 'info',
-        tooltip: 'Angular framework version'
+        tooltip: 'Version actuelle du framework Angular'
       },
       {
         label: 'SSR Active',
         value: this.wasServerRendered(),
         status: this.wasServerRendered() ? 'success' : 'error',
         tooltip: this.wasServerRendered()
-          ? 'Page was server-side rendered (detected via ng-server-context)'
-          : 'Page was client-side rendered only'
+          ? 'Cette page a été rendue côté serveur'
+          : 'Cette page a été rendue uniquement côté client'
       },
       {
         label: 'Zoneless Mode',
         value: true,
         status: 'success',
-        tooltip: 'Signals-based reactivity without zone.js'
+        tooltip: 'Réactivité via Signals, sans zone.js'
       },
       {
         label: 'Backend Online',
         value: isBackendOnline,
         status: isBackendOnline ? 'success' : 'error',
         tooltip: isBackendOnline
-          ? `Connected to ${environment.baseUrl}`
-          : 'Backend unavailable'
+          ? `Connecté à ${environment.baseUrl}`
+          : 'Backend indisponible'
       },
       {
         label: 'Authenticated',
         value: this.coreFacade.isVisitorAuthenticated(),
         status: this.coreFacade.isVisitorAuthenticated() ? 'success' : 'error',
         tooltip: this.coreFacade.isVisitorAuthenticated()
-          ? 'User session active'
-          : 'Not authenticated'
+          ? 'Session utilisateur active'
+          : 'Utilisateur non authentifié'
       }
     ];
   });
