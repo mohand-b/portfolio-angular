@@ -21,12 +21,16 @@ export class Skills {
   protected readonly categoryMeta = SKILL_CATEGORY_META;
   protected readonly hexWithAlpha = hexWithAlpha;
 
-  private readonly trackVisit = httpResource<void>(() => ({
-    url: `${environment.baseUrl}/visitor/page-visit/skills`,
-    method: 'POST',
-    body: {},
-    withCredentials: true
-  }));
+  private readonly trackVisit = httpResource<void>(() => {
+    const visitor = this.coreFacade.visitor();
+    return visitor ?
+      {
+        url: `${environment.baseUrl}/visitor/page-visit/skills`,
+        method: 'POST',
+        body: {},
+        withCredentials: true
+      } : undefined;
+  });
 
   protected getSkillsByCategory(category: SkillCategory) {
     return this.skills().filter(skill => skill.category === category);

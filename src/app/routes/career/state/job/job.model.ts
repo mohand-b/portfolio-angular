@@ -7,6 +7,7 @@ export interface JobDto extends TimelineItemDto {
   location?: string;
   missions: string[];
   projects?: ProjectDto[];
+  logo?: string;
 }
 
 export interface JobMinimalDto {
