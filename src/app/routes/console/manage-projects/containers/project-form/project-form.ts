@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, input, output, signal, WritableSignal} from '@angular/core';
+import {Component, computed, effect, inject, input, output, signal} from '@angular/core';
 import {httpResource} from '@angular/common/http';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -14,11 +14,16 @@ import {debounceTime, distinctUntilChanged, of, switchMap} from 'rxjs';
 import {environment} from '../../../../../../../environments/environments';
 import {toFormData} from '../../../../../shared/extensions/object.extension';
 import {ToastService} from '../../../../../shared/services/toast.service';
-import {Stepper, StepConfig} from '../../../../../shared/components/stepper/stepper';
+import {StepConfig, Stepper} from '../../../../../shared/components/stepper/stepper';
 import {JobMinimalDto} from '../../../../career/state/job/job.model';
 import {PROJECT_TYPE_OPTIONS, ProjectDto} from '../../../../projects/state/project/project.model';
 import {SkillService} from '../../../../skills/state/skill/skill.service';
-import {SKILL_CATEGORY_META, SkillCategory, SkillCategoryMeta, SkillDto} from '../../../../skills/state/skill/skill.model';
+import {
+  SKILL_CATEGORY_META,
+  SkillCategory,
+  SkillCategoryMeta,
+  SkillDto
+} from '../../../../skills/state/skill/skill.model';
 import {ConsoleFacade} from '../../../console.facade';
 
 @Component({
@@ -49,7 +54,7 @@ export class ProjectForm {
 
   readonly step = signal(0);
   readonly missions = signal<string[]>([]);
-  readonly images = signal<Array<{file: File; preview: string}>>([]);
+  readonly images = signal<Array<{ file: File; preview: string }>>([]);
   readonly existingImages = signal<string[]>([]);
   readonly selectedSkills = signal<SkillDto[]>([]);
   readonly isEditing = computed(() => !!this.project());
@@ -172,8 +177,8 @@ export class ProjectForm {
     const payload: any = {
       title: step1.title!.trim(),
       jobId: step1.isCompanyProject && step1.jobId ? step1.jobId : undefined,
-      description: step1.description?.trim() || undefined,
-      collaboration: step1.collaboration?.trim() || undefined,
+      description: step1.description?.trim() || '',
+      collaboration: step1.collaboration?.trim() || '',
       missions: this.missions(),
       projectTypes: step2.projectTypes!,
       skillIds: this.selectedSkills().map(skill => skill.id),
@@ -191,19 +196,22 @@ export class ProjectForm {
       payload.market = '';
     }
 
-    if (this.isEditing()) {
-      payload.isLinkedToJob = step1.isCompanyProject;
-    }
-
     const formData = toFormData(payload);
 
-    this.existingImages().forEach(url => {
-      formData.append('images', url);
-    });
+    if (this.isEditing()) {
+      if (this.existingImages().length === 0 && this.images().length === 0) {
+        formData.append('removeAllImages', 'true');
+      } else {
+        this.existingImages().forEach(url => {
+          formData.append('images', url);
+        });
+      }
+    }
 
     this.images().forEach(img => {
       formData.append('images', img.file);
     });
+
 
     const operation$ = this.isEditing()
       ? this.consoleFacade.updateProject(this.project()!.id, formData)
