@@ -1,8 +1,23 @@
+export enum SkillKind {
+  LANGUAGE = 'LANGUAGE',
+  FRAMEWORK = 'FRAMEWORK',
+  LIBRARY = 'LIBRARY',
+  TOOL = 'TOOL',
+  CONCEPT = 'CONCEPT',
+  PRACTICE = 'PRACTICE',
+  PLATFORM = 'PLATFORM',
+  FEATURE = 'FEATURE',
+}
+
 export interface SkillDto {
   id: string;
   name: string;
   level: number;
-  category: SkillCategory;
+  kind: SkillKind;
+  categories: SkillCategory[];
+  sinceYear?: number;
+  iconSvg?: string;
+  displayPriority: number;
 }
 
 export type SkillCreateDto = Omit<SkillDto, 'id'>;
