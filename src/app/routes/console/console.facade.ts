@@ -107,9 +107,15 @@ export class ConsoleFacade {
     );
   }
 
-  updateSkillCategory(id: string, category: SkillCategory): Observable<SkillDto> {
-    return this.skillService.updateSkillCategory(id, category).pipe(
-      tap(skill => this.skillStore.updateSkillCategory(id, skill.category))
+  updateSkill(id: string, skill: SkillCreateDto): Observable<SkillDto> {
+    return this.skillService.updateSkill(id, skill).pipe(
+      tap(skill => this.skillStore.updateSkill(id, skill))
+    );
+  }
+
+  updateSkillCategories(id: string, categories: SkillCategory[]): Observable<SkillDto> {
+    return this.skillService.updateSkillCategories(id, categories).pipe(
+      tap(skill => this.skillStore.updateSkillCategories(id, skill.categories))
     );
   }
 

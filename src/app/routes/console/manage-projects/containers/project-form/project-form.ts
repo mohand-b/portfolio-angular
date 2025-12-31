@@ -327,10 +327,12 @@ export class ProjectForm {
     const grouped = new Map<SkillCategory, SkillDto[]>();
 
     skills.forEach(skill => {
-      if (!grouped.has(skill.category)) {
-        grouped.set(skill.category, []);
-      }
-      grouped.get(skill.category)!.push(skill);
+      skill.categories.forEach(category => {
+        if (!grouped.has(category)) {
+          grouped.set(category, []);
+        }
+        grouped.get(category)!.push(skill);
+      });
     });
 
     const categoryOrder = Object.values(SkillCategory);

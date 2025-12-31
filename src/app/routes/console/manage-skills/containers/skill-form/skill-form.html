@@ -1,0 +1,151 @@
+<form [formGroup]="form" (submit)="save()" class="w-full h-full flex flex-col justify-between">
+  <div class="flex flex-col gap-4">
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Nom de la compétence</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <input formControlName="name" matInput placeholder="Ex: Angular, TypeScript..."/>
+      </mat-form-field>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Type de compétence</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-select formControlName="kind" class="unified-field" placeholder="Sélectionner le type">
+          @for (kind of skillKinds; track kind) {
+            <mat-option [value]="kind" class="!text-neutral-700">
+              {{ skillKindCatalog[kind].label }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Catégories</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-select formControlName="categories" class="unified-field" multiple placeholder="Sélectionner les catégories">
+          <mat-select-trigger>
+            @if (form.value.categories?.length) {
+              {{ getSelectedCategoriesLabel() }}
+            } @else {
+              Sélectionner les catégories
+            }
+          </mat-select-trigger>
+          @for (cat of skillCategories; track cat) {
+            <mat-option [value]="cat" class="flex items-center gap-2 !text-neutral-700">
+              @if (skillCategoryCatalog[cat].icon) {
+                <mat-icon class="!text-lg !leading-none" [style.color]="skillCategoryCatalog[cat].color">
+                  {{ skillCategoryCatalog[cat].icon }}
+                </mat-icon>
+              }
+              {{ skillCategoryCatalog[cat].label }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Niveau de maîtrise</label>
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-select formControlName="level" class="unified-field" placeholder="Sélectionner le niveau">
+          @for (level of [1, 2, 3, 4, 5]; track level) {
+            <mat-option [value]="level" class="!text-neutral-700">
+              Niveau {{ level }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">
+        Année de début
+        @if (form.value.sinceYear) {
+          <span class="text-blue-600 font-semibold ml-2">{{ form.value.sinceYear }}</span>
+        } @else {
+          <span class="text-gray-500 font-normal ml-2">(optionnel)</span>
+        }
+      </label>
+      <mat-slider [min]="minYear" [max]="maxYear" [step]="1" [discrete]="true" class="year-slider">
+        <input matSliderThumb formControlName="sinceYear"/>
+      </mat-slider>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Priorité d'affichage</label>
+      <div class="grid grid-cols-4 gap-2">
+        @for (priority of priorityLevels; track priority.value) {
+          <button
+            type="button"
+            class="flex flex-col items-center gap-1.5 p-2 rounded-lg border-2 transition-all cursor-pointer"
+            [class.border-gray-300]="form.value.displayPriority !== priority.value"
+            [class.bg-gray-50]="form.value.displayPriority !== priority.value"
+            [class.border-blue-500]="form.value.displayPriority === priority.value"
+            [class.bg-blue-50]="form.value.displayPriority === priority.value"
+            (click)="form.patchValue({ displayPriority: priority.value })"
+          >
+            <mat-icon [style.color]="priority.color" class="!text-xl !w-5 !h-5 !leading-5">
+              {{ priority.icon }}
+            </mat-icon>
+            <span class="text-xs font-medium text-gray-700">{{ priority.label }}</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="w-full">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Icône SVG (optionnel)</label>
+      <input
+        #svgInput
+        type="file"
+        accept=".svg,image/svg+xml"
+        class="hidden"
+        (change)="onSvgSelected($event)"
+      />
+      <div class="flex items-center gap-2">
+        @if (svgFile() || existingSvg()) {
+          <div class="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 border border-gray-200">
+            <div class="w-8 h-8 flex items-center justify-center bg-white rounded border border-gray-300 flex-shrink-0">
+              @if (svgFile()) {
+                <img [src]="svgFile()!.preview" alt="SVG" class="w-6 h-6"/>
+              } @else if (existingSvgSafe()) {
+                <div [innerHTML]="existingSvgSafe()" class="w-6 h-6"></div>
+              }
+            </div>
+            <span class="text-sm text-gray-700 truncate flex-1">
+              @if (svgFile()) {
+                {{ svgFile()!.file.name }}
+              } @else {
+                SVG actuel
+              }
+            </span>
+            <button
+              type="button"
+              (click)="clearSvg()"
+              class="text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
+            >
+              <mat-icon class="!text-base !w-4 !h-4">close</mat-icon>
+            </button>
+          </div>
+        } @else {
+          <button
+            type="button"
+            (click)="svgInput.click()"
+            class="flex-1 px-3 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors text-sm text-gray-600 flex items-center gap-2 cursor-pointer"
+          >
+            <mat-icon class="!text-lg !w-5 !h-5 text-gray-400">upload_file</mat-icon>
+            <span>Importer un SVG</span>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-3 mt-4">
+    <button type="submit" matButton="filled" [disabled]="form.invalid">
+      <mat-icon>{{ isEditing() ? 'edit' : 'add' }}</mat-icon>
+      {{ isEditing() ? 'Modifier' : 'Créer' }}
+    </button>
+  </div>
+</form>

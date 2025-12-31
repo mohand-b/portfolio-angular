@@ -53,7 +53,7 @@ interface ProjectTypeDistribution {
 interface TopSkill {
   id: string;
   name: string;
-  category: SkillCategory;
+  categories: SkillCategory[];
   projectCount: number;
   usageRate: number;
 }
@@ -162,19 +162,27 @@ export class HomeProjectsStats {
 
   readonly barChartData = computed<ChartConfiguration<'bar'>['data']>(() => {
     const skills = this.projectStatsResource.value()?.topSkills ?? [];
-    const top5 = skills.slice(0, 5);
+    const top5 = skills
+      .filter(s => s.categories && s.categories.length > 0)
+      .slice(0, 5);
 
     return {
       labels: top5.map(s => s.name),
       datasets: [{
         data: top5.map(s => s.projectCount),
-        backgroundColor: top5.map(s => hexToRgba(SKILL_CATEGORY_META[s.category].color, 0.8)),
+        backgroundColor: top5.map(s => {
+          const category = s.categories?.[0];
+          const meta = category ? SKILL_CATEGORY_META[category] : null;
+          const color = meta?.color ?? '#94A3B8';
+          return hexToRgba(color, 0.8);
+        }),
         borderWidth: 0,
         borderRadius: 8,
         barPercentage: 0.6
       }]
     };
   });
+
 
   readonly barChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: true,

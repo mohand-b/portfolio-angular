@@ -109,8 +109,8 @@
                     <div class="flex flex-wrap gap-2">
                       @for (skill of categoryGroup[1]; track skill.id) {
                         <span class="px-3 py-1.5 text-sm font-medium rounded-full"
-                              [style.background-color]="getCategoryMeta(skill.category).color + '15'"
-                              [style.color]="getCategoryMeta(skill.category).color">
+                              [style.background-color]="getCategoryMeta(categoryGroup[0]).color + '15'"
+                              [style.color]="getCategoryMeta(categoryGroup[0]).color">
                           {{ skill.name }}
                         </span>
                       }
@@ -142,8 +142,8 @@
                   <div class="flex flex-wrap gap-2">
                     @for (skill of categoryGroup[1]; track skill.id) {
                       <span class="px-3 py-1.5 text-sm font-medium rounded-full"
-                            [style.background-color]="getCategoryMeta(skill.category).color + '15'"
-                            [style.color]="getCategoryMeta(skill.category).color">
+                            [style.background-color]="getCategoryMeta(categoryGroup[0]).color + '15'"
+                            [style.color]="getCategoryMeta(categoryGroup[0]).color">
                         {{ skill.name }}
                       </span>
                     }

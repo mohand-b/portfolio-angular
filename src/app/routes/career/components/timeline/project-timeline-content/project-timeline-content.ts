@@ -25,7 +25,9 @@ export class ProjectTimelineContent {
 
     const categoryMap = new Map<SkillCategory, number>();
     skills.forEach(skill => {
-      categoryMap.set(skill.category, (categoryMap.get(skill.category) || 0) + 1);
+      skill.categories.forEach(category => {
+        categoryMap.set(category, (categoryMap.get(category) || 0) + 1);
+      });
     });
 
     return Array.from(categoryMap.entries()).map(([category, count]) => {

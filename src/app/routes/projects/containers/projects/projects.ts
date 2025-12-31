@@ -147,8 +147,10 @@ export class Projects {
 
   sortedSelectedSkills(): SkillDto[] {
     const categoryOrder = Object.values(SkillCategory);
-    return [...this.selectedSkills()].sort((a, b) =>
-      categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category)
-    );
+    return [...this.selectedSkills()].sort((a, b) => {
+      const aFirstCategory = a.categories[0];
+      const bFirstCategory = b.categories[0];
+      return categoryOrder.indexOf(aFirstCategory) - categoryOrder.indexOf(bFirstCategory);
+    });
   }
 }

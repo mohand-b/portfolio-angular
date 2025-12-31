@@ -5,25 +5,22 @@
       @for (category of categories; track category) {
         @if (getSkillsByCategory(category).length > 0) {
           <section class="flex flex-col gap-4">
-            <div class="flex items-center gap-3">
-              <div class="flex items-center justify-center w-12 h-12 rounded-lg" [style.background-color]="hexWithAlpha(categoryMeta[category].color, .1)">
-                <mat-icon class="!text-2xl !leading-none" [style.color]="categoryMeta[category].color">{{ categoryMeta[category].icon }}</mat-icon>
+            <div class="flex items-center gap-2">
+              <div class="flex items-center justify-center w-12 h-12 rounded-lg">
+                <mat-icon class="!text-2xl !leading-none"
+                          [style.color]="categoryMeta[category].color">{{ categoryMeta[category].icon }}
+                </mat-icon>
               </div>
               <div>
                 <h2 class="text-xl font-semibold text-neutral-800">{{ categoryMeta[category].label }}</h2>
                 <p class="text-sm text-neutral-600">{{ categoryMeta[category].subtitle }}</p>
               </div>
             </div>
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
               @for (skill of getSkillsByCategory(category); track skill.id) {
-                <div class="bg-white border border-neutral-200 rounded-lg p-4 flex flex-col gap-3 cursor-pointer transition-all hover:border-neutral-400 hover:shadow-sm" (click)="navigateToProjects(skill)">
-                  <span class="text-sm font-medium text-neutral-900">{{ skill.name }}</span>
-                  <div class="flex gap-1">
-                    @for (segment of [1, 2, 3, 4, 5]; track segment) {
-                      <div class="h-2 flex-1 rounded-full transition-all" [class]="segment <= skill.level ? 'opacity-100' : 'opacity-20'" [style.background-color]="categoryMeta[category].color"></div>
-                    }
-                  </div>
-                </div>
+                <app-skill-item
+                  [skill]="skill"
+                  [categoryColor]="categoryMeta[category].color"/>
               }
             </div>
           </section>

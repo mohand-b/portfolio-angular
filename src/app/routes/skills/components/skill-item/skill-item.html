@@ -1,0 +1,56 @@
+<div class="relative h-full">
+  <div
+    [class.shine-effect]="skill().displayPriority === 3"
+    class="h-full bg-white border border-neutral-200 p-2.5 flex items-center gap-3 cursor-pointer transition-all hover:shadow-xs"
+    (click)="toggleMenu($event)">
+    @if (skill().iconSvg) {
+      <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center"
+           [innerHTML]="getColoredSvg()"></div>
+    }
+    <div class="flex-1 min-w-0 flex flex-col gap-2">
+      <div class="flex items-center justify-between gap-2">
+        <span class="text-xs font-medium text-neutral-900 truncate">{{ skill().name }}</span>
+        <span class="px-1.5 py-0.5 rounded text-[0.625rem] font-medium flex-shrink-0 leading-none"
+              [style.background-color]="hexWithAlpha(categoryColor(), 0.15)"
+              [style.color]="categoryColor()">{{ skillKindMeta[skill().kind].label }}</span>
+      </div>
+
+      <div class="flex gap-0.5 w-full">
+        @for (segment of [1, 2, 3, 4, 5]; track segment) {
+          <div class="h-1.5 flex-1 rounded-full transition-all"
+               [class]="segment <= skill().level ? 'opacity-100' : 'opacity-20'"
+               [style.background-color]="categoryColor()"></div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (openMenu()) {
+    <div
+      class="absolute top-full left-4 mt-2 z-50 bg-white border border-neutral-200 rounded-lg px-4 py-2.5 min-w-[180px] shadow-none"
+      (click)="$event.stopPropagation()">
+      <div
+        class="absolute -top-2 left-4 w-4 h-4 bg-white border-l border-t border-neutral-200 transform rotate-45"></div>
+      @if (skill().sinceYear) {
+        <p class="text-xs text-neutral-500 mb-2">Utilisé depuis
+          <span class="font-semibold">{{ skill().sinceYear }}</span></p>
+      }
+
+      @if (consoleMode()) {
+        <div
+          class="flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-800 cursor-pointer leading-none mb-2"
+          (click)="onEdit()">
+          <mat-icon class="!text-sm !w-3.5 !h-3.5 !leading-none">edit</mat-icon>
+          <span>Modifier</span>
+        </div>
+      }
+
+      <div
+        class="flex items-center gap-1 text-xs text-primary cursor-pointer leading-none"
+        (click)="navigateToProjects()">
+        <mat-icon class="!text-sm !w-3.5 !h-3.5 !leading-none">search</mat-icon>
+        <span>Voir projets liés</span>
+      </div>
+    </div>
+  }
+</div>

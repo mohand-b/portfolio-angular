@@ -18,12 +18,16 @@ export class SkillService {
     return this.http.post<SkillDto>(`${this.skillBaseUrl}/create`, skill, {withCredentials: true});
   }
 
+  updateSkill(id: string, skill: SkillCreateDto): Observable<SkillDto> {
+    return this.http.patch<SkillDto>(`${this.skillBaseUrl}/${id}`, skill, {withCredentials: true});
+  }
+
   deleteSkillById(id: string): Observable<void> {
     return this.http.delete<void>(`${this.skillBaseUrl}/${id}`, {withCredentials: true});
   }
 
-  updateSkillCategory(id: string, category: SkillCategory): Observable<SkillDto> {
-    return this.http.patch<SkillDto>(`${this.skillBaseUrl}/${id}/category`, {category}, {withCredentials: true});
+  updateSkillCategories(id: string, categories: SkillCategory[]): Observable<SkillDto> {
+    return this.http.patch<SkillDto>(`${this.skillBaseUrl}/${id}/categories`, {categories}, {withCredentials: true});
   }
 
   updateSkillLevel(id: string, level: number): Observable<SkillDto> {

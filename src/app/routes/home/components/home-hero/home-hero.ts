@@ -30,13 +30,14 @@ export class HomeHero {
     return skills.map(skill => {
       const duration = 12 + Math.random() * 10;
       const startY = -50 + Math.random() * 70;
+      const primaryCategory = skill.categories[0];
       return {
         name: skill.name,
         left: Math.random() * 100,
         duration,
         delay: -(Math.random() * duration),
         opacity: 0.2 + Math.random() * 0.2,
-        color: SKILL_CATEGORY_META[skill.category].color,
+        color: primaryCategory ? SKILL_CATEGORY_META[primaryCategory].color : '#94A3B8',
         startY,
         endY: startY + 40 + Math.random() * 40
       };

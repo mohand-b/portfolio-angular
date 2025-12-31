@@ -6,48 +6,39 @@
       Ajouter une compétence
     </button>
   </div>
-  <div class="flex flex-col flex-1 gap-6 bg-neutral-100 p-5" style="--tw-shadow-color: rgba(0,0,0,0.05);">
-    @for (cat of categories; track cat) {
-      @if (getSkillsByCategory(cat).length > 0) {
-        <app-skill-category-section
-          cdkDropList
-          cdkDropListSortingDisabled
-          [cdkDropListData]="getSkillsByCategory(cat)"
-          [cdkDropListConnectedTo]="dropListIds"
-          [id]="cat"
-          (cdkDropListDropped)="drop($event, cat)"
-          [category]="cat"
-          [count]="getSkillsByCategory(cat).length"
-          [collapsible]="true"
-          [visibleRows]="1"
-          [rowHeightRem]="2.75"
-          [rowGapRem]="1">
-          @for (skill of getSkillsByCategory(cat); track skill.id) {
-            <app-skill-item
-              cdkDrag
-              [skill]="skill"
-              [cdkDragData]="skill"
-              (setLevel)="onSkillLevelChange(skill, $event)"
-              (cdkDragStarted)="isDragging.set(true)"
-              (cdkDragEnded)="isDragging.set(false)"/>
-          }
-        </app-skill-category-section>
+  <div class="flex flex-col flex-1 gap-8 bg-neutral-100 p-8">
+    @for (category of categories; track category) {
+      @if (getSkillsByCategory(category).length > 0) {
+        <section class="flex flex-col gap-4">
+          <div class="flex items-center gap-2">
+            <div class="flex items-center justify-center w-12 h-12 rounded-lg">
+              <mat-icon class="!text-2xl !leading-none"
+                        [style.color]="categoryMeta[category].color">{{ categoryMeta[category].icon }}
+              </mat-icon>
+            </div>
+            <div>
+              <h2 class="text-xl font-semibold text-neutral-800">{{ categoryMeta[category].label }}</h2>
+              <p class="text-sm text-neutral-600">{{ categoryMeta[category].subtitle }}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            @for (skill of getSkillsByCategory(category); track skill.id) {
+              <div class="h-full">
+                <app-skill-item
+                  [skill]="skill"
+                  [categoryColor]="categoryMeta[category].color"
+                  [consoleMode]="true"
+                  (edit)="openEditPanel(skill)"/>
+              </div>
+            }
+          </div>
+        </section>
       }
     }
   </div>
 </div>
 
-<div
-  (cdkDropListDropped)="onDropToTrash($event)"
-  [cdkDropListConnectedTo]="dropListIds"
-  [cdkDropListData]="emptySkillList"
-  [class.global-trash-zone--active]="isDragging()"
-  [id]="dropTrashId"
-  cdkDropList
-  class="global-trash-zone">
-  <mat-icon style="color: #e53935;">delete</mat-icon>
-</div>
 
 <app-side-panel (closed)="onCloseRequested()" [isOpen]="panelOpen()">
-  <app-skill-create (created)="onCloseRequested()"/>
+  <app-skill-form [skill]="editingSkill()" (saved)="onCloseRequested()"/>
 </app-side-panel>

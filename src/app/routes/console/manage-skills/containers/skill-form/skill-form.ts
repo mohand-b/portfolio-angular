@@ -1,4 +1,4 @@
-import {Component, inject, output, signal} from '@angular/core';
+import {Component, computed, effect, inject, input, output, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -10,13 +10,15 @@ import {
   SKILL_KIND_META,
   SkillCategory,
   SkillCreateDto,
+  SkillDto,
   SkillKind
 } from '../../../../skills/state/skill/skill.model';
 import {MatIconModule} from '@angular/material/icon';
 import {ConsoleFacade} from '../../../console.facade';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-skill-create',
+  selector: 'app-skill-form',
   imports: [
     MatFormFieldModule,
     MatInputModule,
@@ -26,10 +28,18 @@ import {ConsoleFacade} from '../../../console.facade';
     ReactiveFormsModule,
     MatIconModule
   ],
-  templateUrl: './skill-create.html',
-  styleUrl: './skill-create.scss'
+  templateUrl: './skill-form.html',
+  styleUrl: './skill-form.scss'
 })
-export class SkillCreate {
+export class SkillForm {
+  private readonly consoleFacade = inject(ConsoleFacade);
+  private readonly fb = inject(FormBuilder);
+  private readonly sanitizer = inject(DomSanitizer);
+
+  readonly skill = input<SkillDto | null>(null);
+  readonly saved = output<void>();
+
+  readonly isEditing = computed(() => !!this.skill());
 
   readonly skillCategories: SkillCategory[] = Object.values(SkillCategory) as SkillCategory[];
   readonly skillKinds = Object.values(SkillKind);
@@ -45,12 +55,14 @@ export class SkillCreate {
   ];
 
   readonly svgFile = signal<{ file: File; preview: string } | null>(null);
+  readonly existingSvg = signal<string | null>(null);
+  readonly existingSvgSafe = computed<SafeHtml | null>(() => {
+    const svg = this.existingSvg();
+    return svg ? this.sanitizer.bypassSecurityTrustHtml(svg) : null;
+  });
 
-  readonly created = output<void>();
   protected readonly skillCategoryCatalog = SKILL_CATEGORY_META;
   protected readonly skillKindCatalog = SKILL_KIND_META;
-  private consoleFacade = inject(ConsoleFacade);
-  private fb = inject(FormBuilder);
 
   form: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -60,6 +72,38 @@ export class SkillCreate {
     sinceYear: [null],
     displayPriority: [1, Validators.required],
   });
+
+  constructor() {
+    effect(() => {
+      const skill = this.skill();
+      if (skill) {
+        this.form.patchValue({
+          name: skill.name,
+          level: skill.level,
+          categories: skill.categories,
+          kind: skill.kind,
+          sinceYear: skill.sinceYear || null,
+          displayPriority: skill.displayPriority,
+        });
+
+        if (skill.iconSvg) {
+          this.existingSvg.set(skill.iconSvg);
+        }
+        this.svgFile.set(null);
+      } else {
+        this.form.reset({
+          name: '',
+          level: 3,
+          categories: [],
+          kind: '',
+          sinceYear: null,
+          displayPriority: 1
+        });
+        this.svgFile.set(null);
+        this.existingSvg.set(null);
+      }
+    });
+  }
 
   onSvgSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -84,6 +128,7 @@ export class SkillCreate {
       const svgContent = reader.result as string;
       const preview = `data:image/svg+xml;base64,${btoa(svgContent)}`;
       this.svgFile.set({file, preview});
+      this.existingSvg.set(null);
     };
     reader.readAsText(file);
 
@@ -92,6 +137,7 @@ export class SkillCreate {
 
   clearSvg(): void {
     this.svgFile.set(null);
+    this.existingSvg.set(null);
   }
 
   getSelectedCategoriesLabel(): string {
@@ -100,7 +146,7 @@ export class SkillCreate {
     return categories.map(cat => this.skillCategoryCatalog[cat].shortLabel).join(', ');
   }
 
-  addSkill() {
+  save() {
     if (this.form.invalid) return;
 
     const svgData = this.svgFile();
@@ -109,9 +155,11 @@ export class SkillCreate {
     if (svgData) {
       const base64Data = svgData.preview.split(',')[1];
       svgContent = atob(base64Data);
+    } else if (this.existingSvg()) {
+      svgContent = this.existingSvg()!;
     }
 
-    const skill: SkillCreateDto = {
+    const skillData: SkillCreateDto = {
       name: this.form.value.name,
       level: this.form.value.level,
       kind: this.form.value.kind,
@@ -121,14 +169,19 @@ export class SkillCreate {
       iconSvg: svgContent,
     };
 
-    this.consoleFacade.createSkill(skill).subscribe({
+    const operation = this.isEditing()
+      ? this.consoleFacade.updateSkill(this.skill()!.id, skillData)
+      : this.consoleFacade.createSkill(skillData);
+
+    operation.subscribe({
       next: () => {
-        this.created.emit();
-        this.form.reset({level: 3, displayPriority: 1});
-        this.clearSvg();
+        this.saved.emit();
+        if (!this.isEditing()) {
+          this.form.reset({level: 3, displayPriority: 1});
+          this.clearSvg();
+        }
       },
       error: () => this.form.markAsTouched(),
     });
   }
-
 }

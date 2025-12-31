@@ -29,8 +29,11 @@ export const SkillStore = signalStore(
     addSkill(skill: SkillDto): void {
       patchState(store, addEntity(skill));
     },
-    updateSkillCategory(id: string, category: SkillCategory): void {
-      patchState(store, updateEntity({id, changes: {category}}))
+    updateSkill(id: string, skill: SkillDto): void {
+      patchState(store, updateEntity({id, changes: skill}));
+    },
+    updateSkillCategories(id: string, categories: SkillCategory[]): void {
+      patchState(store, updateEntity({id, changes: {categories}}))
     },
     updateSkillLevel(id: string, level: number): void {
       patchState(store, updateEntity({id, changes: {level}}))

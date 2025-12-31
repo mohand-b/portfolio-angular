@@ -9,6 +9,55 @@ export enum SkillKind {
   FEATURE = 'FEATURE',
 }
 
+export interface SkillKindMeta {
+  key: SkillKind;
+  label: string;
+  icon: string;
+}
+
+export const SKILL_KIND_META: Record<SkillKind, SkillKindMeta> = {
+  [SkillKind.LANGUAGE]: {
+    key: SkillKind.LANGUAGE,
+    label: 'Langage',
+    icon: 'code',
+  },
+  [SkillKind.FRAMEWORK]: {
+    key: SkillKind.FRAMEWORK,
+    label: 'Framework',
+    icon: 'view_module',
+  },
+  [SkillKind.LIBRARY]: {
+    key: SkillKind.LIBRARY,
+    label: 'Bibliothèque',
+    icon: 'local_library',
+  },
+  [SkillKind.TOOL]: {
+    key: SkillKind.TOOL,
+    label: 'Outil',
+    icon: 'build',
+  },
+  [SkillKind.CONCEPT]: {
+    key: SkillKind.CONCEPT,
+    label: 'Concept',
+    icon: 'lightbulb',
+  },
+  [SkillKind.PRACTICE]: {
+    key: SkillKind.PRACTICE,
+    label: 'Pratique',
+    icon: 'psychology',
+  },
+  [SkillKind.PLATFORM]: {
+    key: SkillKind.PLATFORM,
+    label: 'Plateforme',
+    icon: 'cloud',
+  },
+  [SkillKind.FEATURE]: {
+    key: SkillKind.FEATURE,
+    label: 'Fonctionnalité',
+    icon: 'star',
+  },
+} as const;
+
 export interface SkillDto {
   id: string;
   name: string;
