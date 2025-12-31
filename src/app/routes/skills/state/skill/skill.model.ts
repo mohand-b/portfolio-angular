@@ -3,10 +3,11 @@ export enum SkillKind {
   FRAMEWORK = 'FRAMEWORK',
   LIBRARY = 'LIBRARY',
   TOOL = 'TOOL',
-  CONCEPT = 'CONCEPT',
-  PRACTICE = 'PRACTICE',
   PLATFORM = 'PLATFORM',
-  FEATURE = 'FEATURE',
+  DATABASE = 'DATABASE',
+  CONCEPT = 'CONCEPT',
+  PATTERN = 'PATTERN',
+  PRACTICE = 'PRACTICE',
 }
 
 export interface SkillKindMeta {
@@ -15,7 +16,7 @@ export interface SkillKindMeta {
   icon: string;
 }
 
-export const SKILL_KIND_META: Record<SkillKind, SkillKindMeta> = {
+export const SKILL_KIND_META = {
   [SkillKind.LANGUAGE]: {
     key: SkillKind.LANGUAGE,
     label: 'Langage',
@@ -24,37 +25,42 @@ export const SKILL_KIND_META: Record<SkillKind, SkillKindMeta> = {
   [SkillKind.FRAMEWORK]: {
     key: SkillKind.FRAMEWORK,
     label: 'Framework',
-    icon: 'view_module',
+    icon: 'widgets',
   },
   [SkillKind.LIBRARY]: {
     key: SkillKind.LIBRARY,
     label: 'Bibliothèque',
-    icon: 'local_library',
+    icon: 'extension',
   },
   [SkillKind.TOOL]: {
     key: SkillKind.TOOL,
     label: 'Outil',
     icon: 'build',
   },
-  [SkillKind.CONCEPT]: {
-    key: SkillKind.CONCEPT,
-    label: 'Concept',
-    icon: 'lightbulb',
-  },
-  [SkillKind.PRACTICE]: {
-    key: SkillKind.PRACTICE,
-    label: 'Pratique',
-    icon: 'psychology',
-  },
   [SkillKind.PLATFORM]: {
     key: SkillKind.PLATFORM,
     label: 'Plateforme',
     icon: 'cloud',
   },
-  [SkillKind.FEATURE]: {
-    key: SkillKind.FEATURE,
-    label: 'Fonctionnalité',
-    icon: 'star',
+  [SkillKind.DATABASE]: {
+    key: SkillKind.DATABASE,
+    label: 'BDD',
+    icon: 'storage',
+  },
+  [SkillKind.CONCEPT]: {
+    key: SkillKind.CONCEPT,
+    label: 'Concept',
+    icon: 'lightbulb',
+  },
+  [SkillKind.PATTERN]: {
+    key: SkillKind.PATTERN,
+    label: 'Pattern',
+    icon: 'schema',
+  },
+  [SkillKind.PRACTICE]: {
+    key: SkillKind.PRACTICE,
+    label: 'Pratique',
+    icon: 'checklist',
   },
 } as const;
 

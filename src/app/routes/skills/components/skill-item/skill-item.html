@@ -31,6 +31,12 @@
       (click)="$event.stopPropagation()">
       <div
         class="absolute -top-2 left-4 w-4 h-4 bg-white border-l border-t border-neutral-200 transform rotate-45"></div>
+      @if (skill().displayPriority === 3) {
+        <div class="flex items-center gap-1 text-xs text-amber-500 mb-2">
+          <mat-icon class="!text-sm !w-3.5 !h-3.5 !leading-none">star</mat-icon>
+          <p class="font-semibold">Compétence principale</p>
+        </div>
+      }
       @if (skill().sinceYear) {
         <p class="text-xs text-neutral-500 mb-2">Utilisé depuis
           <span class="font-semibold">{{ skill().sinceYear }}</span></p>
@@ -49,7 +55,7 @@
         class="flex items-center gap-1 text-xs text-primary cursor-pointer leading-none"
         (click)="navigateToProjects()">
         <mat-icon class="!text-sm !w-3.5 !h-3.5 !leading-none">search</mat-icon>
-        <span>Voir projets liés</span>
+        <span>Voir les projets liés</span>
       </div>
     </div>
   }
