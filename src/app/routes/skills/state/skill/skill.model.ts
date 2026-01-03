@@ -44,7 +44,7 @@ export const SKILL_KIND_META = {
   },
   [SkillKind.DATABASE]: {
     key: SkillKind.DATABASE,
-    label: 'BDD',
+    label: 'BDDretir',
     icon: 'storage',
   },
   [SkillKind.CONCEPT]: {

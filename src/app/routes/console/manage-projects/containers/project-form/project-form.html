@@ -2,10 +2,10 @@
   <app-stepper [steps]="stepsMeta" [(currentStep)]="step"></app-stepper>
   <div class="flex-1 overflow-auto">
     @switch (step()) {
-      @default {
+      @case (0) {
         <div class="flex flex-col gap-4" formGroupName="step1">
           <div class="w-full">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Nom du projet</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nom du projet *</label>
             <mat-form-field appearance="outline" class="w-full">
               <input formControlName="title" matInput placeholder="Saisir le nom du projet">
             </mat-form-field>
@@ -13,22 +13,39 @@
           <div class="w-full">
             <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
             <mat-form-field appearance="outline" class="w-full">
-              <textarea formControlName="description" matInput placeholder="Décrire le projet en quelques mots" rows="3"></textarea>
+              <textarea formControlName="description" matInput placeholder="Décrire le projet en quelques mots"
+                        rows="3"></textarea>
             </mat-form-field>
           </div>
-          <div class="w-full">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Collaboration</label>
-            <mat-form-field appearance="outline" class="w-full">
-              <textarea formControlName="collaboration" matInput placeholder="Décrire le mode de collaboration" rows="3"></textarea>
-            </mat-form-field>
-          </div>
-          <div class="w-full">
-            <div class="flex items-center justify-between py-2">
-              <label class="text-sm font-medium text-gray-700">Projet réalisé en entreprise</label>
-              <mat-slide-toggle formControlName="isCompanyProject" color="primary"></mat-slide-toggle>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="w-full">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Statut</label>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-select formControlName="status" class="unified-field">
+                  @for (status of projectStatusOptions; track status) {
+                    <mat-option [value]="status">{{ ProjectStatusLabels[status] }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="w-full">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Visibilité</label>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-select formControlName="visibility" class="unified-field">
+                  @for (visibility of projectVisibilityOptions; track visibility) {
+                    <mat-option [value]="visibility">{{ ProjectVisibilityLabels[visibility] }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
-          @if (s1.get('isCompanyProject')?.value) {
+
+          <div class="flex items-center justify-between">
+            <label class="text-sm font-medium text-gray-700">Projet réalisé en entreprise</label>
+            <mat-slide-toggle formControlName="companyProject" color="primary"></mat-slide-toggle>
+          </div>
+
+          @if (s1.get('companyProject')?.value) {
             <div class="w-full">
               <label class="block text-sm font-medium text-gray-700 mb-2">Entreprise</label>
               <mat-form-field appearance="outline" class="w-full">
@@ -47,76 +64,148 @@
               </mat-form-field>
             </div>
           }
+
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Mon rôle</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-select [formControl]="myRoleControl" class="unified-field" placeholder="Sélectionner votre rôle">
+                @for (role of teamRoleOptions; track role) {
+                  <mat-option [value]="role">
+                    {{ TeamRoleLabels[role] }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="w-full flex flex-col gap-3">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="block text-sm font-medium text-gray-700">Composition de l'équipe</label>
+                <span class="text-sm font-medium text-gray-700">{{ teamSize() }}</span>
+              </div>
+              <mat-form-field appearance="outline" class="w-full">
+                <input type="text" matInput [formControl]="teamRoleSearchControl" placeholder="Ajouter un rôle..."
+                       [matAutocomplete]="autoTeamRole">
+                <mat-autocomplete #autoTeamRole="matAutocomplete" (optionSelected)="onTeamRoleSelected($event)"
+                                  [displayWith]="displayTeamRole">
+                  @for (role of filteredTeamRoles(); track role) {
+                    <mat-option [value]="role">
+                      {{ TeamRoleLabels[role] }}
+                    </mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+            @if (teamComposition().length > 0) {
+              <div class="flex flex-wrap gap-2.5">
+                @for (item of teamComposition(); track item.role) {
+                  <div class="flex items-center gap-2 px-3.5 py-2 rounded-full text-sm bg-primary/10 text-primary">
+                    @if (myRole() === item.role) {
+                      <mat-icon class="!text-base !w-4 !h-4 !leading-4 flex items-center">person</mat-icon>
+                    }
+                    <span class="font-medium leading-none">{{ TeamRoleLabels[item.role] }}</span>
+                    <div class="flex items-center gap-1.5 ml-1">
+                      <span (click)="decrementTeamRole(item.role)"
+                            class="cursor-pointer hover:opacity-70 transition-opacity select-none text-base font-bold">−</span>
+                      <span class="font-bold min-w-[1.25rem] text-center text-sm">{{ item.count }}</span>
+                      <span (click)="incrementTeamRole(item.role)"
+                            class="cursor-pointer hover:opacity-70 transition-opacity select-none text-base font-bold">+</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </div>
       }
       @case (1) {
-        <div class="flex flex-col gap-4">
-          <div formGroupName="step2" class="flex flex-col gap-4">
-            <div class="w-full">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Typologie de projet</label>
-              <mat-form-field appearance="outline" class="w-full md:col-span-2">
-                <mat-select placeholder="Sélectionner une ou plusieurs typologies" formControlName="projectTypes" class="unified-field" multiple aria-label="Typologie de projet">
-                  <mat-select-trigger>
-                    <span class="text-sm">{{ s2.get('projectTypes')?.value?.join(', ') }}</span>
-                  </mat-select-trigger>
-                  @for (opt of projectTypeOptions; track opt) {
-                    <mat-option [value]="opt">{{ opt }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="w-full">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Périmètre d'usage</label>
-              <div class="flex gap-3 w-full">
-                <button type="button" (click)="setScope('Interne')" class="flex-1 flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow" [style.box-shadow]="s2.get('scope')?.value === 'Interne' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">business</mat-icon>
-                  <span class="leading-[18px]">Interne</span>
-                </button>
-                <button type="button" (click)="setScope('Externe')" class="flex-1 flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow" [style.box-shadow]="s2.get('scope')?.value === 'Externe' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">public</mat-icon>
-                  <span class="leading-[18px]">Externe</span>
-                </button>
-              </div>
-            </div>
+        <div class="flex flex-col gap-4" formGroupName="step2">
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Typologie de projet *</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-select placeholder="Sélectionner une ou plusieurs typologies" formControlName="projectTypes"
+                          class="unified-field" multiple>
+                <mat-select-trigger>
+                  <span class="text-sm">{{ s2.get('projectTypes')?.value?.join(', ') }}</span>
+                </mat-select-trigger>
+                @for (opt of projectTypeOptions; track opt) {
+                  <mat-option [value]="opt">{{ opt }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-            <div class="w-full">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Type de marché</label>
-              <div class="grid grid-cols-2 gap-3 w-full">
-                <button type="button" (click)="setMarket('B2B')" class="flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow" [style.box-shadow]="s2.get('market')?.value === 'B2B' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">handshake</mat-icon>
-                  <span class="leading-[18px]">B2B</span>
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Portée du projet</label>
+            <div class="grid grid-cols-3 gap-2">
+              @for (scope of projectScopeOptions; track scope) {
+                <button type="button" (click)="setScope(scope)"
+                        class="flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
+                        [style.box-shadow]="s2.get('scope')?.value === scope ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
+                  <span class="leading-[18px] text-center">{{ ProjectScopeLabels[scope] }}</span>
                 </button>
-                <button type="button" (click)="setMarket('B2C')" class="flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow" [style.box-shadow]="s2.get('market')?.value === 'B2C' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">groups</mat-icon>
-                  <span class="leading-[18px]">B2C</span>
-                </button>
-                <button type="button" (click)="setMarket('C2C')" class="flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow" [style.box-shadow]="s2.get('market')?.value === 'C2C' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">swap_horiz</mat-icon>
-                  <span class="leading-[18px]">C2C</span>
-                </button>
-                <button type="button" (click)="setMarket('Communautaire')" class="flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow" [style.box-shadow]="s2.get('market')?.value === 'Communautaire' ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
-                  <mat-icon class="mr-2 !text-[18px] !w-[18px] !h-[18px] !leading-[18px] flex-shrink-0">diversity_3</mat-icon>
-                  <span class="leading-[18px]">Communautaire</span>
-                </button>
-              </div>
+              }
             </div>
+          </div>
+
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Type de marché</label>
+            <div class="grid grid-cols-3 gap-2">
+              @for (market of projectMarketOptions; track market) {
+                <button type="button" (click)="setMarket(market)"
+                        class="flex items-center justify-center px-3 py-2.5 rounded-lg bg-white text-gray-700 text-sm cursor-pointer transition-shadow"
+                        [style.box-shadow]="s2.get('market')?.value === market ? 'inset 0 0 0 2px var(--color-primary)' : 'inset 0 0 0 1px #D1D5DB'">
+                  <span class="leading-[18px] text-center">{{ ProjectMarketLabels[market] }}</span>
+                </button>
+              }
+            </div>
+          </div>
+
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Domaines d'application</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput placeholder="Ajouter un domaine (ex: E-commerce, Finance...)"
+                     [formControl]="domainControl" (keydown.enter)="addDomain($event)"/>
+              <mat-icon matSuffix>add</mat-icon>
+            </mat-form-field>
+            @if (domains().length > 0) {
+              <div class="flex flex-wrap gap-2 mt-2">
+                @for (domain of domains(); track domain; let i = $index) {
+                  <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-blue-100 text-blue-700">
+                    <span>{{ domain }}</span>
+                    <button type="button" (click)="removeDomain(i)"
+                            class="flex items-center justify-center w-4 h-4 rounded-full hover:bg-black/10 transition-colors cursor-pointer">
+                      <mat-icon class="!text-xs !w-3 !h-3 !leading-none flex items-center justify-center">close
+                      </mat-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
           </div>
 
           <div class="w-full">
             <label class="block text-sm font-medium text-gray-700 mb-2">Technologies & Compétences</label>
             <mat-form-field appearance="outline" class="w-full">
-              <input matInput placeholder="Rechercher une compétence (ex: React, Angular...)" [formControl]="skillSearchControl" [matAutocomplete]="auto" (keydown.enter)="$event.preventDefault()">
-              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displaySkillName" (optionSelected)="onSkillSelected($event)">
+              <input matInput placeholder="Rechercher une compétence (ex: React, Angular...)"
+                     [formControl]="skillSearchControl" [matAutocomplete]="auto"
+                     (keydown.enter)="$event.preventDefault()">
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displaySkillName"
+                                (optionSelected)="onSkillSelected($event)">
                 @for (skill of filteredSkills(); track skill.id) {
                   <mat-option [value]="skill">
                     <div class="flex items-center justify-between w-full gap-2">
                       <span class="text-sm truncate flex-shrink-0">{{ skill.name }}</span>
                       @if (skill.categories.length > 0) {
                         <div class="flex items-center gap-0.5 ml-4 flex-shrink-0">
-                          <mat-icon class="!text-[14px] !w-[14px] !h-[14px] !leading-none !mr-1" [style.color]="getCategoryMeta(skill.categories[0]).color">
+                          <mat-icon class="!text-[14px] !w-[14px] !h-[14px] !leading-none !mr-1"
+                                    [style.color]="getCategoryMeta(skill.categories[0]).color">
                             {{ getCategoryMeta(skill.categories[0]).icon }}
                           </mat-icon>
-                          <span class="opacity-60 skill-category-label">{{ getCategoryMeta(skill.categories[0]).label }}</span>
+                          <span
+                            class="opacity-60 skill-category-label">{{ getCategoryMeta(skill.categories[0]).label }}</span>
                         </div>
                       }
                     </div>
@@ -133,10 +222,14 @@
                     </div>
                     <div class="flex flex-wrap gap-2">
                       @for (skill of categoryGroup[1]; track skill.id) {
-                        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm" [style.background-color]="getCategoryMeta(categoryGroup[0]).color + '20'" [style.color]="getCategoryMeta(categoryGroup[0]).color">
+                        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm"
+                             [style.background-color]="getCategoryMeta(categoryGroup[0]).color + '20'"
+                             [style.color]="getCategoryMeta(categoryGroup[0]).color">
                           <span>{{ skill.name }}</span>
-                          <button type="button" (click)="removeSkill(skill)" class="flex items-center justify-center w-4 h-4 rounded-full hover:bg-black/10 transition-colors cursor-pointer">
-                            <mat-icon class="!text-xs !w-3 !h-3 !leading-none flex items-center justify-center">close</mat-icon>
+                          <button type="button" (click)="removeSkill(skill)"
+                                  class="flex items-center justify-center w-4 h-4 rounded-full hover:bg-black/10 transition-colors cursor-pointer">
+                            <mat-icon class="!text-xs !w-3 !h-3 !leading-none flex items-center justify-center">close
+                            </mat-icon>
                           </button>
                         </div>
                       }
@@ -149,22 +242,78 @@
         </div>
       }
       @case (2) {
+        <div class="flex flex-col gap-4" formGroupName="step3">
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Contexte</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <textarea formControlName="context" matInput placeholder="Quel était le contexte du projet ?"
+                        rows="3"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Problème</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <textarea formControlName="problem" matInput placeholder="Quel problème fallait-il résoudre ?"
+                        rows="3"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="w-full">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Solution</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <textarea formControlName="solution" matInput placeholder="Quelle solution avez-vous apportée ?"
+                        rows="3"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      }
+      @case (3) {
         <div class="flex flex-col gap-4">
           <div class="w-full">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Missions réalisées</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Réalisations / Achievements</label>
             <mat-form-field appearance="outline" class="w-full">
-              <input matInput placeholder="Ajouter une mission" [formControl]="missionControl" (keydown.enter)="addMission($event)"/>
+              <input matInput placeholder="Ajouter une réalisation" [formControl]="achievementControl"
+                     (keydown.enter)="addAchievement($event)"/>
               <mat-icon matSuffix>add</mat-icon>
             </mat-form-field>
           </div>
-          @if (missions().length > 0) {
+          @if (achievements().length > 0) {
             <div class="flex flex-col gap-2">
-              @for (m of missions(); track m; let i = $index) {
-                <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
-                  <mat-icon class="!text-green-700 !text-[18px] !w-[18px] !h-[18px] flex-shrink-0">check_circle</mat-icon>
-                  <div class="flex-1 text-sm text-gray-700 line-clamp-3">{{ m }}</div>
-                  <button type="button" class="text-gray-400 hover:text-red-500 cursor-pointer transition-colors flex-shrink-0" (click)="removeMission(i)">
-                    <mat-icon class="!text-[20px] !w-[20px] !h-[20px]">close</mat-icon>
+              @for (achievement of achievements(); track achievement; let i = $index) {
+                <div
+                  class="flex items-start gap-3 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                  <mat-icon class="!text-green-700 !text-[18px] !w-[18px] !h-[18px] flex-shrink-0 mt-0.5">check_circle
+                  </mat-icon>
+                  <div class="flex-1 text-sm text-gray-700 leading-relaxed">{{ achievement }}</div>
+                  <button type="button"
+                          class="text-gray-400 hover:text-red-500 cursor-pointer transition-colors flex-shrink-0 mt-0.5"
+                          (click)="removeAchievement(i)">
+                    <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">close</mat-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          }
+
+          <div class="w-full mt-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Défis / Challenges</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput placeholder="Ajouter un défi rencontré" [formControl]="challengeControl"
+                     (keydown.enter)="addChallenge($event)"/>
+              <mat-icon matSuffix>add</mat-icon>
+            </mat-form-field>
+          </div>
+          @if (challenges().length > 0) {
+            <div class="flex flex-col gap-2">
+              @for (challenge of challenges(); track challenge; let i = $index) {
+                <div
+                  class="flex items-start gap-3 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                  <mat-icon class="!text-orange-500 !text-[18px] !w-[18px] !h-[18px] flex-shrink-0 mt-0.5">sports_mma
+                  </mat-icon>
+                  <div class="flex-1 text-sm text-gray-700 leading-relaxed">{{ challenge }}</div>
+                  <button type="button"
+                          class="text-gray-400 hover:text-red-500 cursor-pointer transition-colors flex-shrink-0 mt-0.5"
+                          (click)="removeChallenge(i)">
+                    <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">close</mat-icon>
                   </button>
                 </div>
               }
@@ -172,32 +321,72 @@
           }
         </div>
       }
-      @case (3) {
+      @case (4) {
         <div class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
             <label class="block text-sm font-medium text-gray-700">Images du projet</label>
-            <span class="text-xs text-gray-500 font-normal">{{ totalImages }} / 4 images</span>
+            <span class="text-xs text-gray-500 font-normal">{{ totalImages }} / 10 images</span>
           </div>
-          <input #imageInput (change)="onFilesSelected($event)" accept="image/png,image/jpeg,image/jpg,image/webp" class="hidden" type="file" multiple/>
+          <input #imageInput (change)="onFilesSelected($event)" accept="image/png,image/jpeg,image/jpg,image/webp"
+                 class="hidden" type="file" multiple/>
           <div class="grid grid-cols-2 gap-3">
-            @for (imgUrl of existingImages(); track $index) {
-              <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-                <img [src]="imgUrl" class="h-full w-full object-cover" alt="Image existante {{ $index + 1 }}"/>
-                <button type="button" (click)="removeExistingImage($index)" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-sm">
-                  <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
-                </button>
+            @for (img of existingImages(); track $index) {
+              <div class="flex flex-col gap-2">
+                <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                  <img [src]="img.url" class="h-full w-full object-cover" alt="Image existante {{ $index + 1 }}"/>
+                  @if (img.metadata.isCover) {
+                    <div class="absolute top-2 left-2 px-2 py-1 rounded bg-primary text-white text-xs font-medium">
+                      Couverture
+                    </div>
+                  }
+                  <div class="absolute top-2 right-2 flex gap-1">
+                    @if (!img.metadata.isCover) {
+                      <button type="button" (click)="setCoverImage($index, false)"
+                              class="w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-primary flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-sm">
+                        <mat-icon class="!text-[16px] !w-4 !h-4">star</mat-icon>
+                      </button>
+                    }
+                    <button type="button" (click)="removeExistingImage($index)"
+                            class="w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-sm">
+                      <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <input type="text" [value]="img.metadata.name" (input)="updateExistingImageName($index, $event)"
+                       placeholder="Nom de l'image"
+                       class="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"/>
               </div>
             }
             @for (img of images(); track $index) {
-              <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-                <img [src]="img.preview" class="h-full w-full object-cover" alt="Nouvelle image {{ $index + 1 }}"/>
-                <button type="button" (click)="removeImage($index)" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-sm">
-                  <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
-                </button>
+              <div class="flex flex-col gap-2">
+                <div class="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                  <img [src]="img.preview" class="h-full w-full object-cover" alt="Nouvelle image {{ $index + 1 }}"/>
+                  @if (img.metadata.isCover) {
+                    <div class="absolute top-2 left-2 px-2 py-1 rounded bg-primary text-white text-xs font-medium">
+                      Couverture
+                    </div>
+                  }
+                  <div class="absolute top-2 right-2 flex gap-1">
+                    @if (!img.metadata.isCover) {
+                      <button type="button" (click)="setCoverImage($index, true)"
+                              class="w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-primary flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-sm">
+                        <mat-icon class="!text-[16px] !w-4 !h-4">star</mat-icon>
+                      </button>
+                    }
+                    <button type="button" (click)="removeImage($index)"
+                            class="w-6 h-6 rounded-full bg-white/90 backdrop-blur-sm text-gray-600 hover:text-red-500 flex items-center justify-center hover:bg-white transition-colors cursor-pointer shadow-sm">
+                      <mat-icon class="!text-[16px] !w-4 !h-4">close</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <input type="text" [value]="img.metadata.name" (input)="updateImageName($index, $event)"
+                       placeholder="Nom de l'image"
+                       class="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"/>
               </div>
             }
-            @if (totalImages < 4) {
-              <button type="button" (click)="imageInput.click()" class="aspect-[4/3] w-full rounded-lg border-1 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center cursor-pointer hover:border-gray-400 hover:bg-gray-100 transition-colors">
+            @if (totalImages < 10) {
+              <button type="button" (click)="imageInput.click()"
+                      class="aspect-[4/3] w-full rounded-lg border-1 border-dashed border-gray-300 bg-gray-50 flex flex-col items-center justify-center cursor-pointer hover:border-gray-400 hover:bg-gray-100 transition-colors">
                 <mat-icon class="text-3xl text-gray-400">add_photo_alternate</mat-icon>
                 <span class="text-xs text-gray-500 mt-1">Ajouter</span>
               </button>
@@ -214,7 +403,8 @@
       <span></span>
     }
     @if (step() < stepsMeta.length - 1) {
-      <button type="button" matButton="filled" (click)="next()" [disabled]="(step()===0 && s1.invalid) || (step()===1 && s2.invalid)">
+      <button type="button" matButton="filled" (click)="next()"
+              [disabled]="(step()===0 && s1.invalid) || (step()===1 && s2.invalid)">
         Suivant
       </button>
     } @else {

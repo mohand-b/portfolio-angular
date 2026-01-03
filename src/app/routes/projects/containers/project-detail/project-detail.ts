@@ -39,7 +39,7 @@ export class ProjectDetail {
   readonly loading = computed(() => this.projectResource.isLoading());
 
   readonly currentImageIndex = signal(0);
-  readonly images = computed(() => this.project()?.images || []);
+  readonly images = computed(() => this.project()?.media?.map(m => m.url) || []);
   readonly hasMultipleImages = computed(() => this.images().length > 1);
 
   constructor() {
